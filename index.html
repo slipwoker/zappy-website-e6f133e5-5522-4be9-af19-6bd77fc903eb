@@ -816,7 +816,7 @@
     <section data-band-index="0" class="index-hero-section" data-layout-spec="בית-hero" data-hero-type="fullscreen-scrim" dir="rtl" id="index-hero-section">
   <!-- Hero Background Image -->
   <div class="index-hero-bg-wrapper">
-    <div data-zappy-zoom-wrapper="true" data-element-id="img-1780930254919-hnaj39lso" data-element-type="image" data-zappy-zoom-wrapper-width-mode="full" style="position: absolute !important; top: 0px !important; left: 0px !important; width: 384px !important; height: 733px !important; max-width: 100% !important; margin-left: 0px !important; margin-right: 0px !important; display: block !important; z-index: 1 !important; overflow: hidden !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true" data-zappy-zoom-wrapper-align="center" data-zappy-zoom-wrapper-width="384px" data-zappy-zoom-wrapper-height="733px"><img fetchpriority="high" data-hero-bg="true" data-placeholder="index-hero-image-1" data-context="A composite real-world facility management scene: a modern commercial building with glass facade being cleaned by rope-access technicians, a ground crew operating floor polishing machines, and an industrial building environment in the background. Professional, blue-collar, organized operation." width="1200" height="600" src="/assets/site-index-hero-image-1-1780930405459-7y41hq.webp?v=1780930408295" alt="צוות פרוצס בפעולה - ניקיון חלונות בגובה, ליטוש רצפות, וניהול מבנים" class="index-hero-bg-img" data-hero-background="true" data-element-type="image" data-element-id="img-1780930254919-hnaj39lso" style="object-fit: cover; width: 100%; height: 100%; object-position: 50% 50% !important; position: absolute !important; margin: 0px !important; left: -120.944% !important; top: 0% !important; max-width: none !important; max-height: none !important; display: block !important;" data-zappy-object-position="50% 50%" data-zappy-zoom="1" data-zappy-original-width="384" data-zappy-original-height="732.7555541992188"></div>
+    <div data-zappy-zoom-wrapper="true" data-element-id="img-1780930254919-hnaj39lso" data-element-type="image" data-zappy-zoom-wrapper-width-mode="full" style="position: absolute !important; top: 0px !important; left: 0px !important; width:100% !important; height:100% !important; max-width:none !important; margin-left: 0px !important; margin-right: 0px !important; display: block !important; z-index: 1 !important; overflow: hidden !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true" data-zappy-zoom-wrapper-align="center" data-zappy-zoom-wrapper-width="384px" data-zappy-zoom-wrapper-height="733px"><img fetchpriority="high" data-hero-bg="true" data-placeholder="index-hero-image-1" data-context="A composite real-world facility management scene: a modern commercial building with glass facade being cleaned by rope-access technicians, a ground crew operating floor polishing machines, and an industrial building environment in the background. Professional, blue-collar, organized operation." width="1200" height="600" src="/assets/site-index-hero-image-1-1780930405459-7y41hq.webp?v=1780930408295" alt="צוות פרוצס בפעולה - ניקיון חלונות בגובה, ליטוש רצפות, וניהול מבנים" class="index-hero-bg-img" data-hero-background="true" data-element-type="image" data-element-id="img-1780930254919-hnaj39lso" style="object-fit: cover; width: 100%; height: 100%; object-position: 50% 50% !important; position: absolute !important; margin: 0px !important; left: -120.944% !important; top: 0% !important; max-width: none !important; max-height: none !important; display: block !important;" data-zappy-object-position="50% 50%" data-zappy-zoom="1" data-zappy-original-width="384" data-zappy-original-height="732.7555541992188"></div>
   </div>
 
   <!-- Scrim Overlay for Text Legibility -->
@@ -938,8 +938,8 @@
     <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="dividerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#1CB6E8"></stop>
-          <stop offset="100%" stop-color="#0B5E95"></stop>
+          <stop offset="0%" stop-color="#1A1A1A"></stop>
+          <stop offset="100%" stop-color="#D4A017"></stop>
         </linearGradient>
       </defs>
       <!-- Main diagonal fill -->
@@ -1274,61 +1274,6 @@
           observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
         });
       }, 500);
-    })();
-    </script>
-
-    <script id="zappy-navbar-scroll-effect">
-    (function(){
-      var nb=document.querySelector('nav.navbar,.navbar:not(.zappy-catalog-menu)');
-      var cm=document.querySelector('.zappy-catalog-menu,#zappy-catalog-menu');
-      if(!nb)return;
-      var fb='rgba(245,247,250,0.85)';
-      var th=60;
-      var rs=getComputedStyle(document.documentElement);
-      var td=rs.getPropertyValue('--text-dark').trim()||'#1a1a1a';
-      var tl=rs.getPropertyValue('--text-light').trim()||'#ffffff';
-      var st=true?td:tl;
-      nb.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease,box-shadow 0.3s ease';
-      if(cm)cm.style.transition='background 0.3s ease,backdrop-filter 0.3s ease,-webkit-backdrop-filter 0.3s ease';
-      var neSel='a,.navbar-brand,.navbar-brand a,.dropdown-toggle,.mobile-toggle,.phone-header-btn,.mobile-hamburger-btn,.mobile-close-btn,.mobile-submenu-toggle,.nav-link';
-      var skipCls=['cart-link','login-link','nav-search-toggle','search-toggle'];
-      function sTC(c,clr){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){var sk=false;if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu')){sk=true;}for(var j=0;j<skipCls.length;j++){if(els[i].classList.contains(skipCls[j])){sk=true;break;}}if(!sk)els[i].style.setProperty('color',clr,'important');}}
-      function cTC(c){var els=c.querySelectorAll(neSel);for(var i=0;i<els.length;i++){if(els[i].closest('.sub-menu')||els[i].closest('.dropdown-menu'))continue;els[i].style.removeProperty('color');}}
-      function applyScrolled(){
-        nb.classList.add('scrolled');
-        if(window.innerWidth>768){
-          nb.style.setProperty('--frosted-text',st);
-          nb.style.setProperty('background-image','none','important');
-          nb.style.setProperty('background-color',fb,'important');
-          nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
-          sTC(nb,st);
-        }
-        if(cm){cm.classList.add('scrolled');if(window.innerWidth>768){cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}}
-      }
-      function onS(){
-        if(window._zappyNavNoDarkHero) return;
-        if(window.innerWidth<=768){nb.classList.remove('scrolled');cTC(nb);if(cm){cm.classList.remove('scrolled');cTC(cm);}return;}
-        var y=window.scrollY||window.pageYOffset;
-        if(y>th){
-          nb.classList.add('scrolled');nb.style.setProperty('background-color',fb,'important');nb.style.setProperty('background-image','none','important');
-          nb.style.setProperty('--frosted-text',st);nb.style.backdropFilter='blur(12px)';nb.style.webkitBackdropFilter='blur(12px)';nb.style.boxShadow='0 2px 16px rgba(0,0,0,0.12)';
-          sTC(nb,st);
-          if(cm){cm.classList.add('scrolled');cm.style.setProperty('background',fb,'important');cm.style.setProperty('backdrop-filter','blur(12px)','important');cm.style.setProperty('-webkit-backdrop-filter','blur(12px)','important');sTC(cm,st);}
-        }else{
-          nb.classList.remove('scrolled');nb.style.setProperty('background-color','transparent','important');nb.style.removeProperty('background-image');
-          nb.style.removeProperty('--frosted-text');nb.style.backdropFilter='none';nb.style.webkitBackdropFilter='none';nb.style.boxShadow='none';
-          cTC(nb);
-          if(cm){cm.classList.remove('scrolled');cm.style.setProperty('background','transparent','important');cm.style.setProperty('backdrop-filter','none','important');cm.style.setProperty('-webkit-backdrop-filter','none','important');cTC(cm);}
-        }
-      }
-      function sLum(rv,gv,bv){rv/=255;gv/=255;bv/=255;rv=rv<=0.03928?rv/12.92:Math.pow((rv+0.055)/1.055,2.4);gv=gv<=0.03928?gv/12.92:Math.pow((gv+0.055)/1.055,2.4);bv=bv<=0.03928?bv/12.92:Math.pow((bv+0.055)/1.055,2.4);return 0.2126*rv+0.7152*gv+0.0722*bv;}
-      window.addEventListener('scroll',onS,{passive:true});
-      window.addEventListener('resize',onS,{passive:true});
-      onS();
-      var heroEl=document.querySelector('section[class*="hero"],[data-hero-type],main:not(.courses-page-main)>section:first-child');
-      var hasDH=false;
-      if(heroEl){var hCs=getComputedStyle(heroEl);var hBI=hCs.backgroundImage;if(hBI&&hBI!=='none'){if(hBI.indexOf('url(')!==-1){var hM2=hCs.backgroundColor.match(/\d+/g);if(hM2&&hM2.length>=3){hasDH=sLum(parseInt(hM2[0]),parseInt(hM2[1]),parseInt(hM2[2]))<0.4;}else{hasDH=true;}}else if(hBI.indexOf('gradient')!==-1){var cM=hBI.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/g);if(cM&&cM.length>0){var tLm=0;for(var ci=0;ci<cM.length;ci++){var pts=cM[ci].match(/\d+/g);tLm+=sLum(parseInt(pts[0]),parseInt(pts[1]),parseInt(pts[2]));}hasDH=(tLm/cM.length)<0.4;}else{hasDH=true;}}else{hasDH=true;}}else{var hM=hCs.backgroundColor.match(/\d+/g);if(hM&&hM.length>=3){hasDH=sLum(parseInt(hM[0]),parseInt(hM[1]),parseInt(hM[2]))<0.4;}}}
-      if(!hasDH){window.removeEventListener('scroll',onS);window.removeEventListener('resize',onS);applyScrolled();window._zappyNavNoDarkHero=true;}
     })();
     </script>
 
