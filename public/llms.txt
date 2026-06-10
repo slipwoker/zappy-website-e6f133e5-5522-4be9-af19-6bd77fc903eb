@@ -7,33 +7,33 @@
 ## Pages
 
 ### בית
-https://example.com
+https://proces.zappy5.app
 פרוצס מביאה לשוק הניקיון והתחזוקה מהפכה של ממש: משירותי ניקיון משרדים ועד ניקוי חלונות בגובה באמצעות רחפן, סנפלינג ואוסמוזה הפוכה. שדרגו את הנכס שלכם עוד היום.
 
 ### שירותים
-https://example.com/services
+https://proces.zappy5.app/services
 מנקים הכול, מגיעים לכל מקום: ניקוי חלונות בגובה בעזרת רחפן תותח מים, ציפוי ננו, הדברה ירוקה ועוד. השירותים המתקדמים של פרוצס מחכים לכם כאן.
 
 ### ניהול מתקנים וכוח אדם
-https://example.com/management-staffing
+https://proces.zappy5.app/management-staffing
 פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.
 
 ### צור קשר
-https://example.com/contact
+https://proces.zappy5.app/contact
 צריכים הצעת מחיר לניקוי חלונות ברחפן או חוזה תחזוקה שוטף? צרו קשר עם פרוצס ונחזור אליכם במהירות עם הפתרון המושלם לניקיון מקצועי בגובה.
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://example.com/privacy
+https://proces.zappy5.app/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://example.com/terms
+https://proces.zappy5.app/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://example.com/accessibility
+https://proces.zappy5.app/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
@@ -43,8 +43,8 @@ Information about WCAG compliance and accessibility features.
 - (No contact details configured yet.)
 
 ### Contact form
-- URL: https://example.com/contact
-- Endpoint: https://example.com/api/email/contact-form
+- URL: https://proces.zappy5.app/contact
+- Endpoint: https://proces.zappy5.app/api/email/contact-form
 - Method: POST
 - Content-Type: application/json
 - Fields:
@@ -86,6 +86,6 @@ Facility Management & Staffing Services
 
 # Machine-readable feeds
 
-- Sitemap (XML): https://example.com/sitemap.xml
-- Robots: https://example.com/robots.txt
-- Flattened page text (for LLMs): https://example.com/llms-full.txt
+- Sitemap (XML): https://proces.zappy5.app/sitemap.xml
+- Robots: https://proces.zappy5.app/robots.txt
+- Flattened page text (for LLMs): https://proces.zappy5.app/llms-full.txt
