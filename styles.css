@@ -4401,7 +4401,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-overview-section__eyebrow {
   display: inline-block;
-  background: #D4A017;
+  background: #ffde59;
   color: var(--text-light);
   font-size: 0.875rem;
   font-weight: 600;
@@ -4483,7 +4483,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  color: #ffde59;
   flex-shrink: 0;
 }
 
@@ -4518,7 +4518,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   color: #1A1A2E;
   margin: 0 0 24px 0;
   padding-bottom: 16px;
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid #ffde59;
   display: inline-block;
 }
 
@@ -4547,7 +4547,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  color: #ffde59;
   flex-shrink: 0;
   margin-top: 2px;
 }
