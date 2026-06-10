@@ -25,6 +25,26 @@ https://proces.zappy5.app/cleaning-services
 https://proces.zappy5.app/contact
 צריכים הצעת מחיר לניקוי חלונות ברחפן או חוזה תחזוקה שוטף? צרו קשר עם פרוצס ונחזור אליכם במהירות עם הפתרון המושלם לניקיון מקצועי בגובה.
 
+### מגזין הידע של פרוצס
+https://proces.zappy5.app/blog
+Proces פרוצס - מגזין הידע של פרוצס
+
+### ניקיון
+https://proces.zappy5.app/blog/maintenance-cleaning-quality
+מדריך מעשי לתכנון מערך ניקיון ואחזקה עם נהלים ברורים, כוח אדם מתאים, בקרת איכות וזמינות שוטפת למבנים מסחריים וציבוריים.
+
+### כוח אדם
+https://proces.zappy5.app/blog/staffing-provider-checklist
+סקירה של הקריטריונים המרכזיים בבחירת ספק כוח אדם מקצועי: רישוי, התאמה לתפקיד, זמינות, יציבות, פיקוח ויכולת עמידה בסטנדרטים.
+
+### בקרה
+https://proces.zappy5.app/blog/field-quality-control
+למה בקרת איכות היא תנאי הכרחי בשירותי שטח, ואיך משלבים נהלים, פיקוח, מדידה ושיפור מתמשך לקבלת שירות עקבי ואמין.
+
+### זמינות
+https://proces.zappy5.app/blog/24-7-service-operations
+מדוע זמינות מלאה של מוקדים, מנהלים ורכבי פיקוח היא רכיב אסטרטגי בשירותי שטח, ולא רק יתרון תדמיתי.
+
 ## Legal & Policy
 
 ### Privacy Policy
@@ -54,11 +74,11 @@ Information about WCAG compliance and accessibility features.
 - Method: POST
 - Content-Type: application/json
 - Fields:
-  - `name` (text)
-  - `email` (email)
-  - `phone` (tel)
-  - `message` (textarea)
-  - `privacy_consent` (checkbox)
+  - `name` (text, required)
+  - `email` (email, required)
+  - `phone` (tel, required)
+  - `message` (textarea, required)
+  - `privacy_consent` (checkbox, required)
 
 ---
 
