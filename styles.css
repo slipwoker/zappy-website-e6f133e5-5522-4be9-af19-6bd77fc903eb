@@ -7490,17 +7490,19 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .nav-cta-btn { color: #333333 !important; }
 /* === BUTTON TEXT OVERRIDES END === */
 
+
+
 /* Zappy custom logo size (desktop only — mobile stays at 110px/35px) */
 @media (min-width: 769px) {
   .logo, img.logo, .logo img, .logo-link img, .nav-brand img {
-    max-height: none !important;
-    height: 70px !important;
-    max-width: 280px !important;
+    max-height: 40px !important;
+    height: auto !important;
+    max-width: 160px !important;
     width: auto !important;
     object-fit: contain !important;
   }
   .nav-container {
-    min-height: 100px !important;
+    min-height: 70px !important;
   }
 }
 /* /Zappy custom logo size */
