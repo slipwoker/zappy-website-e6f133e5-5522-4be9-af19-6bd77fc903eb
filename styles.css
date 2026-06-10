@@ -68,9 +68,9 @@
   src: url('assets/fonts/Rubik-Bold.woff2') format('woff2');
 }
 :root {
---primary: #ffde59;
+--primary: #D4A017;
   --secondary: #1A1A1A;
-  --accent: #ffde59;
+  --accent: #F5C842;
   --bg-light: #FFFFFF;
   --bg-dark: #1A1A1A;
   --text-dark: #1A1A1A;
@@ -98,9 +98,9 @@
   --spacing-element-gap: 16px;
   --transition-default: all 0.3s ease;
   --transition-hover: all 0.3s ease;
-  --primary-color: #ffde59;
+  --primary-color: #D4A017;
   --secondary-color: #1A1A1A;
-  --accent-color: #ffde59;
+  --accent-color: #F5C842;
   --background-color: #FFFFFF;
   --surface-color: #F8F8F8;
   --text-color: #1A1A1A;
@@ -272,8 +272,8 @@ small, .small-text {
 }
 
 .btn-primary:hover {
-  background-color: #ffde59;
-  border-color: #ffde59;
+  background-color: #D4A017;
+  border-color: #D4A017;
   color: var(--text-light);
 }
 
@@ -329,9 +329,9 @@ html:not([dir]) .whatsapp-float {
   --nav-bg: #FFFFFF;
   --nav-text: #1A1A1A;
   --nav-text-hover: #b48814;
-  --primary: #ffde59;
+  --primary: #D4A017;
   --secondary: #1A1A1A;
-  --accent: #ffde59;
+  --accent: #F5C842;
 }
 
 .navbar {
@@ -450,7 +450,7 @@ html:not([dir]) .whatsapp-float {
     top: 100%;
     left: 0;
     right: 0;
-    background: #ffde59;
+    background: #D4A017;
     flex-direction: column;
     padding: 2rem 1.5rem;
     gap: 1.5rem;
@@ -518,9 +518,9 @@ html:not([dir]) .whatsapp-float {
   --nav-bg: #FFFFFF;
   --nav-text: #1A1A1A;
   --nav-text-hover: #b48814;
-  --primary: #ffde59;
+  --primary: #D4A017;
   --secondary: #1A1A1A;
-  --accent: #ffde59;
+  --accent: #F5C842;
 }
 
 .navbar {
@@ -639,7 +639,7 @@ html:not([dir]) .whatsapp-float {
     top: 100%;
     left: 0;
     right: 0;
-    background: #ffde59;
+    background: #D4A017;
     flex-direction: column;
     padding: 2rem 1.5rem;
     gap: 1.5rem;
@@ -773,7 +773,7 @@ html:not([dir]) .whatsapp-float {
 .navbar a:focus-visible,
 .navbar button:focus-visible,
 .nav-menu a:focus-visible {
-  outline: 2px solid var(--primary-color, var(--primary, #ffde59));
+  outline: 2px solid var(--primary-color, var(--primary, #D4A017));
   outline-offset: 2px;
 }
 
@@ -1644,9 +1644,9 @@ main:not(.courses-page-main) { margin-top: 0 !important; padding-top: 0 !importa
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 :root {
-  --primary: #ffde59;
+  --primary: #D4A017;
   --secondary: #1A1A1A;
-  --accent: #ffde59;
+  --accent: #F5C842;
   --bg-light: #FFFFFF;
   --bg-dark: #1A1A1A;
   --text-dark: #1A1A1A;
@@ -1968,7 +1968,7 @@ main:not(.courses-page-main) { margin-top: 0 !important; padding-top: 0 !importa
 
 
 /* V2 Decorative Helpers — quote marks */
-:root { --decorative-quote-color: var(--accent, #ffde59); --decorative-quote-font: var(--accent-font, var(--font-display, serif)); }
+:root { --decorative-quote-color: var(--accent, #F5C842); --decorative-quote-font: var(--accent-font, var(--font-display, serif)); }
 blockquote::before, .quote::before, [data-quote]::before {
   content: "\201C";
   font-family: var(--decorative-quote-font);
@@ -2050,7 +2050,7 @@ hr.section-flourish, .section-flourish, [data-section-divider] {
   color: #F8FAFC !important;
 }
 .site-footer .footer-legal .separator {
-  color: #ffde59 !important;
+  color: #D4A017 !important;
 }
 /* Footer contact alignment fix */
 .footer-contact li > a { display: flex; align-items: flex-start; gap: inherit; }
@@ -2163,7 +2163,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .index-hero-section .index-hero-btn-primary:hover {
-  background: #ffde59;
+  background: #F5C842;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(244, 197, 42, 0.4);
 }
@@ -2351,7 +2351,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .index-services-section__card-icon {
   padding: 28px 32px 0 32px;
-  color: #8c7000;
+  color: #ffde59;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -2587,7 +2587,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  background: #ffde59;
+  background: #D4A017;
 }
 
 .index-capabilities-section__collage-item img {
@@ -2960,8 +2960,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .index-cta-section__btn--primary:hover {
-  background-color: #ffde59;
-  border-color: #ffde59;
+  background-color: #F5C842;
+  border-color: #F5C842;
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   transform: translateY(-2px);
 }
@@ -3464,7 +3464,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .services-catalog-section__cta:hover {
-  background-color: #ffde59;
+  background-color: #F5C842;
   box-shadow: 0 8px 25px rgba(244, 197, 42, 0.45);
   transform: translateY(-1px);
 }
@@ -3540,7 +3540,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 /* process */
 .services-process-section {
   position: relative;
-  background-color: #ffde59;
+  background-color: #D4A017;
   background-image: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
   color: var(--text-light);
   padding: var(--spacing-section, 100px) 16px calc(var(--spacing-section, 100px) + 60px);
@@ -3640,7 +3640,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-family: 'Rubik', sans-serif;
   font-size: 2.5rem;
   font-weight: 800;
-  color: #8c7000;
+  color: #ffde59;
   line-height: 1;
   min-width: 60px;
   text-align: center;
@@ -3684,7 +3684,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .services-process-section__connector svg {
   width: 24px;
   height: 32px;
-  color: #8c7000;
+  color: #ffde59;
 }
 
 .services-process-section__image-tile {
@@ -4141,7 +4141,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .services-assurance-section {
     position: relative;
     background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
-    background-color: #ffde59;
+    background-color: #D4A017;
     color: var(--text-light);
     padding: var(--spacing-section, 100px) 16px;
     overflow: hidden;
@@ -4303,7 +4303,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .services-assurance-section .assurance-cta-btn:hover {
-    background: #ffde59;
+    background: #F5C842;
     box-shadow: 0 8px 25px rgba(244, 197, 42, 0.5);
     transform: translateY(-2px);
     color: #0F172A;
@@ -4402,7 +4402,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .management-staffing-overview-section__eyebrow {
   display: inline-block;
   background: #ffde59;
-  color: #1A1A1A;
+  color: var(--text-light);
   font-size: 0.875rem;
   font-weight: 600;
   padding: 6px 18px;
@@ -4416,7 +4416,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.2;
-  color: #1A1A1A;
+  color: #1A1A2E;
   margin-bottom: 16px;
   max-width: 800px;
 }
@@ -4448,7 +4448,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1A1A1A;
+  color: #1A1A2E;
   margin: 0;
 }
 
@@ -4515,7 +4515,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1A1A1A;
+  color: #1A1A2E;
   margin: 0 0 24px 0;
   padding-bottom: 16px;
   border-bottom: 2px solid #ffde59;
@@ -4566,7 +4566,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .management-staffing-overview-section__panel-heading {
   font-size: 1rem;
   font-weight: 700;
-  color: #1A1A1A;
+  color: #1A1A2E;
   margin: 0;
   line-height: 1.4;
 }
@@ -4653,9 +4653,10 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   }
 }
 
+/* property-types */
 .management-staffing-property-types-section {
   position: relative;
-  background: linear-gradient(180deg, #1A1A1A 0%, #000000 100%);
+  background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
   color: var(--text-light);
   padding: 100px 16px 80px;
   overflow: visible;
@@ -4679,8 +4680,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-property-types-section__eyebrow {
   display: inline-block;
-  background: #ffde59;
-  color: #1A1A1A;
+  background: var(--accent);
+  color: #664d0b;
   font-family: 'Rubik', sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
@@ -4753,9 +4754,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 222, 89, 0.15);
+  background: rgba(244, 197, 42, 0.15);
   border-radius: 12px;
-  color: #ffde59;
+  color: var(--accent);
 }
 
 .management-staffing-property-types-section__band-icon svg {
@@ -4915,8 +4916,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-workforce-section .workforce-eyebrow {
   display: inline-block;
-  background: #ffde59;
-  color: #1A1A1A;
+  background: #D4A017;
+  color: var(--text-light);
   font-size: 0.875rem;
   font-weight: 600;
   padding: 6px 16px;
@@ -4931,7 +4932,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.2;
-  color: #1A1A1A;
+  color: #1A1A2E;
   margin: 0 0 16px 0;
 }
 
@@ -4971,7 +4972,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-workforce-section .workforce-card-accent {
   width: 4px;
-  background: #ffde59;
+  background: var(--accent);
   flex-shrink: 0;
   border-radius: 0;
 }
@@ -4986,7 +4987,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .management-staffing-workforce-section .workforce-card-icon {
-  color: #1A1A1A;
+  color: #8a680f;
   margin-bottom: 4px;
   display: flex;
   align-items: center;
@@ -5002,14 +5003,14 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1A1A1A;
+  color: #1A1A2E;
   margin: 0;
 }
 
 .management-staffing-workforce-section .workforce-role {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #1A1A1A;
+  color: var(--primary);
   margin: 0;
   line-height: 1.4;
 }
@@ -5026,7 +5027,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .management-staffing-workforce-section .workforce-tag {
   display: inline-block;
   background: #F0F4FF;
-  color: #1A1A1A;
+  color: #8a680f;
   font-size: 0.8rem;
   font-weight: 600;
   padding: 6px 14px;
@@ -5096,9 +5097,10 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   }
 }
 
+/* standards */
 .management-staffing-standards-section {
   position: relative;
-  background: linear-gradient(180deg, #1A1A1A 0%, #000000 100%);
+  background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
   color: var(--text-light);
   padding: 100px 16px 120px;
   overflow: visible;
@@ -5120,8 +5122,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-standards-section .standards-eyebrow {
   display: inline-block;
-  background: #ffde59;
-  color: #1A1A1A;
+  background: var(--accent);
+  color: var(--bg-dark);
   font-family: 'Rubik', sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
@@ -5200,7 +5202,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   right: 0;
   width: 60px;
   height: 4px;
-  background: #ffde59;
+  background: var(--accent);
   border-radius: 2px 0 0 0;
 }
 
@@ -5216,12 +5218,12 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   width: 48px;
   height: 48px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 222, 89, 0.1);
+  background: rgba(244, 197, 42, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
-  color: #ffde59;
+  color: var(--accent);
 }
 
 .management-staffing-standards-section .standard-card-title {
@@ -5265,7 +5267,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-standards-section .feature-check {
   flex-shrink: 0;
-  color: #ffde59;
+  color: var(--accent);
   width: 16px;
   height: 16px;
 }
@@ -5933,7 +5935,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .contact-contact-form-section__submit {
-  background-color: #ffde59;
+  background-color: #F5C842;
   color: #664d0b;
   padding: 14px 36px;
   border-radius: 8px;
@@ -5950,7 +5952,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .contact-contact-form-section__submit:hover {
-  background-color: #ffde59;
+  background-color: #F5C842;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(245, 200, 0, 0.35);
 }
@@ -6347,7 +6349,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .contact-closing-reassurance-section__btn--primary:hover {
-  background: #ffde59;
+  background: #F5C842;
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(245,200,0,0.28);
 }
@@ -6951,11 +6953,11 @@ nav.navbar .sub-menu li a:hover { color: #b48814 !important; background-color: r
   --cc-modal-bg: #ffffff;
   --cc-primary-color: #1f2937;
   --cc-secondary-color: #4b5563;
-  --cc-btn-primary-bg: #ffde59;
+  --cc-btn-primary-bg: #D4A017;
   --cc-btn-primary-color: #ffffff;
-  --cc-btn-primary-border: #ffde59;
-  --cc-btn-primary-hover-bg: #ffde59;
-  --cc-btn-primary-hover-border: #ffde59;
+  --cc-btn-primary-border: #D4A017;
+  --cc-btn-primary-hover-bg: #D4A017;
+  --cc-btn-primary-hover-border: #D4A017;
   --cc-btn-primary-hover-color: #ffffff;
   /* --cc-btn-secondary-* are used by BOTH the bar's "Customize" link and
    * the preferences modal's "Accept Necessary" / "Save Preferences" pills.
@@ -6969,7 +6971,7 @@ nav.navbar .sub-menu li a:hover { color: #b48814 !important; background-color: r
   --cc-btn-secondary-hover-bg: #e5e7eb;
   --cc-btn-secondary-hover-color: #111827;
   --cc-btn-secondary-hover-border: #d1d5db;
-  --cc-toggle-on-bg: #ffde59;
+  --cc-toggle-on-bg: #D4A017;
 }
 
 #cc-main,
@@ -7082,7 +7084,7 @@ nav.navbar .sub-menu li a:hover { color: #b48814 !important; background-color: r
  * defaults for the preferences modal's two secondary pills). */
 #zappy-cookie-banner .zappy-cookie-banner__button--customize {
   background-color: transparent !important;
-  color: #8c7000 !important;
+  color: #946f10 !important;
   border: none !important;
   padding: 0 8px !important;
   height: 32px !important;
@@ -7092,7 +7094,7 @@ nav.navbar .sub-menu li a:hover { color: #b48814 !important; background-color: r
 }
 
 #zappy-cookie-banner .zappy-cookie-banner__button--customize:hover {
-  color: #8c7000 !important;
+  color: #946f10 !important;
   background-color: transparent !important;
 }
 
@@ -7270,7 +7272,7 @@ nav.navbar .sub-menu li a:hover { color: #b48814 !important; background-color: r
 
 /* Basic Accessibility Enhancements */
 :root {
-  --accessibility-focus: #ffde59;
+  --accessibility-focus: #D4A017;
 }
 
 /* Skip link styles */
@@ -7393,9 +7395,9 @@ nav.navbar .sub-menu li a:hover { color: #b48814 !important; background-color: r
 #mic-access-tool-general-button svg line,
 #mic-access-tool-general-button svg polyline,
 #mic-access-tool-general-button svg g {
-  fill: #ffde59 !important;
-  stroke: #ffde59 !important;
-  color: #8c7000 !important;
+  fill: #D4A017 !important;
+  stroke: #D4A017 !important;
+  color: #946f10 !important;
 }
 
 /* Target images if the icon is an img instead of SVG */
@@ -7416,7 +7418,7 @@ nav.navbar .sub-menu li a:hover { color: #b48814 !important; background-color: r
 .mic-access-tool-box-header,
 div[id*="mic-access-tool-box"] header,
 div[id*="mic-access-tool-box"] .header {
-  background: #ffde59 !important;
+  background: #D4A017 !important;
   color: white !important;
 }
 
@@ -7443,8 +7445,8 @@ div[id*="mic-access-tool-box"] .header * {
 #mic-access-tool-box button:hover,
 div[id*="mic-access-tool-box"] button.active,
 div[id*="mic-access-tool-box"] button:hover {
-  border-color: #ffde59 !important;
-  color: #8c7000 !important;
+  border-color: #D4A017 !important;
+  color: #946f10 !important;
   background-color: rgba(11, 94, 149, 0.1) !important;
 }
 
@@ -7453,7 +7455,7 @@ div[id*="mic-access-tool-box"] button:hover {
 #mic-access-tool-box button[title*="Reset"],
 #mic-access-tool-box [class*="reset"],
 div[id*="mic-access-tool-box"] button[class*="reset"] {
-  background: #ffde59 !important;
+  background: #D4A017 !important;
   color: white !important;
 }
 
@@ -7474,7 +7476,18 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 ._access-icon {
   display: flex !important;
 }
-
+/* === BUTTON TEXT OVERRIDES START === */
+.btn-primary,
+.btn--primary,
+[class*="btn-primary"],
+[class*="btn--primary"] { color: #333333 !important; }
+.btn-accent,
+.btn--accent,
+[class*="btn-accent"],
+[class*="btn--accent"] { color: #333333 !important; }
+.navbar .nav-cta-btn,
+.nav-cta-btn { color: #333333 !important; }
+/* === BUTTON TEXT OVERRIDES END === */
 
 
 
@@ -7493,19 +7506,51 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 /* /Zappy custom logo size */
 
-/* === BUTTON TEXT OVERRIDES START === */
-.btn-primary,
-.btn--primary,
-[class*="btn-primary"],
-[class*="btn--primary"] { color: #333333 !important; }
-.btn-accent,
-.btn--accent,
-[class*="btn-accent"],
-[class*="btn--accent"] { color: #333333 !important; }
-.navbar .nav-cta-btn,
-.nav-cta-btn { color: #333333 !important; }
-/* === BUTTON TEXT OVERRIDES END === */
 
+.management-staffing-overview-section__title {
+  color: var(--text-color) !important;
+}
+
+.management-staffing-overview-section__main-title {
+  color: var(--text-color) !important;
+}
+
+.management-staffing-overview-section__sidebar-title {
+  color: var(--text-color) !important;
+}
+
+.management-staffing-overview-section__panel-heading {
+  color: var(--text-color) !important;
+}
+
+.management-staffing-workforce-section .workforce-card-accent {
+  background: #ffde59 !important;
+}
+
+.management-staffing-standards-section .standard-icon-box {
+  color: #ffde59 !important;
+}
+
+.management-staffing-standards-section .image-accent-bar {
+  background: #ffde59 !important;
+}
+
+.management-staffing-standards-section .feature-check {
+  color: #ffde59 !important;
+}
+
+.management-staffing-property-types-section__band-icon {
+  color: #ffde59 !important;
+  background: rgba(255, 222, 89, 0.15) !important;
+}
+
+.management-staffing-workforce-section .workforce-card-icon {
+  color: var(--text-color) !important;
+}
+
+.management-staffing-workforce-section .workforce-tag {
+  color: var(--text-color) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
