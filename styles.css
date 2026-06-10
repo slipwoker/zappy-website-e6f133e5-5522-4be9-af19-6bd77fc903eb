@@ -4402,7 +4402,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .management-staffing-overview-section__eyebrow {
   display: inline-block;
   background: #ffde59;
-  color: var(--text-light);
+  color: #1A1A1A;
   font-size: 0.875rem;
   font-weight: 600;
   padding: 6px 18px;
@@ -4416,7 +4416,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.2;
-  color: #1A1A2E;
+  color: #1A1A1A;
   margin-bottom: 16px;
   max-width: 800px;
 }
@@ -4448,7 +4448,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1A1A2E;
+  color: #1A1A1A;
   margin: 0;
 }
 
@@ -4483,7 +4483,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8c7000;
+  color: #ffde59;
   flex-shrink: 0;
 }
 
@@ -4515,7 +4515,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1A1A2E;
+  color: #1A1A1A;
   margin: 0 0 24px 0;
   padding-bottom: 16px;
   border-bottom: 2px solid #ffde59;
@@ -4547,7 +4547,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8c7000;
+  color: #ffde59;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -4566,7 +4566,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .management-staffing-overview-section__panel-heading {
   font-size: 1rem;
   font-weight: 700;
-  color: #1A1A2E;
+  color: #1A1A1A;
   margin: 0;
   line-height: 1.4;
 }
@@ -4653,10 +4653,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   }
 }
 
-/* property-types */
 .management-staffing-property-types-section {
   position: relative;
-  background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
+  background: linear-gradient(180deg, #1A1A1A 0%, #000000 100%);
   color: var(--text-light);
   padding: 100px 16px 80px;
   overflow: visible;
@@ -4680,8 +4679,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-property-types-section__eyebrow {
   display: inline-block;
-  background: var(--accent);
-  color: #664d0b;
+  background: #ffde59;
+  color: #1A1A1A;
   font-family: 'Rubik', sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
@@ -4754,9 +4753,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(244, 197, 42, 0.15);
+  background: rgba(255, 222, 89, 0.15);
   border-radius: 12px;
-  color: var(--accent);
+  color: #ffde59;
 }
 
 .management-staffing-property-types-section__band-icon svg {
@@ -4917,7 +4916,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .management-staffing-workforce-section .workforce-eyebrow {
   display: inline-block;
   background: #ffde59;
-  color: var(--text-light);
+  color: #1A1A1A;
   font-size: 0.875rem;
   font-weight: 600;
   padding: 6px 16px;
@@ -4932,7 +4931,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.2;
-  color: #1A1A2E;
+  color: #1A1A1A;
   margin: 0 0 16px 0;
 }
 
@@ -4972,7 +4971,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-workforce-section .workforce-card-accent {
   width: 4px;
-  background: var(--accent);
+  background: #ffde59;
   flex-shrink: 0;
   border-radius: 0;
 }
@@ -4987,7 +4986,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 
 .management-staffing-workforce-section .workforce-card-icon {
-  color: #826800;
+  color: #1A1A1A;
   margin-bottom: 4px;
   display: flex;
   align-items: center;
@@ -5003,14 +5002,14 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1A1A2E;
+  color: #1A1A1A;
   margin: 0;
 }
 
 .management-staffing-workforce-section .workforce-role {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--primary);
+  color: #1A1A1A;
   margin: 0;
   line-height: 1.4;
 }
@@ -5027,7 +5026,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .management-staffing-workforce-section .workforce-tag {
   display: inline-block;
   background: #F0F4FF;
-  color: #826800;
+  color: #1A1A1A;
   font-size: 0.8rem;
   font-weight: 600;
   padding: 6px 14px;
@@ -5097,10 +5096,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   }
 }
 
-/* standards */
 .management-staffing-standards-section {
   position: relative;
-  background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
+  background: linear-gradient(180deg, #1A1A1A 0%, #000000 100%);
   color: var(--text-light);
   padding: 100px 16px 120px;
   overflow: visible;
@@ -5122,8 +5120,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-standards-section .standards-eyebrow {
   display: inline-block;
-  background: var(--accent);
-  color: var(--bg-dark);
+  background: #ffde59;
+  color: #1A1A1A;
   font-family: 'Rubik', sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
@@ -5202,7 +5200,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   right: 0;
   width: 60px;
   height: 4px;
-  background: var(--accent);
+  background: #ffde59;
   border-radius: 2px 0 0 0;
 }
 
@@ -5218,12 +5216,12 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   width: 48px;
   height: 48px;
   border-radius: var(--radius-sm);
-  background: rgba(244, 197, 42, 0.1);
+  background: rgba(255, 222, 89, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
-  color: var(--accent);
+  color: #ffde59;
 }
 
 .management-staffing-standards-section .standard-card-title {
@@ -5267,7 +5265,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .management-staffing-standards-section .feature-check {
   flex-shrink: 0;
-  color: var(--accent);
+  color: #ffde59;
   width: 16px;
   height: 16px;
 }
