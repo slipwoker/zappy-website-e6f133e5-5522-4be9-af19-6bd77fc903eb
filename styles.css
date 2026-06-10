@@ -3565,8 +3565,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .services-process-section__label {
   display: inline-block;
-  background-color: var(--accent);
-  color: #664d0b;
+  background-color: #ffde59;
+  color: #5c3d00;
   font-family: 'Rubik', sans-serif;
   font-size: 0.875rem;
   font-weight: 700;
@@ -3631,8 +3631,8 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .services-process-section__step:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: var(--accent);
-  box-shadow: var(--shadow-colored, 0 8px 32px rgba(245,200,0,0.28));
+  border-color: #ffde59;
+  box-shadow: 0 8px 32px rgba(255,222,89,0.28);
   transform: translateY(-2px);
 }
 
@@ -3640,7 +3640,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-family: 'Rubik', sans-serif;
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--accent);
+  color: #ffde59;
   line-height: 1;
   min-width: 60px;
   text-align: center;
@@ -3684,10 +3684,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .services-process-section__connector svg {
   width: 24px;
   height: 32px;
-  color: var(--accent);
+  color: #ffde59;
 }
 
-/* Decorative Image Tile */
 .services-process-section__image-tile {
   position: absolute;
   inset-inline-end: -40px;
@@ -3696,7 +3695,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   height: 210px;
   border-radius: var(--radius-img, 12px);
   overflow: hidden;
-  border: 3px solid var(--accent);
+  border: 3px solid #ffde59;
   box-shadow: var(--shadow-medium, 0 8px 32px rgba(27,58,107,0.14));
   z-index: 0;
   opacity: 0.9;
