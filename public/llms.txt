@@ -45,26 +45,6 @@ https://proces.zappy5.app/blog/field-quality-control
 https://proces.zappy5.app/blog/24-7-service-operations
 מדוע זמינות מלאה של מוקדים, מנהלים ורכבי פיקוח היא רכיב אסטרטגי בשירותי שטח, ולא רק יתרון תדמיתי.
 
-### מגזין הידע של פרוצס
-https://proces.zappy5.app/blog-899270
-Proces פרוצס - מגזין הידע של פרוצס
-
-### ניקיון
-https://proces.zappy5.app/blog/maintenance-cleaning-quality-9302
-מדריך מעשי לתכנון מערך ניקיון ואחזקה במבנים פעילים, עם דגש על תכנון, כוח אדם, בקרה ושמירה על רציפות תפעולית.
-
-### כוח אדם
-https://proces.zappy5.app/blog/staffing-provider-checklist-9335
-סקירה ממוקדת של הקריטריונים המרכזיים לבחירת ספק כוח אדם אמין, יציב ומקצועי עבור מערכים תפעוליים.
-
-### בקרה
-https://proces.zappy5.app/blog/field-quality-control-9368
-למה בקרת איכות שוטפת היא תנאי לשירות עקבי, ואיך נכון לבנות מנגנון פיקוח שמייצר שיפור מתמשך.
-
-### זמינות
-https://proces.zappy5.app/blog/24-7-service-operations-9387
-כיצד זמינות מסביב לשעון מחזקת רציפות תפעולית, מצמצמת סיכונים ומשפרת את איכות השירות באתרי לקוח.
-
 ## Legal & Policy
 
 ### Privacy Policy
@@ -97,7 +77,7 @@ Information about WCAG compliance and accessibility features.
   - `name` (text, required)
   - `email` (email, required)
   - `phone` (tel, required)
-  - `message` (textarea, required)
+  - `message` (textarea)
   - `privacy_consent` (checkbox, required)
 
 ---
