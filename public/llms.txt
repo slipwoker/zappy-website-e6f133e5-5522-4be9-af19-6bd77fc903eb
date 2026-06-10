@@ -6,19 +6,22 @@
 
 ## Pages
 
-### בית
+### ניקיון ותחזוקה בגובה אחר — Proces פרוצס
 https://proces.zappy5.app
 פרוצס מביאה לשוק הניקיון והתחזוקה מהפכה של ממש: משירותי ניקיון משרדים ועד ניקוי חלונות בגובה באמצעות רחפן, סנפלינג ואוסמוזה הפוכה. שדרגו את הנכס שלכם עוד היום.
 
-### שירותי ניקיון
-https://proces.zappy5.app/cleaning-services
-מנקים הכול, מגיעים לכל מקום: ניקוי חלונות בגובה בעזרת רחפן תותח מים, ציפוי ננו, הדברה ירוקה ועוד. השירותים המתקדמים של פרוצס מחכים לכם כאן.
+### Page
+https://proces.zappy5.app/menu-group-1781113438479
 
-### ניהול מתקנים וכוח אדם
+### ניהול מתקנים וכוח אדם מקצועי — Proces פרוצס
 https://proces.zappy5.app/management-staffing
 פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.
 
-### צור קשר
+### שירותי גובה עם רחפן וסנפלינג — Proces פרוצס
+https://proces.zappy5.app/cleaning-services
+מנקים הכול, מגיעים לכל מקום: ניקוי חלונות בגובה בעזרת רחפן תותח מים, ציפוי ננו, הדברה ירוקה ועוד. השירותים המתקדמים של פרוצס מחכים לכם כאן.
+
+### דברו איתנו על ניקיון ותחזוקה בגובה — Proces פרוצס
 https://proces.zappy5.app/contact
 צריכים הצעת מחיר לניקוי חלונות ברחפן או חוזה תחזוקה שוטף? צרו קשר עם פרוצס ונחזור אליכם במהירות עם הפתרון המושלם לניקיון מקצועי בגובה.
 
@@ -51,11 +54,11 @@ Information about WCAG compliance and accessibility features.
 - Method: POST
 - Content-Type: application/json
 - Fields:
-  - `name` (text, required)
-  - `email` (email, required)
-  - `phone` (tel, required)
-  - `message` (textarea, required)
-  - `privacy_consent` (checkbox, required)
+  - `name` (text)
+  - `email` (email)
+  - `phone` (tel)
+  - `message` (textarea)
+  - `privacy_consent` (checkbox)
 
 ---
 
