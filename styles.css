@@ -2680,12 +2680,14 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   }
 
   .index-capabilities-section__collage-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
 
   .index-capabilities-section__collage-item--main {
-    grid-column: span 2;
-  }
+  grid-column: span 2;
+  aspect-ratio: 4 / 3;
+}
 
   .index-capabilities-section__collage-overlay {
     inset: -6px;
