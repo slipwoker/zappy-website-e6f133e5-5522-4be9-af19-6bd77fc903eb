@@ -13,6 +13,9 @@ https://proces.zappy5.app
 ### Page
 https://proces.zappy5.app/menu-group-1781113438479
 
+### Page
+https://proces.zappy5.app/about-us
+
 ### ניהול מתקנים וכוח אדם מקצועי — Proces פרוצס
 https://proces.zappy5.app/management-staffing
 פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.
@@ -54,11 +57,11 @@ Information about WCAG compliance and accessibility features.
 - Method: POST
 - Content-Type: application/json
 - Fields:
-  - `name` (text, required)
-  - `email` (email, required)
-  - `phone` (tel, required)
+  - `name` (text)
+  - `email` (email)
+  - `phone` (tel)
   - `message` (textarea)
-  - `privacy_consent` (checkbox, required)
+  - `privacy_consent` (checkbox)
 
 ---
 
