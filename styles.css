@@ -7551,6 +7551,159 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .management-staffing-workforce-section .workforce-tag {
   color: var(--text-color) !important;
 }
+
+/* AI-generated section */
+/* About Us Section — Proces */
+.proces-about {
+  background-color: var(--background-color, #FFFFFF);
+  padding: 80px 24px;
+  font-family: system-ui, sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+.proces-about__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.proces-about__header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.proces-about__heading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--secondary-color, #1A1A1A);
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+}
+
+.proces-about__divider {
+  width: 70px;
+  height: 4px;
+  background-color: var(--primary-color, #D4A017);
+  margin: 0 auto 20px auto;
+  border-radius: 2px;
+}
+
+.proces-about__subheading {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text-secondary-color, #555555);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Content Paragraphs */
+.proces-about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.proces-about__paragraph {
+  padding: 32px;
+  background-color: var(--surface-color, #F8F8F8);
+  border-radius: 12px;
+  border: 1px solid rgba(212, 160, 23, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.proces-about__paragraph:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.proces-about__paragraph-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--secondary-color, #1A1A1A);
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(212, 160, 23, 0.2);
+}
+
+.proces-about__paragraph-text {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--text-secondary-color, #555555);
+  line-height: 1.85;
+  margin: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .proces-about {
+    padding: 56px 20px;
+  }
+
+  .proces-about__heading {
+    font-size: 2rem;
+  }
+
+  .proces-about__subheading {
+    font-size: 1.05rem;
+  }
+
+  .proces-about__header {
+    margin-bottom: 40px;
+  }
+
+  .proces-about__content {
+    gap: 24px;
+  }
+
+  .proces-about__paragraph {
+    padding: 24px 20px;
+  }
+
+  .proces-about__paragraph-title {
+    font-size: 1.15rem;
+  }
+
+  .proces-about__paragraph-text {
+    font-size: 0.98rem;
+    line-height: 1.75;
+  }
+}
+
+@media (max-width: 480px) {
+  .proces-about {
+    padding: 40px 16px;
+  }
+
+  .proces-about__heading {
+    font-size: 1.75rem;
+  }
+
+  .proces-about__subheading {
+    font-size: 0.95rem;
+  }
+
+  .proces-about__divider {
+    width: 50px;
+    height: 3px;
+  }
+
+  .proces-about__paragraph {
+    padding: 20px 16px;
+    border-radius: 10px;
+  }
+
+  .proces-about__paragraph-title {
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+  }
+
+  .proces-about__paragraph-text {
+    font-size: 0.93rem;
+    line-height: 1.7;
+  }
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
