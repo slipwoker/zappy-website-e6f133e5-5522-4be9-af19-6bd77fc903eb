@@ -7704,6 +7704,124 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     line-height: 1.7;
   }
 }
+
+/* AI-generated section */
+.advantages-section {
+  background-color: var(--background-color, #FFFFFF);
+  padding: 80px 20px;
+  font-family: system-ui, sans-serif;
+}
+
+.advantages-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.advantages-heading {
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-color, #1A1A1A);
+  margin-bottom: 48px;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+.advantages-heading::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: var(--primary-color, #D4A017);
+  margin: 16px auto 0;
+  border-radius: 2px;
+}
+
+.advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.advantage-card {
+  background-color: #F8F8F8;
+  border: 1px solid rgba(134, 134, 134, 0.2);
+  border-radius: 12px;
+  padding: 28px 24px 24px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.advantage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(212, 160, 23, 0.3);
+}
+
+.advantage-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-color, #1A1A1A);
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.advantage-card-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary-color, #555555);
+  line-height: 1.7;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* Responsive: Tablet - 2 columns */
+@media (max-width: 900px) {
+  .advantages-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .advantages-heading {
+    font-size: 2rem;
+    margin-bottom: 36px;
+  }
+
+  .advantage-card {
+    padding: 24px 20px 20px;
+  }
+}
+
+/* Responsive: Mobile - 1 column */
+@media (max-width: 600px) {
+  .advantages-section {
+    padding: 56px 16px;
+  }
+
+  .advantages-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .advantages-heading {
+    font-size: 1.75rem;
+    margin-bottom: 32px;
+  }
+
+  .advantage-card {
+    padding: 22px 18px 18px;
+  }
+
+  .advantage-card-title {
+    font-size: 1.1rem;
+  }
+
+  .advantage-card-text {
+    font-size: 0.9rem;
+  }
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
