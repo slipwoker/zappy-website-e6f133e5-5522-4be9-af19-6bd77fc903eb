@@ -166,7 +166,7 @@ a:hover {
 }
 
 .site-footer a {
-  color: inherit;
+  color: #000000 !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -7830,19 +7830,19 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer h4 {
-  color: var(--text-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer p {
-  color: var(--text-secondary-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer span {
-  color: var(--text-secondary-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer li {
-  color: var(--text-secondary-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer a {
@@ -7858,11 +7858,11 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .footer-bottom .copyright {
-  color: var(--text-secondary-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-bottom .legal-links a {
-  color: var(--text-secondary-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer .contact-icon {
@@ -7882,15 +7882,15 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .contact-list a {
-  color: var(--text-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer .contact-list li {
-  color: var(--text-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer .contact-list span {
-  color: var(--text-color) !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-legal a {
