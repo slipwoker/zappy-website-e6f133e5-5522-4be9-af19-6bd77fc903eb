@@ -7940,6 +7940,16 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   width: 100% !important;
 }
 }
+
+.site-footer .footer-bottom .legal-links a,
+.site-footer .footer-bottom .legal-links a:link,
+.site-footer .footer-bottom .legal-links a:visited {
+  color: #000000 !important;
+}
+
+.site-footer .footer-bottom .legal-links a:hover {
+  color: var(--primary-color) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
