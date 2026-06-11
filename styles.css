@@ -7822,6 +7822,102 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     font-size: 0.9rem;
   }
 }
+
+.site-footer {
+  background-color: var(--background-color) !important;
+}
+
+.site-footer h4 {
+  color: var(--text-color) !important;
+}
+
+.site-footer p {
+  color: var(--text-secondary-color) !important;
+}
+
+.site-footer span {
+  color: var(--text-secondary-color) !important;
+}
+
+.site-footer li {
+  color: var(--text-secondary-color) !important;
+}
+
+.site-footer a {
+  color: var(--text-secondary-color) !important;
+}
+
+.site-footer a:hover {
+  color: var(--primary-color) !important;
+}
+
+.site-footer .footer-bottom {
+  border-top: 1px solid #E0E0E0 !important;
+}
+
+.site-footer .footer-bottom .copyright {
+  color: var(--text-secondary-color) !important;
+}
+
+.site-footer .footer-bottom .legal-links a {
+  color: var(--text-secondary-color) !important;
+}
+
+.site-footer .contact-icon {
+  color: var(--primary-color) !important;
+}
+
+.site-footer .fab, .site-footer .fas {
+  color: var(--primary-color) !important;
+}
+
+.site-footer .footer-social a .fab {
+  color: var(--text-color) !important;
+}
+
+.site-footer .footer-social a:hover .fab {
+  color: var(--primary-color) !important;
+}
+
+.site-footer .contact-list a {
+  color: var(--text-color) !important;
+}
+
+.site-footer .contact-list li {
+  color: var(--text-color) !important;
+}
+
+.site-footer .contact-list span {
+  color: var(--text-color) !important;
+}
+
+.site-footer .footer-legal a {
+  color: var(--text-color) !important;
+}
+
+.site-footer .copyright p {
+  color: var(--text-color) !important;
+}
+
+.site-footer .footer-description {
+  color: var(--text-color) !important;
+}
+
+.site-footer .footer-bottom a {
+  color: var(--text-color) !important;
+}
+
+.site-footer .footer-bottom p {
+  color: var(--text-color) !important;
+}
+
+.site-footer .footer-bottom span:not(.separator) {
+  color: var(--text-color) !important;
+}
+
+.site-footer .footer-legal .separator {
+  color: var(--text-color) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
