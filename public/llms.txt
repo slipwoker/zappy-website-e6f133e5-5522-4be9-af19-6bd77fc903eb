@@ -50,7 +50,7 @@ Information about WCAG compliance and accessibility features.
 - Email: proces@outlook.co.il
 - Phone: 077-4243446
 - Phone (tel): tel:0774243446
-- Address: נגב 2, קרית שדה התעופה, ישראל
+- Address: איירפורט סיטי, קרית שדה התעופה, ישראל
 
 ### Contact form
 - URL: https://proces.zappy5.app/contact
