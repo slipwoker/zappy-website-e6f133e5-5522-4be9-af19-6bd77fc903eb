@@ -161,26 +161,31 @@
       // Track button clicks (counted as actions)
       if (target.tagName === 'BUTTON' || target.closest('button')) {
         var button = target.tagName === 'BUTTON' ? target : target.closest('button');
-        trackEvent('click', {
+        var clickMeta = {
           element: 'button',
           text: button.textContent.trim().substring(0, 100),
           id: button.id || null,
           class: button.className || null
-        });
+        };
+        
+        trackEvent('click', clickMeta);
       }
       
       // Track link clicks (navigation - not counted as actions)
       else if (target.tagName === 'A' || target.closest('a')) {
         var link = target.tagName === 'A' ? target : target.closest('a');
-        trackEvent('navigation', {
+        var navMeta = {
           element: 'link',
           text: link.textContent.trim().substring(0, 100),
           href: link.href,
           external: link.hostname !== window.location.hostname
-        });
+        };
+        
+        trackEvent('navigation', navMeta);
       }
     }, true);
   }
+  
   
   // Track form submissions
   if (config.trackFormSubmissions) {
@@ -794,23 +799,23 @@
 <a class="skip-link" href="#main">דלג לתוכן הראשי</a>
   <nav class="navbar" dir="rtl">
   <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-element-type="button" data-element-id="btn-1781096877550-r0lea1tv8" data-native-element="true">
-    <svg class="hamburger-icon" width="24" height="24" viewbox="0 0 24 24" fill="none">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
     </svg>
-    <svg class="close-icon" width="24" height="24" viewbox="0 0 24 24" fill="none" style="display: none;">
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
       <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
     </svg>
   </button>
   
   <button class="phone-header-btn" data-phone="0774243446" aria-label="Call" data-element-type="button" data-element-id="btn-1781096877550-890ahlv5s" data-native-element="true">
-    <svg width="20" height="20" viewbox="0 0 24 24" fill="currentColor">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
     </svg>
   </button>
 
   <div class="nav-container">
     <div class="nav-right-group"><div class="nav-brand">
-      <a href="/" class="logo-link"><img class="logo" src="/assets/proces-facility-management-staffing-services-logo-1781112406928-4x52i2.webp?v=1781112407341-x37g9w" alt="Proces פרוצס" data-image-type="logo" ></a>
+      <a href="/" class="logo-link"><img class="logo" src="/assets/proces-facility-management-staffing-services-logo-1781456039245-2ndve4.webp?v=1781456039688-nznxj4" alt="Proces פרוצס" data-image-type="logo" ></a>
     </div><ul class="nav-menu" id="navMenu"><li><a href="/" data-i18n="nav-home">בית</a></li><li><a href="/cleaning-services">שירותי ניקיון</a></li><li><a href="/management-staffing">ניהול מתקנים וכוח אדם</a></li><li><a href="/about-us" class="">אודותינו</a></li><li class="nav-cta-item-mobile"><a href="/contact">צור קשר</a></li><li><a href="/knowledge-tips" class="nav-link">כתבות</a></li></ul></div>
     
     
@@ -1414,12 +1419,12 @@
 
   <!-- Bottom divider: cyan gradient chevron -->
   <div class="services-catalog-section__divider-wrapper">
-    <svg data-no-icon-edit="true" aria-hidden="true" viewbox="0 0 1200 80" preserveaspectratio="none" xmlns="http://www.w3.org/2000/svg">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <lineargradient id="services-chevron-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient id="services-chevron-grad" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="var(--secondary)"></stop>
           <stop offset="100%" stop-color="var(--primary)"></stop>
-        </lineargradient>
+        </linearGradient>
       </defs>
       <path d="M0,80 L0,30 L600,60 L1200,30 L1200,80 Z" fill="#D4A017"></path>
     </svg>
@@ -1448,7 +1453,7 @@
 
         <!-- Connector 1 -->
         <div class="services-process-section__connector" aria-hidden="true">
-          <svg viewbox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
             <polyline points="12,0 12,30 6,24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
             <polyline points="12,30 18,24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
           </svg>
@@ -1465,7 +1470,7 @@
 
         <!-- Connector 2 -->
         <div class="services-process-section__connector" aria-hidden="true">
-          <svg viewbox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
             <polyline points="12,0 12,30 6,24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
             <polyline points="12,30 18,24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
           </svg>
@@ -1482,7 +1487,7 @@
 
         <!-- Connector 3 -->
         <div class="services-process-section__connector" aria-hidden="true">
-          <svg viewbox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 24 40" xmlns="http://www.w3.org/2000/svg">
             <polyline points="12,0 12,30 6,24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
             <polyline points="12,30 18,24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
           </svg>
@@ -1508,7 +1513,7 @@
 
   <!-- Bottom Divider: White Zig-Zag Chevron Edge -->
   <div class="services-process-section__divider-wrapper" aria-hidden="true">
-    <svg data-no-icon-edit="true" aria-hidden="true" viewbox="0 0 1200 60" preserveaspectratio="none" xmlns="http://www.w3.org/2000/svg">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <polygon points="0,60 0,0 60,0 120,60 180,0 240,60 300,0 360,60 420,0 480,60 540,0 600,60 660,0 720,60 780,0 840,60 900,0 960,60 1020,0 1080,60 1140,0 1200,60 1200,60" fill="var(--bg-light)"></polygon>
     </svg>
   </div>
@@ -1538,19 +1543,19 @@
         <ul class="services-specialists-section__feature-list">
           <li class="services-specialists-section__feature-item">
             <span class="services-specialists-section__feature-icon">
-              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
             </span>
             <span class="services-specialists-section__feature-text">צוותי גלישה מוסמכים לעבודות בגובה רב</span>
           </li>
           <li class="services-specialists-section__feature-item">
             <span class="services-specialists-section__feature-icon">
-              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
             </span>
             <span class="services-specialists-section__feature-text">טכנולוגיית רחפן ייחודית לשטיפה והתזת קצף</span>
           </li>
           <li class="services-specialists-section__feature-item">
             <span class="services-specialists-section__feature-icon">
-              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+              <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
             </span>
             <span class="services-specialists-section__feature-text">ציפוי ננו וחיפוי מגן למשטחי זכוכית ומתכת</span>
           </li>
@@ -1585,7 +1590,7 @@
     <div class="services-specialists-section__highlights">
       <div class="services-specialists-section__highlight-card">
         <div class="services-specialists-section__highlight-icon-wrapper">
-          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
         </div>
         <h3 class="services-specialists-section__highlight-title">עבודות גובה וגלישה (סנפלינג)</h3>
         <p class="services-specialists-section__highlight-text">צוותי הגלישה המוסמכים של פרוצס מבצעים עבודות ניקיון, תחזוקה ואיטום בגובה רב תוך עמידה בתקני הבטיחות המחמירים ביותר. פתרון יעיל וחסכוני לבניינים רבי-קומות.</p>
@@ -1593,7 +1598,7 @@
       
       <div class="services-specialists-section__highlight-card">
         <div class="services-specialists-section__highlight-icon-wrapper">
-          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="3"></circle><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M2 12h4"></path><path d="M18 12h4"></path></svg>
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="3"></circle><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M2 12h4"></path><path d="M18 12h4"></path></svg>
         </div>
         <h3 class="services-specialists-section__highlight-title">טכנולוגיית רחפן מתקדמת</h3>
         <p class="services-specialists-section__highlight-text">שירות ייחודי של פרוצס: הטסת תותח מים או קצף באמצעות רחפן תרמי לשטיפת חזיתות, גגות וחניונים. הגעה לכל נקודה ללא צורך בפיגומים, במהירות ובדיוק מרביים.</p>
@@ -1601,7 +1606,7 @@
 
       <div class="services-specialists-section__highlight-card">
         <div class="services-specialists-section__highlight-icon-wrapper">
-          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+          <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
         </div>
         <h3 class="services-specialists-section__highlight-title">חיטוי בגז אוזון וחדרים נקיים</h3>
         <p class="services-specialists-section__highlight-text">מחלקת ההתמחות שלנו מבצעת ניקוי וחיטוי מעבדות, חדרים נקיים ומפעלים תוך שימוש בטכנולוגיית גז אוזון (O3) והדברה אקולוגית ירוקה, העומדים בתקנים הבינלאומיים המחמירים ביותר.</p>
@@ -1612,7 +1617,7 @@
 
   <!-- Bottom Divider: Bold Yellow Slanted Bar -->
   <div class="services-specialists-section__divider-wrapper">
-    <svg data-no-icon-edit="true" aria-hidden="true" viewbox="0 0 1200 60" preserveaspectratio="none" xmlns="http://www.w3.org/2000/svg">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0,60 L0,0 L1200,60 Z" fill="#D4A017"></path>
     </svg>
   </div>
@@ -1632,7 +1637,7 @@
             <!-- Block 1 -->
             <div class="assurance-card">
                 <div class="assurance-icon-wrap">
-                    <svg class="assurance-icon" viewbox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-icon-type="svg">
+                    <svg class="assurance-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-icon-type="svg">
                         <path d="M24 4L6 12V22C6 31.5 13.7 40.3 24 43C34.3 40.3 42 31.5 42 22V12L24 4Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         <path d="M16 24L21 29L32 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
@@ -1644,7 +1649,7 @@
             <!-- Block 2 -->
             <div class="assurance-card">
                 <div class="assurance-icon-wrap">
-                    <svg class="assurance-icon" viewbox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-icon-type="svg">
+                    <svg class="assurance-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-icon-type="svg">
                         <path d="M14 12H34C36.2 12 38 13.8 38 16V34C38 36.2 36.2 38 34 38H14C11.8 38 10 36.2 10 34V16C10 13.8 11.8 12 14 12Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         <path d="M10 20H38" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         <path d="M18 28V32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -1659,7 +1664,7 @@
             <!-- Block 3 -->
             <div class="assurance-card">
                 <div class="assurance-icon-wrap">
-                    <svg class="assurance-icon" viewbox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-icon-type="svg">
+                    <svg class="assurance-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-type="icon" data-icon-type="svg">
                         <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></circle>
                         <path d="M24 14V24L30 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
                         <path d="M14 24H16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -1678,7 +1683,7 @@
         <div class="assurance-cta-wrap">
             <a href="#contact" class="assurance-cta-btn">
                 <span>צרו קשר לקבלת הצעת מחיר</span>
-                <svg width="20" height="20" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
             </a>
@@ -1687,7 +1692,7 @@
 
     <!-- Decorative Chevron Accent (Left Side) -->
     <div class="assurance-decor-chevron" aria-hidden="true">
-        <svg viewbox="0 0 80 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M30 0L80 0L80 200L30 200L0 100Z" fill="var(--accent)" opacity="0.08"></path>
             <path d="M20 0L70 0L70 200L20 200L-10 100Z" fill="var(--accent)" opacity="0.05"></path>
         </svg>
