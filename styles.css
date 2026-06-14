@@ -119,9 +119,7 @@ html {
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
-}
-
-body {
+}html[dir="rtl"]{
   font-size: 16px !important;
   line-height: 1.7 !important;
   font-family: 'Rubik', sans-serif;
@@ -306,10 +304,7 @@ small, .small-text {
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-html[dir="rtl"] .whatsapp-float {
-  right: 20px;
-  left: auto;
-}
+.whatsapp-float{right: 20px;left: auto;}
 
 html[dir="ltr"] .whatsapp-float,
 html:not([dir]) .whatsapp-float {
@@ -890,46 +885,28 @@ html[lang="fr"] .nav-cta-container {
 /* ============================================
    RTL DESKTOP LAYOUT (Hebrew, Arabic)
    ============================================ */
-html[dir="rtl"] .nav-container,
+.nav-container,
 html[lang="he"] .nav-container,
-html[lang="ar"] .nav-container {
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
+html[lang="ar"] .nav-container{flex-direction: row-reverse;justify-content: space-between;}
 
 /* CTA on the left in RTL */
-html[dir="rtl"] .nav-cta-container,
+.nav-cta-container,
 html[lang="he"] .nav-cta-container,
-html[lang="ar"] .nav-cta-container {
-  order: -1;
-  margin: 0;
-}
+html[lang="ar"] .nav-cta-container{order: -1;margin: 0;}
 
 /* Wrapper groups menu and logo together on the right */
-html[dir="rtl"] .nav-right-group,
+.nav-right-group,
 html[lang="he"] .nav-right-group,
-html[lang="ar"] .nav-right-group {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  order: 1;
-  flex: 1;
-  min-width: 0;
-  flex-direction: row-reverse;
-}
+html[lang="ar"] .nav-right-group{display: flex;align-items: center;gap: 1rem;order: 1;flex: 1;min-width: 0;flex-direction: row-reverse;}
 
 /* Within wrapper: Logo on far right, menu to its left */
-html[dir="rtl"] .nav-right-group .nav-brand,
+.nav-right-group .nav-brand,
 html[lang="he"] .nav-right-group .nav-brand,
-html[lang="ar"] .nav-right-group .nav-brand {
-  order: 2;
-}
+html[lang="ar"] .nav-right-group .nav-brand{order: 2;}
 
-html[dir="rtl"] .nav-right-group .nav-menu,
+.nav-right-group .nav-menu,
 html[lang="he"] .nav-right-group .nav-menu,
-html[lang="ar"] .nav-right-group .nav-menu {
-  order: 1;
-}
+html[lang="ar"] .nav-right-group .nav-menu{order: 1;}
 
 /* ============================================
    DROPDOWN MENUS (Desktop)
@@ -988,12 +965,9 @@ html[lang="ar"] .nav-right-group .nav-menu {
   margin: 0;
 }
 
-html[dir="rtl"] .dropdown-menu,
+.dropdown-menu,
 html[lang="he"] .dropdown-menu,
-html[lang="ar"] .dropdown-menu {
-  right: 0;
-  left: auto;
-}
+html[lang="ar"] .dropdown-menu{right: 0;left: auto;}
 
 html[dir="ltr"] .dropdown-menu,
 html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .dropdown-menu {
@@ -1189,20 +1163,12 @@ html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .dropdown-menu {
      which breaks AI centering hacks (top:50% + margin-top:-Npx).
      Use explicit left/right + transform for robust vertical centering. */
   .nav-brand,
-  html[dir="rtl"] .nav-brand,
+  .nav-brand,
   html[lang="he"] .nav-brand,
   html[lang="ar"] .nav-brand,
   html[dir="rtl"] .nav-right-group .nav-brand,
   html[lang="he"] .nav-right-group .nav-brand,
-  html[lang="ar"] .nav-right-group .nav-brand {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    text-align: center;
-    order: 0 !important;
-  }
+  html[lang="ar"] .nav-right-group .nav-brand{position: absolute !important;left: 50% !important;top: 50% !important;transform: translate(-50%, -50%) !important;margin: 0 !important;text-align: center;order: 0 !important;}
   
   /* Mobile logo size: fixed at 35px/110px — do not adjust, especially for e-commerce/catalog sites */
   .logo {
@@ -1316,11 +1282,9 @@ html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .dropdown-menu {
     font-size: 0.9em;
   }
   
-  html[dir="rtl"] .dropdown-menu li a,
+  .dropdown-menu li a,
   html[lang="he"] .dropdown-menu li a,
-  html[lang="ar"] .dropdown-menu li a {
-    padding: 12px 50px 12px 30px !important;
-  }
+  html[lang="ar"] .dropdown-menu li a{padding: 12px 50px 12px 30px !important;}
 
   /* Mobile submenu links: use nav panel text color instead of desktop submenu color.
      Desktop submenu uses light bg + dark text, but mobile submenu is inline (transparent)
@@ -1426,32 +1390,21 @@ html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .dropdown-menu {
    Uses !important to override any inline styles
    ============================================ */
 @media (max-width: 768px) {
-  html[dir="rtl"] .mobile-toggle,
+  .mobile-toggle,
   html[lang="he"] .mobile-toggle,
-  html[lang="ar"] .mobile-toggle {
-    left: auto !important;
-    right: 12px !important;
-  }
+  html[lang="ar"] .mobile-toggle{left: auto !important;right: 12px !important;}
   
-  html[dir="rtl"] .phone-header-btn,
+  .phone-header-btn,
   html[lang="he"] .phone-header-btn,
-  html[lang="ar"] .phone-header-btn {
-    left: 12px !important;
-    right: auto !important;
-  }
+  html[lang="ar"] .phone-header-btn{left: 12px !important;right: auto !important;}
   
-  html[dir="rtl"] .nav-menu,
+  .nav-menu,
   html[lang="he"] .nav-menu,
-  html[lang="ar"] .nav-menu {
-    right: 0 !important;
-    left: auto !important;
-  }
+  html[lang="ar"] .nav-menu{right: 0 !important;left: auto !important;}
   
-  html[dir="rtl"] .nav-menu a,
+  .nav-menu a,
   html[lang="he"] .nav-menu a,
-  html[lang="ar"] .nav-menu a {
-    text-align: right !important;
-  }
+  html[lang="ar"] .nav-menu a{text-align: start !important;}
   
   /* Hide desktop language switcher on mobile - hamburger menu handles it */
   /* High specificity to override stored CSS */
@@ -1530,7 +1483,7 @@ nav.navbar {
      this rule wins the cascade via equal-or-higher specificity. */
   #navMenu,
   .nav-menu,
-  html[dir="rtl"] .nav-menu,
+  .nav-menu,
   html[dir="rtl"] .navbar .nav-menu,
   html[dir="rtl"] nav .nav-menu,
   html[dir="rtl"] header .nav-menu,
@@ -1541,11 +1494,7 @@ nav.navbar {
   [dir="rtl"] .nav-container .nav-menu,
   [dir="rtl"] .nav-menu,
   html[lang="he"] .nav-menu,
-  html[lang="ar"] .nav-menu {
-    position: fixed !important;
-    top: var(--total-header-height, var(--zappy-navbar-bottom, 70px)) !important;
-    right: var(--ios-viewport-gap, 0px) !important;
-  }
+  html[lang="ar"] .nav-menu{position: fixed !important;top: var(--total-header-height, var(--zappy-navbar-bottom, 70px)) !important;right: var(--ios-viewport-gap, 0px) !important;}
 }
 
 /* Constrained nav-container - content limited to 1200px and centered */
@@ -1562,37 +1511,28 @@ nav.navbar {
 
 /* RTL layout for cloned sites (without nav-right-group) */
 /* Base RTL styles - apply to all screens */
-html[dir="rtl"] .nav-container,
+.nav-container,
 html[lang="he"] .nav-container,
-html[lang="ar"] .nav-container {
-  justify-content: space-between !important;
-}
+html[lang="ar"] .nav-container{justify-content: space-between !important;}
 
 /* Logo stays on right in RTL - DESKTOP ONLY */
 /* On mobile, logo should be centered (handled by mobile media query) */
 @media (min-width: 769px) {
-  html[dir="rtl"] .nav-brand,
+  .nav-brand,
   html[dir="rtl"] .logo-link,
   html[lang="he"] .nav-brand,
   html[lang="he"] .logo-link,
   html[lang="ar"] .nav-brand,
-  html[lang="ar"] .logo-link {
-    order: 2 !important;
-    margin-left: 1.5rem !important;
-  }
+  html[lang="ar"] .logo-link{order: 2 !important;margin-left: 1.5rem !important;}
 }
 
 /* Base RTL nav-menu styles - display:flex but NOT flex-direction (that's desktop-only) */
-html[dir="rtl"] .nav-menu,
+.nav-menu,
 html[lang="he"] .nav-menu,
-html[lang="ar"] .nav-menu {
-  order: 1 !important;
-  margin-right: 0 !important;
-  margin-left: 0 !important;
-}
+html[lang="ar"] .nav-menu{order: 1 !important;margin-right: 0 !important;margin-left: 0 !important;}
 
 /* CTA button pushed to far left in RTL */
-html[dir="rtl"] .cta-button,
+.cta-button,
 html[dir="rtl"] a.cta-button,
 html[dir="rtl"] .nav-cta-btn,
 html[lang="he"] .cta-button,
@@ -1600,35 +1540,22 @@ html[lang="he"] a.cta-button,
 html[lang="he"] .nav-cta-btn,
 html[lang="ar"] .cta-button,
 html[lang="ar"] a.cta-button,
-html[lang="ar"] .nav-cta-btn {
-  order: 0 !important;
-  margin-right: auto !important;
-  margin-left: 0 !important;
-}
+html[lang="ar"] .nav-cta-btn{order: 0 !important;margin-right: auto !important;margin-left: 0 !important;}
 
 /* DESKTOP ONLY: Horizontal flex layout for RTL navbar - prevents breaking mobile vertical menu */
 @media (min-width: 769px) {
-  html[dir="rtl"] .nav-container,
+  .nav-container,
   html[lang="he"] .nav-container,
-  html[lang="ar"] .nav-container {
-    flex-direction: row-reverse !important;
-  }
+  html[lang="ar"] .nav-container{flex-direction: row-reverse !important;}
   
-  html[dir="rtl"] .nav-menu,
+  .nav-menu,
   html[lang="he"] .nav-menu,
-  html[lang="ar"] .nav-menu {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 1.5rem !important;
-    /* flex:1 ensures menu fills space between brand and CTA so items
+  html[lang="ar"] .nav-menu{display: flex !important;flex-direction: row !important;align-items: center !important;gap: 1.5rem !important;/* flex:1 ensures menu fills space between brand and CTA so items
        stay adjacent to the logo instead of centering when the
        .nav-right-group wrapper is absent (cloned sites, etc.).
        justify-content: flex-start pushes items toward the logo
        (in RTL, flex-start = right side, adjacent to the brand). */
-    flex: 1 !important;
-    justify-content: flex-start !important;
-  }
+    flex: 1 !important;justify-content: flex-start !important;}
 }
 
 /* ============================================
@@ -1658,20 +1585,7 @@ main:not(.courses-page-main) { margin-top: 0 !important; padding-top: 0 !importa
   --radius-md: 12px;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
   --transition: all 0.3s ease;
-}
-
-.site-footer {
-  background-color: var(--bg-dark);
-  color: var(--text-light);
-  font-family: 'Rubik', sans-serif;
-  line-height: 1.6;
-  direction: rtl;
-  text-align: right;
-  padding: 3rem 0 0;
-  border-top: 4px solid var(--accent);
-  position: relative;
-  overflow: hidden;
-}
+}.site-footer{background-color: var(--bg-dark);color: var(--text-light);font-family: 'Rubik', sans-serif;line-height: 1.6;text-align: start;padding: 3rem 0 0;border-top: 4px solid var(--accent);position: relative;overflow: hidden;}html[dir="rtl"] .site-footer{direction: rtl;}
 
 /* Subtle chevron/industrial pattern overlay */
 .site-footer::before {
@@ -1834,14 +1748,7 @@ main:not(.courses-page-main) { margin-top: 0 !important; padding-top: 0 !importa
 
 .hours-day {
   font-weight: 500;
-}
-
-.hours-time {
-  color: var(--accent);
-  font-weight: 600;
-  direction: ltr;
-  display: inline-block;
-}
+}.hours-time{color: var(--accent);font-weight: 600;display: inline-block;}html[dir="ltr"] .hours-time{direction: ltr;}
 
 .footer-social-col .footer-social {
   display: flex;
@@ -1989,8 +1896,8 @@ blockquote::after, .quote::after, [data-quote]::after {
   vertical-align: -0.6em;
   display: inline-block;
 }
-html[dir="rtl"] blockquote::before, html[dir="rtl"] .quote::before, html[dir="rtl"] [data-quote]::before { content: "\201D"; }
-html[dir="rtl"] blockquote::after, html[dir="rtl"] .quote::after, html[dir="rtl"] [data-quote]::after { content: "\201C"; }
+blockquote::before, html[dir="rtl"] .quote::before, html[dir="rtl"] [data-quote]::before{content: "\201D";}
+blockquote::after, html[dir="rtl"] .quote::after, html[dir="rtl"] [data-quote]::after{content: "\201C";}
 
 /* V2 Decorative Helpers — section divider flourish */
 hr.section-flourish, .section-flourish, [data-section-divider] {
@@ -2055,15 +1962,12 @@ hr.section-flourish, .section-flourish, [data-section-divider] {
 /* Footer contact alignment fix */
 .footer-contact li > a { display: flex; align-items: flex-start; gap: inherit; }
 /* RTL footer contact: icon on the right (start) side, text on the left */
-html[dir="rtl"] .footer-contact li,
+.footer-contact li,
 html[dir="rtl"] .site-footer .footer-contact li,
-html[dir="rtl"] .site-footer .footer-col:nth-child(3) .footer-contact li {
-  flex-direction: row !important;
-  justify-content: flex-start !important;
-}
-html[dir="rtl"] .footer-contact .contact-icon { order: 0 !important; }
-html[dir="rtl"] .footer-contact .contact-text { order: 1 !important; }
-html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
+html[dir="rtl"] .site-footer .footer-col:nth-child(3) .footer-contact li{flex-direction: row !important;justify-content: flex-start !important;}
+.footer-contact .contact-icon{order: 0 !important;}
+.footer-contact .contact-text{order: 1 !important;}
+.footer-contact li > a{flex-direction: row !important;}
 .index-hero-section {
   position: relative;
   width: 100%;
@@ -2113,7 +2017,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .index-hero-section .index-hero-content {
   max-width: 700px;
   margin-inline-start: 0;
-  text-align: right;
+  text-align: start;
 }
 
 /* Headings */
@@ -2254,17 +2158,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 }
 @media (max-width: 768px) {
   .hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 28px !important; }
-}
-
-
-.index-services-section {
-  position: relative;
-  background: #FFFFFF;
-  color: var(--text-dark);
-  padding: var(--spacing-section, 100px) 16px 120px;
-  overflow: visible;
-  direction: rtl;
-}
+}.index-services-section{position: relative;background: #FFFFFF;color: var(--text-dark);padding: var(--spacing-section, 100px) 16px 120px;overflow: visible;}html[dir="rtl"] .index-services-section{direction: rtl;}
 
 .index-services-section__container {
   max-width: 1200px;
@@ -2312,15 +2206,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   color: var(--text-muted);
   margin: 0;
   max-width: 600px;
-}
-
-/* Services Grid */
-.index-services-section__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-card-gap, 32px);
-  direction: rtl;
-}
+}/* Services Grid */
+.index-services-section__grid{display: grid;grid-template-columns: repeat(3, 1fr);gap: var(--spacing-card-gap, 32px);}html[dir="rtl"] /* Services Grid */
+.index-services-section__grid{direction: rtl;}
 
 /* Service Card */
 .index-services-section__card {
@@ -2453,17 +2341,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .index-services-section__grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-.index-capabilities-section {
-  position: relative;
-  overflow: visible;
-  background-color: #1A1A1A;
-  background-image: linear-gradient(180deg, #1A1A1A 0%, #0D0D0D 100%);
-  color: var(--text-light);
-  padding: 100px 16px 80px;
-  direction: rtl;
-}
+}.index-capabilities-section{position: relative;overflow: visible;background-color: #1A1A1A;background-image: linear-gradient(180deg, #1A1A1A 0%, #0D0D0D 100%);color: var(--text-light);padding: 100px 16px 80px;}html[dir="rtl"] .index-capabilities-section{direction: rtl;}
 
 .index-capabilities-section__container {
   max-width: 1200px;
@@ -2707,17 +2585,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .index-capabilities-section__collage-item--main {
     grid-column: span 1;
   }
-}
-
-/* industries */
-.index-industries-section {
-  position: relative;
-  background: var(--bg-light);
-  color: var(--text-dark);
-  padding: 100px 0 80px 0;
-  overflow: visible;
-  direction: rtl;
-}
+}/* industries */
+.index-industries-section{position: relative;background: var(--bg-light);color: var(--text-dark);padding: 100px 0 80px 0;overflow: visible;}html[dir="rtl"] /* industries */
+.index-industries-section{direction: rtl;}
 
 .index-industries-section__container {
   max-width: 1200px;
@@ -2749,15 +2619,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   background-color: var(--accent);
   margin: 0 auto;
   border-radius: 2px;
-}
-
-/* Grid */
-.index-industries-section__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  direction: rtl;
-}
+}/* Grid */
+.index-industries-section__grid{display: grid;grid-template-columns: repeat(3, 1fr);gap: 32px;}html[dir="rtl"] /* Grid */
+.index-industries-section__grid{direction: rtl;}
 
 /* Tiles */
 .index-industries-section__tile {
@@ -2795,7 +2659,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   flex: 1;
   display: flex;
   flex-direction: column;
-  text-align: right;
+  text-align: start;
 }
 
 .index-industries-section__tile-title {
@@ -2804,7 +2668,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   line-height: 1.3;
   color: var(--text-dark);
   margin: 0 0 12px 0;
-  text-align: right;
+  text-align: start;
 }
 
 .index-industries-section__tile-desc {
@@ -2813,7 +2677,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   line-height: 1.7;
   color: var(--text-muted);
   margin: 0;
-  text-align: right;
+  text-align: start;
 }
 
 /* Bottom Divider */
@@ -3026,17 +2890,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
     height: 120px;
     opacity: 0.1;
   }
-}
-
-/* intro */
-.services-intro-section {
-  position: relative;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
-  padding: 100px 16px 80px;
-  overflow: visible;
-  direction: rtl;
-}
+}/* intro */
+.services-intro-section{position: relative;background-color: var(--bg-light);color: var(--text-dark);padding: 100px 16px 80px;overflow: visible;}html[dir="rtl"] /* intro */
+.services-intro-section{direction: rtl;}
 
 .services-intro-section__container {
   max-width: 1200px;
@@ -3264,18 +3120,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .services-intro-section__content-grid {
     gap: 32px;
   }
-}
-
-
-/* catalog */
-.services-catalog-section {
-  position: relative;
-  overflow: visible;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
-  padding: 100px 0 80px;
-  direction: rtl;
-}
+}/* catalog */
+.services-catalog-section{position: relative;overflow: visible;background-color: var(--bg-light);color: var(--text-dark);padding: 100px 0 80px;}html[dir="rtl"] /* catalog */
+.services-catalog-section{direction: rtl;}
 
 /* Container */
 .services-catalog-section__container {
@@ -3326,15 +3173,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   margin: 0 auto;
   max-width: 700px;
   text-align: center;
-}
-
-/* Grid */
-.services-catalog-section__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-card-gap);
-  direction: rtl;
-}
+}/* Grid */
+.services-catalog-section__grid{display: grid;grid-template-columns: repeat(3, 1fr);gap: var(--spacing-card-gap);}html[dir="rtl"] /* Grid */
+.services-catalog-section__grid{direction: rtl;}
 
 /* Card Base */
 .services-catalog-section__card {
@@ -3370,7 +3211,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   line-height: 1.3;
   color: var(--text-dark);
   margin: 0;
-  text-align: right;
+  text-align: start;
 }
 
 /* Card Description */
@@ -3381,7 +3222,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   line-height: 1.7;
   color: var(--text-muted);
   margin: 0;
-  text-align: right;
+  text-align: start;
 }
 
 /* Micro List */
@@ -3400,7 +3241,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-weight: 400;
   line-height: 1.6;
   color: var(--text-dark);
-  text-align: right;
+  text-align: start;
   position: relative;
   padding-inline-start: 18px;
 }
@@ -3537,18 +3378,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .services-catalog-section__grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-/* process */
-.services-process-section {
-  position: relative;
-  background-color: #D4A017;
-  background-image: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
-  color: var(--text-light);
-  padding: var(--spacing-section, 100px) 16px calc(var(--spacing-section, 100px) + 60px);
-  overflow: visible;
-  direction: rtl;
-}
+}/* process */
+.services-process-section{position: relative;background-color: #D4A017;background-image: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);color: var(--text-light);padding: var(--spacing-section, 100px) 16px calc(var(--spacing-section, 100px) + 60px);overflow: visible;}html[dir="rtl"] /* process */
+.services-process-section{direction: rtl;}
 
 .services-process-section__container {
   max-width: 1200px;
@@ -3790,17 +3622,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .services-process-section__process-group {
     padding-inline-end: 60px;
   }
-}
-
-/* specialists */
-.services-specialists-section {
-  position: relative;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
-  padding: 100px 16px 80px;
-  overflow: visible;
-  direction: rtl;
-}
+}/* specialists */
+.services-specialists-section{position: relative;background-color: var(--bg-light);color: var(--text-dark);padding: 100px 16px 80px;overflow: visible;}html[dir="rtl"] /* specialists */
+.services-specialists-section{direction: rtl;}
 
 .services-specialists-section__container {
   max-width: 1200px;
@@ -4137,19 +3961,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .services-specialists-section__divider-wrapper {
     height: 40px;
   }
-}
-
-/* assurance */
-.services-assurance-section {
-    position: relative;
-    background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
-    background-color: #D4A017;
-    color: var(--text-light);
-    padding: var(--spacing-section, 100px) 16px;
-    overflow: hidden;
-    direction: rtl;
-    text-align: right;
-}
+}/* assurance */
+.services-assurance-section{position: relative;background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);background-color: #D4A017;color: var(--text-light);padding: var(--spacing-section, 100px) 16px;overflow: hidden;text-align: start;}html[dir="rtl"] /* assurance */
+.services-assurance-section{direction: rtl;}
 
 .services-assurance-section .services-assurance-container {
     max-width: 1200px;
@@ -4215,7 +4029,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-card, 12px);
     padding: var(--spacing-card-padding, 32px);
-    text-align: right;
+    text-align: start;
     transition: all 0.3s ease;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     display: flex;
@@ -4375,17 +4189,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
         width: 80px;
         opacity: 0.6;
     }
-}
-
-/* overview */
-.management-staffing-overview-section {
-  position: relative;
-  background: #F4F6FA;
-  color: var(--text-dark);
-  padding: 100px 0 80px 0;
-  overflow: visible;
-  direction: rtl;
-}
+}/* overview */
+.management-staffing-overview-section{position: relative;background: #F4F6FA;color: var(--text-dark);padding: 100px 0 80px 0;overflow: visible;}html[dir="rtl"] /* overview */
+.management-staffing-overview-section{direction: rtl;}
 
 .management-staffing-overview-section__container {
   max-width: 1200px;
@@ -4653,17 +4459,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
     grid-template-columns: 1fr 340px;
     gap: 32px;
   }
-}
-
-/* property-types */
-.management-staffing-property-types-section {
-  position: relative;
-  background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
-  color: var(--text-light);
-  padding: 100px 16px 80px;
-  overflow: visible;
-  direction: rtl;
-}
+}/* property-types */
+.management-staffing-property-types-section{position: relative;background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);color: var(--text-light);padding: 100px 16px 80px;overflow: visible;}html[dir="rtl"] /* property-types */
+.management-staffing-property-types-section{direction: rtl;}
 
 .management-staffing-property-types-section__container {
   max-width: 1200px;
@@ -4889,18 +4687,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
     width: 320px;
     height: 220px;
   }
-}
-
-/* workforce */
-.management-staffing-workforce-section {
-  background: #F4F6FA;
-  color: var(--text-dark);
-  position: relative;
-  overflow: visible;
-  padding: 100px 16px 80px;
-  direction: rtl;
-  font-family: 'Rubik', sans-serif;
-}
+}/* workforce */
+.management-staffing-workforce-section{background: #F4F6FA;color: var(--text-dark);position: relative;overflow: visible;padding: 100px 16px 80px;font-family: 'Rubik', sans-serif;}html[dir="rtl"] /* workforce */
+.management-staffing-workforce-section{direction: rtl;}
 
 .management-staffing-workforce-section .workforce-container {
   max-width: 1200px;
@@ -4945,15 +4734,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   color: #6B7280;
   margin: 0;
   max-width: 600px;
-}
-
-/* Grid */
-.management-staffing-workforce-section .workforce-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-  direction: rtl;
-}
+}/* Grid */
+.management-staffing-workforce-section .workforce-grid{display: grid;grid-template-columns: repeat(2, 1fr);gap: 32px;}html[dir="rtl"] /* Grid */
+.management-staffing-workforce-section .workforce-grid{direction: rtl;}
 
 /* Card */
 .management-staffing-workforce-section .workforce-card {
@@ -5097,17 +4880,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .management-staffing-workforce-section .workforce-card-content {
     padding: 24px;
   }
-}
-
-/* standards */
-.management-staffing-standards-section {
-  position: relative;
-  background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
-  color: var(--text-light);
-  padding: 100px 16px 120px;
-  overflow: visible;
-  direction: rtl;
-}
+}/* standards */
+.management-staffing-standards-section{position: relative;background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);color: var(--text-light);padding: 100px 16px 120px;overflow: visible;}html[dir="rtl"] /* standards */
+.management-staffing-standards-section{direction: rtl;}
 
 .management-staffing-standards-section .standards-container {
   max-width: 1200px;
@@ -5153,15 +4928,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   max-width: 700px;
   margin: 0 auto;
   text-align: center;
-}
-
-/* ── Three Column Grid ── */
-.management-staffing-standards-section .standards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-card-gap);
-  direction: rtl;
-}
+}/* ── Three Column Grid ── */
+.management-staffing-standards-section .standards-grid{display: grid;grid-template-columns: repeat(3, 1fr);gap: var(--spacing-card-gap);}html[dir="rtl"] /* ── Three Column Grid ── */
+.management-staffing-standards-section .standards-grid{direction: rtl;}
 
 /* ── Standard Card ── */
 .management-staffing-standards-section .standard-card {
@@ -5447,17 +5216,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
     flex-direction: column;
     gap: 12px;
   }
-}
-
-/* contact-intro */
-.contact-contact-intro-section {
-  position: relative;
-  background-color: var(--bg-light);
-  color: var(--text-dark);
-  padding: 120px 16px 80px;
-  overflow: visible;
-  direction: rtl;
-}
+}/* contact-intro */
+.contact-contact-intro-section{position: relative;background-color: var(--bg-light);color: var(--text-dark);padding: 120px 16px 80px;overflow: visible;}html[dir="rtl"] /* contact-intro */
+.contact-contact-intro-section{direction: rtl;}
 
 .contact-contact-intro-container {
   max-width: 1200px;
@@ -5747,23 +5508,13 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   .contact-contact-intro-section .contact-contact-intro-service-note {
     padding: 20px;
   }
-}
-
-/* contact-form */
+}/* contact-form */
 /* ============================================================ */
 /* CONTACT-FORM SECTION — Proces פרוצס                             */
 /* ============================================================ */
 
-.contact-contact-form-section {
-  position: relative;
-  overflow: visible;
-  background-color: var(--bg-dark);
-  background-image: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
-  color: var(--text-light);
-  padding: 120px 16px 80px; /* 80px bottom padding accounts for divider height */
-  direction: rtl;
-  text-align: right;
-}
+.contact-contact-form-section{position: relative;overflow: visible;background-color: var(--bg-dark);background-image: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);color: var(--text-light);padding: 120px 16px 80px;/* 80px bottom padding accounts for divider height */
+  direction: rtl;text-align: right;}
 
 .contact-contact-form-section__container {
   max-width: 1200px;
@@ -5854,7 +5605,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-light);
-  text-align: right;
+  text-align: start;
 }
 
 .contact-contact-form-section__input,
@@ -5870,7 +5621,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
   padding: 14px 16px;
   width: 100%;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  text-align: right;
+  text-align: start;
 }
 
 .contact-contact-form-section__input::placeholder,
@@ -5895,7 +5646,7 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 
 .contact-contact-form-section__privacy {
   margin-bottom: 32px;
-  text-align: right;
+  text-align: start;
 }
 
 .contact-contact-form-section__privacy .privacy-consent-label {
@@ -6260,18 +6011,9 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
     flex: 1;
     min-width: 280px;
   }
-}
-
-/* closing-reassurance */
-.contact-closing-reassurance-section {
-  position: relative;
-  background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);
-  color: var(--text-light);
-  padding: 80px 16px;
-  overflow: hidden;
-  direction: rtl;
-  text-align: right;
-}
+}/* closing-reassurance */
+.contact-closing-reassurance-section{position: relative;background: linear-gradient(180deg, #1B3A6B 0%, #152E56 100%);color: var(--text-light);padding: 80px 16px;overflow: hidden;text-align: start;}html[dir="rtl"] /* closing-reassurance */
+.contact-closing-reassurance-section{direction: rtl;}
 
 .contact-closing-reassurance-section__container {
   max-width: 1200px;
@@ -6428,10 +6170,10 @@ html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
 .footer-contact li > a { display: flex; align-items: flex-start; gap: inherit; }
 
 /* RTL footer contact: icon on the right (start) side, text on the left */
-html[dir="rtl"] .footer-contact li, html[dir="rtl"] .site-footer .footer-contact li, html[dir="rtl"] .site-footer .footer-col:nth-child(3) .footer-contact li { flex-direction: row !important; justify-content: flex-start !important; }
-html[dir="rtl"] .footer-contact .contact-icon { order: 0 !important; }
-html[dir="rtl"] .footer-contact .contact-text { order: 1 !important; }
-html[dir="rtl"] .footer-contact li > a { flex-direction: row !important; }
+.footer-contact li, html[dir="rtl"] .site-footer .footer-contact li, html[dir="rtl"] .site-footer .footer-col:nth-child(3) .footer-contact li{flex-direction: row !important;justify-content: flex-start !important;}
+.footer-contact .contact-icon{order: 0 !important;}
+.footer-contact .contact-text{order: 1 !important;}
+.footer-contact li > a{flex-direction: row !important;}
 
 
 /* ============================================
@@ -7552,17 +7294,11 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 
 .management-staffing-workforce-section .workforce-tag {
   color: var(--text-color) !important;
-}
-
-/* AI-generated section */
+}/* AI-generated section */
 /* About Us Section — Proces */
-.proces-about {
-  background-color: var(--background-color, #FFFFFF);
-  padding: 80px 24px;
-  font-family: system-ui, sans-serif;
-  direction: rtl;
-  text-align: right;
-}
+.proces-about{background-color: var(--background-color, #FFFFFF);padding: 80px 24px;font-family: system-ui, sans-serif;text-align: start;}html[dir="rtl"] /* AI-generated section */
+/* About Us Section — Proces */
+.proces-about{direction: rtl;}
 
 .proces-about__container {
   max-width: 900px;
@@ -8023,12 +7759,11 @@ nav .sub-menu.zappy-empty-submenu,
 /* ========== RTL MOBILE NAVBAR FIX (zappy-rtl-mobile-fix) ========== */
 /* High-specificity rules to ensure RTL positioning wins over any [lang="en"] conflicts */
 /* For RTL sites: hamburger on RIGHT, phone on LEFT (mirror of LTR layout) */
-/* NOTE: Includes both html[dir="rtl"] AND [dir="rtl"] selectors as fallback */
+/* NOTE: Includes both AND [dir="rtl"] selectors as fallback */
 /* because some pages may be wrapped with <html lang="en"> (missing dir="rtl" on html) */
 /* but still have dir="rtl" on <body> or other ancestor elements */
 
-@media (max-width: 768px) {
-  /* RTL Mobile Toggle (hamburger) - positioned on RIGHT */
+@media (max-width: 768px){/* RTL Mobile Toggle (hamburger) - positioned on RIGHT */
   /* Using multiple parent selectors for higher specificity */
   html[dir="rtl"] .navbar .mobile-toggle,
   html[dir="rtl"] nav .mobile-toggle,
@@ -8042,12 +7777,10 @@ nav .sub-menu.zappy-empty-submenu,
   [dir="rtl"] .mobile-toggle,
   html[lang="he"] .mobile-toggle,
   html[lang="ar"] .mobile-toggle {
-    left: auto !important;
-    right: 15px !important;
-  }
+    left: auto !important;right: 15px !important;}
   
   /* RTL Phone Button - positioned on LEFT */
-  html[dir="rtl"] .navbar .phone-header-btn,
+  .navbar .phone-header-btn,
   html[dir="rtl"] nav .phone-header-btn,
   html[dir="rtl"] header .phone-header-btn,
   html[dir="rtl"] .nav-container .phone-header-btn,
@@ -8058,13 +7791,10 @@ nav .sub-menu.zappy-empty-submenu,
   [dir="rtl"] .nav-container .phone-header-btn,
   [dir="rtl"] .phone-header-btn,
   html[lang="he"] .phone-header-btn,
-  html[lang="ar"] .phone-header-btn {
-    left: 15px !important;
-    right: auto !important;
-  }
+  html[lang="ar"] .phone-header-btn{left: 15px !important;right: auto !important;}
   
   /* RTL Mobile Menu - slides from RIGHT */
-  html[dir="rtl"] .navbar .nav-menu,
+  .navbar .nav-menu,
   html[dir="rtl"] nav .nav-menu,
   html[dir="rtl"] header .nav-menu,
   html[dir="rtl"] .nav-container .nav-menu,
@@ -8075,22 +7805,17 @@ nav .sub-menu.zappy-empty-submenu,
   [dir="rtl"] .nav-container .nav-menu,
   [dir="rtl"] .nav-menu,
   html[lang="he"] .nav-menu,
-  html[lang="ar"] .nav-menu {
-    left: auto !important;
-    right: 0 !important;
-  }
+  html[lang="ar"] .nav-menu{left: auto !important;right: 0 !important;}
   
   /* RTL Mobile Menu Links - text align right */
-  html[dir="rtl"] .nav-menu a,
+  .nav-menu a,
   html[dir="rtl"] .nav-menu li,
   [dir="rtl"] .nav-menu a,
   [dir="rtl"] .nav-menu li,
   html[lang="he"] .nav-menu a,
   html[lang="he"] .nav-menu li,
   html[lang="ar"] .nav-menu a,
-  html[lang="ar"] .nav-menu li {
-    text-align: right !important;
-  }
+  html[lang="ar"] .nav-menu li{text-align: right !important;}
 }
 
 /* ========== END RTL MOBILE NAVBAR FIX ========== */
@@ -8733,7 +8458,7 @@ section[data-hero-type] {
   }
   #navMenu,
   .nav-menu,
-  html[dir="rtl"] .nav-menu,
+  .nav-menu,
   html[dir="rtl"] .navbar .nav-menu,
   html[dir="rtl"] nav .nav-menu,
   html[dir="rtl"] header .nav-menu,
@@ -8744,18 +8469,14 @@ section[data-hero-type] {
   [dir="rtl"] .nav-container .nav-menu,
   [dir="rtl"] .nav-menu,
   html[lang="he"] .nav-menu,
-  html[lang="ar"] .nav-menu {
-    /* Force position:fixed so the --ios-viewport-gap shift is measured
+  html[lang="ar"] .nav-menu{/* Force position:fixed so the --ios-viewport-gap shift is measured
        against the (visual) viewport, not whatever container the menu may
        have been reparented into by earlier v1/v2 patches.
        --zappy-navbar-bottom is set by the runtime JS companion and
        defaults to 70px — this lets us override the v2 `top: 100%` (which
        with position:fixed would resolve to the full viewport height and
        push the menu off-screen). */
-    position: fixed !important;
-    top: var(--zappy-navbar-bottom, 70px) !important;
-    right: var(--ios-viewport-gap, 0px) !important;
-  }
+    position: fixed !important;top: var(--zappy-navbar-bottom, 70px) !important;right: var(--ios-viewport-gap, 0px) !important;}
 }
 
 
@@ -8814,19 +8535,16 @@ html[dir="ltr"] .zappy-products-dropdown .zappy-nav-child > a {
   .nav-menu.open > li.zappy-products-dropdown > a {
     padding-right: 56px !important;
   }
-  html[dir="rtl"] .navbar .nav-menu.active > li.zappy-products-dropdown > a,
+  .navbar .nav-menu.active > li.zappy-products-dropdown > a,
   html[dir="rtl"] nav.navbar .nav-menu.active > li.zappy-products-dropdown > a,
   html[dir="rtl"] #navMenu.active > li.zappy-products-dropdown > a,
-  html[dir="rtl"] .nav-menu.open > li.zappy-products-dropdown > a {
-    padding-right: 16px !important;
-    padding-left: 56px !important;
-  }
+  html[dir="rtl"] .nav-menu.open > li.zappy-products-dropdown > a{padding-right: 16px !important;padding-left: 56px !important;}
 }
 
-html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+#mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
 html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
 html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
-html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+html[dir="rtl"] ._access-icon{left: 20px !important;right: auto !important;}
 html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
 html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
 html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
@@ -8891,24 +8609,12 @@ html[dir="ltr"] .service-detail.service-reverse .service-detail-content { order:
      left from the center instead of being centered on it. */
   .navbar .nav-brand,
   nav.navbar .nav-brand,
-  html[dir="rtl"] .navbar .nav-brand,
+  .navbar .nav-brand,
   html[dir="rtl"] nav.navbar .nav-brand,
   html[lang="he"] .navbar .nav-brand,
   html[lang="he"] nav.navbar .nav-brand,
   html[lang="ar"] .navbar .nav-brand,
-  html[lang="ar"] nav.navbar .nav-brand {
-    position: absolute !important;
-    left: 50% !important;
-    right: auto !important;
-    top: 50% !important;
-    width: auto !important;
-    min-width: max-content !important;
-    max-width: calc(100% - 168px) !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    text-align: center !important;
-    justify-content: center !important;
-  }
+  html[lang="ar"] nav.navbar .nav-brand{position: absolute !important;left: 50% !important;right: auto !important;top: 50% !important;width: auto !important;min-width: max-content !important;max-width: calc(100% - 168px) !important;transform: translate(-50%, -50%) !important;margin: 0 !important;text-align: center !important;justify-content: center !important;}
 
   .navbar .nav-brand .logo-link,
   nav.navbar .nav-brand .logo-link,
@@ -9008,3 +8714,87 @@ html[dir="ltr"] .service-detail.service-reverse .service-detail-content { order:
 
 /* Spec table BiDi fix: isolate cells so mixed LTR/RTL content renders correctly */
 .specs-table th, .specs-table td { unicode-bidi: plaintext !important; }
+
+/* ZAPPY-LTR-TEXTALIGN-OVERRIDES:BEGIN */
+/* ============================================
+   LTR TEXT-ALIGN OVERRIDES FOR RTL-BAKED CONTENT
+   See block comment at top of multiLanguageService.js for full rationale.
+   Patterns covered:
+   - *-card-content / *-card-text  → e-commerce + collections card bodies
+   - *-content-column              → split / two-column section bodies
+   - contact form grid/card blocks → contact form two-column sections
+   - *-info-item / .suggestion-item → contact-form widgets
+   - .order-success-card           → checkout success card
+   - .privacy-consent-label        → contact-form consent checkbox row
+   - .text-left                    → AI sometimes literally writes
+                                     ".text-left { text-align: right }" in
+                                     Hebrew sites — flip it so the class
+                                     name matches its behaviour.
+   Uses text-align: start (resolves to left in LTR, right in RTL via the
+   CSS spec) for the structural patterns; .text-left is forced literally
+   to left because its name is a contract.
+   ============================================ */
+html[dir="ltr"] [class*="-card-content"],
+html[dir="ltr"] [class*="-card-text"],
+html[dir="ltr"] [class*="-content-column"],
+html[dir="ltr"] .suggestion-item,
+html[dir="ltr"] .contact-info-item,
+html[dir="ltr"] .order-success-card {
+  text-align: start !important;
+}
+
+html[dir="ltr"] .text-left {
+  text-align: left !important;
+}
+
+/* Contact form columns/cards are often baked with direction: rtl. In LTR this
+   reverses the grid column placement and moves punctuation to the wrong side
+   of headings (e.g. "?What should you tell us"). */
+html[dir="ltr"] .contact-form-grid,
+html[dir="ltr"] .contact-form-container,
+html[dir="ltr"] .form-card,
+html[dir="ltr"] .reassurance-card,
+html[dir="ltr"] .suggestion-list {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+html[dir="ltr"] .suggestion-item,
+html[dir="ltr"] .contact-info-item {
+  direction: ltr !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+/* Consent labels are often baked with direction: rtl so the checkbox renders
+   on the right. In LTR the checkbox is the first DOM child and should render
+   on the left, before the translated agreement text. */
+html[dir="ltr"] .privacy-consent-label {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Form inputs the AI baked with both `direction: rtl` AND `text-align:
+   right` on contact pages — for LTR visitors the cursor + placeholder must
+   read left-to-right, otherwise typing an English email puts the @ on the
+   wrong side of the input. */
+html[dir="ltr"] .contact-contact-form-section .form-group input,
+html[dir="ltr"] .contact-contact-form-section .form-group textarea {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Solution / service sections baked with direction: rtl — in LTR the text
+   reads backwards (period on the left, right-aligned paragraphs). */
+html[dir="ltr"] .solution-content,
+html[dir="ltr"] .solution-item,
+html[dir="ltr"] .service-detail-content,
+html[dir="ltr"] .service-detail,
+html[dir="ltr"] .solutions-showcase,
+html[dir="ltr"] [class*="solutions-grid"],
+html[dir="ltr"] [class*="solution-description"],
+html[dir="ltr"] [class*="solution-text"] {
+  direction: ltr !important;
+  text-align: left !important;
+}
+/* ZAPPY-LTR-TEXTALIGN-OVERRIDES:END */
