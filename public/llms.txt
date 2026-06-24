@@ -7,40 +7,40 @@
 ## Pages
 
 ### ניקיון ותחזוקה בגובה אחר — Proces פרוצס
-https://proces.zappy5.app
+https://proces.co.il
 פרוצס מביאה לשוק הניקיון והתחזוקה מהפכה של ממש: משירותי ניקיון משרדים ועד ניקוי חלונות בגובה באמצעות רחפן, סנפלינג ואוסמוזה הפוכה. שדרגו את הנכס שלכם עוד היום.
 
 ### שירותי גובה עם רחפן וסנפלינג — Proces פרוצס
-https://proces.zappy5.app/cleaning-services
+https://proces.co.il/cleaning-services
 מנקים הכול, מגיעים לכל מקום: ניקוי חלונות בגובה בעזרת רחפן תותח מים, ציפוי ננו, הדברה ירוקה ועוד. השירותים המתקדמים של פרוצס מחכים לכם כאן.
 
 ### ניהול מתקנים וכוח אדם מקצועי — Proces פרוצס
-https://proces.zappy5.app/management-staffing
+https://proces.co.il/management-staffing
 פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.
 
 ### Page
-https://proces.zappy5.app/about-us
+https://proces.co.il/about-us
 
 ### דברו איתנו על ניקיון ותחזוקה בגובה — Proces פרוצס
-https://proces.zappy5.app/contact
+https://proces.co.il/contact
 צריכים הצעת מחיר לניקוי חלונות ברחפן או חוזה תחזוקה שוטף? צרו קשר עם פרוצס ונחזור אליכם במהירות עם הפתרון המושלם לניקיון מקצועי בגובה.
 
 ### כתבות מידע וטיפים
-https://proces.zappy5.app/knowledge-tips
+https://proces.co.il/knowledge-tips
 Proces פרוצס - כתבות מידע וטיפים
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://proces.zappy5.app/privacy
+https://proces.co.il/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://proces.zappy5.app/terms
+https://proces.co.il/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://proces.zappy5.app/accessibility
+https://proces.co.il/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
@@ -53,8 +53,8 @@ Information about WCAG compliance and accessibility features.
 - Address: איירפורט סיטי, קרית שדה התעופה, ישראל
 
 ### Contact form
-- URL: https://proces.zappy5.app/contact
-- Endpoint: https://proces.zappy5.app/api/email/contact-form
+- URL: https://proces.co.il/contact
+- Endpoint: https://proces.co.il/api/email/contact-form
 - Method: POST
 - Content-Type: application/json
 - Fields:
@@ -97,6 +97,6 @@ Facility Management & Staffing Services
 
 # Machine-readable feeds
 
-- Sitemap (XML): https://proces.zappy5.app/sitemap.xml
-- Robots: https://proces.zappy5.app/robots.txt
-- Flattened page text (for LLMs): https://proces.zappy5.app/llms-full.txt
+- Sitemap (XML): https://proces.co.il/sitemap.xml
+- Robots: https://proces.co.il/robots.txt
+- Flattened page text (for LLMs): https://proces.co.il/llms-full.txt

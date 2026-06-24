@@ -228,7 +228,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="דברו איתנו על ניקיון ותחזוקה בגובה — Proces פרוצס">
     <meta name="twitter:description" content="צריכים הצעת מחיר לניקוי חלונות ברחפן או חוזה תחזוקה שוטף? צרו קשר עם פרוצס ונחזור אליכם במהירות עם הפתרון המושלם לניקיון מקצועי בגובה.">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://proces.zappy5.app#organization","name":"Proces פרוצס","url":"https://proces.zappy5.app","description":"Proces is a comprehensive facility management and staffing company offering a wide range of professional cleaning and maintenance services for commercial buildings, offices, residential towers, hotels, and parking lots. The company stands out with advanced technical capabilities including drone-mounted water cannon cleaning, abseiling (rappelling) for high-rise window cleaning, reverse osmosis window treatment, nano coating, and eco-friendly pest control. They serve both ongoing contract clients and one-time customers, combining general labor supply with highly specialized professional cleaning divisions.","address":{"@type":"PostalAddress","streetAddress":"איירפורט סיטי, קרית שדה התעופה, ישראל"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer service","email":"proces@outlook.co.il","telephone":"077-4243446","availableLanguage":["he","en"]}]},{"@type":"WebSite","@id":"https://proces.zappy5.app#website","url":"https://proces.zappy5.app","name":"Proces פרוצס","publisher":{"@id":"https://proces.zappy5.app#organization"},"inLanguage":"he"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://proces.zappy5.app"},{"@type":"ListItem","position":2,"name":"Contact","item":"https://proces.zappy5.app/contact"}]},{"@type":"ContactPage","@id":"https://proces.zappy5.app/contact#contactpage","url":"https://proces.zappy5.app/contact","name":"דברו איתנו על ניקיון ותחזוקה בגובה — Proces פרוצס","mainEntity":{"@id":"https://proces.zappy5.app#organization"},"potentialAction":{"@type":"CommunicateAction","target":{"@type":"EntryPoint","urlTemplate":"https://proces.zappy5.app/api/email/contact-form","actionPlatform":["http/method=POST"],"contentType":"application/json"},"instrument":[{"@type":"PropertyValue","name":"name","propertyID":"text","valueRequired":true,"description":"ישראל ישראלי"},{"@type":"PropertyValue","name":"email","propertyID":"email","valueRequired":true,"description":"israel@example.co.il"},{"@type":"PropertyValue","name":"phone","propertyID":"tel","valueRequired":true,"description":"050-0000000"},{"@type":"PropertyValue","name":"service_type","propertyID":"select","valueRequired":true},{"@type":"PropertyValue","name":"message","propertyID":"textarea","valueRequired":true,"description":"אנא תארו את סוג הנכס, השירות הנדרש והאם מדובר בעבודה חד-פעמית או מתמשכת..."},{"@type":"PropertyValue","name":"privacy_consent","propertyID":"checkbox","valueRequired":true}]}}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://proces.co.il#organization","name":"Proces פרוצס","url":"https://proces.co.il","description":"Proces is a comprehensive facility management and staffing company offering a wide range of professional cleaning and maintenance services for commercial buildings, offices, residential towers, hotels, and parking lots. The company stands out with advanced technical capabilities including drone-mounted water cannon cleaning, abseiling (rappelling) for high-rise window cleaning, reverse osmosis window treatment, nano coating, and eco-friendly pest control. They serve both ongoing contract clients and one-time customers, combining general labor supply with highly specialized professional cleaning divisions.","address":{"@type":"PostalAddress","streetAddress":"איירפורט סיטי, קרית שדה התעופה, ישראל"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer service","email":"proces@outlook.co.il","telephone":"077-4243446","availableLanguage":["he","en"]}]},{"@type":"WebSite","@id":"https://proces.co.il#website","url":"https://proces.co.il","name":"Proces פרוצס","publisher":{"@id":"https://proces.co.il#organization"},"inLanguage":"he"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://proces.co.il"},{"@type":"ListItem","position":2,"name":"Contact","item":"https://proces.co.il/contact"}]},{"@type":"ContactPage","@id":"https://proces.co.il/contact#contactpage","url":"https://proces.co.il/contact","name":"דברו איתנו על ניקיון ותחזוקה בגובה — Proces פרוצס","mainEntity":{"@id":"https://proces.co.il#organization"},"potentialAction":{"@type":"CommunicateAction","target":{"@type":"EntryPoint","urlTemplate":"https://proces.co.il/api/email/contact-form","actionPlatform":["http/method=POST"],"contentType":"application/json"},"instrument":[{"@type":"PropertyValue","name":"name","propertyID":"text","valueRequired":true,"description":"ישראל ישראלי"},{"@type":"PropertyValue","name":"email","propertyID":"email","valueRequired":true,"description":"israel@example.co.il"},{"@type":"PropertyValue","name":"phone","propertyID":"tel","valueRequired":true,"description":"050-0000000"},{"@type":"PropertyValue","name":"service_type","propertyID":"select","valueRequired":true},{"@type":"PropertyValue","name":"message","propertyID":"textarea","valueRequired":true,"description":"אנא תארו את סוג הנכס, השירות הנדרש והאם מדובר בעבודה חד-פעמית או מתמשכת..."},{"@type":"PropertyValue","name":"privacy_consent","propertyID":"checkbox","valueRequired":true}]}}]}</script>
     <title data-i18n="contact_page_title">דברו איתנו על ניקיון ותחזוקה בגובה — Proces פרוצס</title>
   
   
@@ -4883,16 +4883,32 @@ html[dir="rtl"] body {
         }
       }
 
-      // Carry over inline formatting from the source element when the translation
-      // is plain text. E.g., source: <font color="#fff">Hebrew</font>,
-      // translation: "English" → wrap as <font color="#fff">English</font>.
+      // Carry over a single inline colour/format wrapper from the source element
+      // when the translation is plain text. The inline-editor colour picker wraps
+      // the selected text in <span style="color:#hex !important"> (legacy edits
+      // used <font color>). Without re-applying that wrapper, the
+      // textContent/innerHTML swap below destroys it and the user's picked text
+      // colour silently reverts to the CSS default on every load / language
+      // switch (the edit IS saved in the HTML — it's just re-rendered away here).
+      var wrappedFormatting = false;
       var fontChild = el.querySelector('font[color], font[face], font[size]');
-      if (fontChild && !inlineFormatPattern.test(translation)) {
-        var fontTag = '<font';
-        for (var ai = 0; ai < fontChild.attributes.length; ai++) {
-          fontTag += ' ' + fontChild.attributes[ai].name + '="' + fontChild.attributes[ai].value.replace(/"/g, '&quot;') + '"';
+      var styleWrapper = fontChild;
+      if (!styleWrapper && el.children.length === 1) {
+        var onlyChild = el.children[0];
+        if (onlyChild && onlyChild.tagName === 'SPAN' &&
+            /(^|;)\s*(color|background|background-color)\s*:/i.test(onlyChild.getAttribute('style') || '') &&
+            onlyChild.textContent.trim() === (el.textContent || '').trim()) {
+          styleWrapper = onlyChild;
         }
-        translation = fontTag + '>' + translation + '</font>';
+      }
+      if (styleWrapper && !inlineFormatPattern.test(translation) && !structuralTagPattern.test(translation)) {
+        var wrapperTag = styleWrapper.tagName.toLowerCase();
+        var openTag = '<' + wrapperTag;
+        for (var ai = 0; ai < styleWrapper.attributes.length; ai++) {
+          openTag += ' ' + styleWrapper.attributes[ai].name + '="' + styleWrapper.attributes[ai].value.replace(/"/g, '&quot;') + '"';
+        }
+        translation = openTag + '>' + translation + '</' + wrapperTag + '>';
+        wrappedFormatting = true;
       }
 
       var hasNewlines = translation.indexOf(newlineChar) !== -1;
@@ -4900,7 +4916,7 @@ html[dir="rtl"] body {
       var hasEntities = /&[a-zA-Z]+;|&#\d+;|&#x[0-9a-fA-F]+;/.test(translation);
       var elementHasBr = /<br\s*\/?>/i.test(el.innerHTML);
 
-      if (hasNewlines || hasInlineFormat || hasEntities || elementHasBr) {
+      if (hasNewlines || hasInlineFormat || hasEntities || elementHasBr || wrappedFormatting) {
         el.innerHTML = translation.split(newlineChar).join('<br>');
       } else {
         el.textContent = translation;
