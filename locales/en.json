@@ -53,7 +53,7 @@
   "terms_h2_7": "6. Limitation of Liability",
   "terms_h2_8": "7. Copyright and Intellectual Property",
   "terms_h2_9": "8. Privacy",
-  "terms_p_19": "Proces פרוצס provides Facility Management & Staffing Services through the website. The services are subject to the terms detailed in this document \n            and may change from time to time.",
+  "terms_p_19": "Proces פרוצס provides Facility Management &amp; Staffing Services through the website. The services are subject to the terms detailed in this document \n            and may change from time to time.",
   "terms_p_20": "Use of the website is conditional upon compliance with the following terms:",
   "terms_p_21": "If the services include payment:",
   "terms_p_22": "The services are provided \"as is\" without warranty of any kind. The company shall not be liable for indirect, \n            consequential or special damages arising from use of the website, except in cases where the law provides otherwise.",
@@ -89,7 +89,7 @@
   "terms_h4_18": "Follow Us",
   "terms_li_48": "\"The Company\" - Proces פרוצס",
   "terms_li_49": "\"The User\" - anyone who browses or uses the website",
-  "terms_li_50": "\"The Services\" - Facility Management & Staffing Services provided through the website",
+  "terms_li_50": "<strong>\"Services\"</strong> - Facility Management &amp; Staffing Services provided through the website",
   "terms_li_51": "Using the website for legal purposes only",
   "terms_li_52": "Not interfering with the website's operation or other users",
   "terms_li_53": "Not uploading offensive, illegal or harmful content",
@@ -914,5 +914,9 @@
   "knowledge_tips_seo_twitter_description": "Proces פרוצס - Information Articles and Tips",
   "management_staffing_seo_og_description": "Proces combines general staffing supply with professional cleaning divisions for high-altitude work. Smart facility management solutions for office buildings, hotels and luxury towers. Talk to us.",
   "cleaning_services_seo_twitter_description": "We clean everything, reach everywhere: high-rise window cleaning with water cannon drone, nano coating, green pest control and more. Proces advanced services are waiting for you here.",
-  "management_staffing_seo_twitter_description": "Proces combines general staffing supply with professional cleaning divisions for high-altitude work. Smart facility management solutions for office buildings, hotels and luxury towers. Talk to us."
+  "management_staffing_seo_twitter_description": "Proces combines general staffing supply with professional cleaning divisions for high-altitude work. Smart facility management solutions for office buildings, hotels and luxury towers. Talk to us.",
+  "new_text_142_0": "<input type=\"checkbox\" name=\"privacy_consent\" class=\"privacy-consent-checkbox\" required />\n          <span><span>I have read and I agree to the</span> <a href=\"/terms\" target=\"_blank\">",
+  "new_text_142_1": "</a> <span>and the</span> <a href=\"/privacy\" target=\"_blank\">",
+  "new_text_144_0": "<span>Looking for more information? Visit our</span> <a href=\"#\">",
+  "new_text_144_1": "</a> <span>and discover more articles, guides, and tips to help you keep your property in perfect condition.</span>"
 }
