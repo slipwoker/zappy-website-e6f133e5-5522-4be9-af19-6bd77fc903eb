@@ -20,22 +20,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il" />
   </url>
   <url>
-    <loc>https://proces.co.il/cleaning-services</loc>
+    <loc>https://proces.co.il/services</loc>
     <lastmod>2026-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/cleaning-services" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/cleaning-services" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/cleaning-services" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/services" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/services" />
   </url>
   <url>
-    <loc>https://proces.co.il/en/cleaning-services</loc>
+    <loc>https://proces.co.il/en/services</loc>
     <lastmod>2026-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/cleaning-services" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/cleaning-services" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/cleaning-services" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/services" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/services" />
   </url>
   <url>
     <loc>https://proces.co.il/management-staffing</loc>
