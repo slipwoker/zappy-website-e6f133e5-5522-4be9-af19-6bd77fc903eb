@@ -38,22 +38,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/services" />
   </url>
   <url>
-    <loc>https://proces.co.il/about-us</loc>
+    <loc>https://proces.co.il/about-the-company</loc>
     <lastmod>2026-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/about-us" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/about-us" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/about-us" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/about-the-company" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/about-the-company" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/about-the-company" />
   </url>
   <url>
-    <loc>https://proces.co.il/en/about-us</loc>
+    <loc>https://proces.co.il/en/about-the-company</loc>
     <lastmod>2026-06-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/about-us" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/about-us" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/about-us" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/about-the-company" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/about-the-company" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/about-the-company" />
   </url>
   <url>
     <loc>https://proces.co.il/contact</loc>
