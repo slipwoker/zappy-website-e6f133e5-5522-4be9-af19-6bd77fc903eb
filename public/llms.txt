@@ -14,10 +14,6 @@ https://proces.co.il
 https://proces.co.il/services
 מנקים הכול, מגיעים לכל מקום: ניקוי חלונות בגובה בעזרת רחפן תותח מים, ציפוי ננו, הדברה ירוקה ועוד. השירותים המתקדמים של פרוצס מחכים לכם כאן.
 
-### ניהול מתקנים וכוח אדם מקצועי — Proces פרוצס
-https://proces.co.il/management-staffing
-פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.
-
 ### Page
 https://proces.co.il/about-us
 
@@ -61,7 +57,7 @@ Information about WCAG compliance and accessibility features.
   - `name` (text, required)
   - `email` (email, required)
   - `phone` (tel, required)
-  - `service_type` (select)
+  - `service_type` (select, required)
   - `message` (textarea, required)
   - `privacy_consent` (checkbox, required)
 

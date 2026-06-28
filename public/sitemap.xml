@@ -38,24 +38,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/services" />
   </url>
   <url>
-    <loc>https://proces.co.il/management-staffing</loc>
-    <lastmod>2026-06-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/management-staffing" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/management-staffing" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/management-staffing" />
-  </url>
-  <url>
-    <loc>https://proces.co.il/en/management-staffing</loc>
-    <lastmod>2026-06-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/management-staffing" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/management-staffing" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/management-staffing" />
-  </url>
-  <url>
     <loc>https://proces.co.il/about-us</loc>
     <lastmod>2026-06-28</lastmod>
     <changefreq>weekly</changefreq>
