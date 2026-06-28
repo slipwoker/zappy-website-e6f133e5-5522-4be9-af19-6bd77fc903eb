@@ -1406,20 +1406,23 @@ window.onload = function() {
     }
 })();
 
-/* ZAPPY_CUSTOM_JS_START:f5195a5b98c0 */
+/* ZAPPY_CUSTOM_JS_START:32d378b37420 */
 (function () {
   function __zappyCustomInit() {
     try {
 (function() {
-  // Back-to-top button — appears after scrolling down, scrolls smoothly to top
+  // Remove existing button if present
+  var existing = document.getElementById('back-to-top-btn');
+  if (existing) existing.remove();
+
   const btn = document.createElement('button');
   btn.id = 'back-to-top-btn';
   btn.setAttribute('aria-label', 'חזרה לראש העמוד');
   btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
   
-  // Style the button
+  // Position on the LEFT side, above the accessibility icon
   btn.style.cssText = 
-    'position:fixed;bottom:24px;right:24px;z-index:9999;' +
+    'position:fixed;bottom:90px;left:20px;z-index:9998;' +
     'width:48px;height:48px;border-radius:50%;' +
     'background:#D4A017;color:#FFFFFF;border:none;cursor:pointer;' +
     'display:flex;align-items:center;justify-content:center;' +
@@ -1461,7 +1464,7 @@ window.onload = function() {
     __zappyCustomInit();
   }
 })();
-/* ZAPPY_CUSTOM_JS_END:f5195a5b98c0 */
+/* ZAPPY_CUSTOM_JS_END:32d378b37420 */
 
 
 /* ZAPPY_PUBLISHED_LIGHTBOX_RUNTIME */
