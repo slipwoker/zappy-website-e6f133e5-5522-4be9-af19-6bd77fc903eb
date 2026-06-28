@@ -8036,6 +8036,348 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     font-size: 0.9rem;
     padding: 14px 20px;
   }
+}/* AI-generated section */
+/* ===== Section Container ===== */
+.proces-management-section{background-color: var(--secondary-color, #1A1A1A);padding: 100px 20px;font-family: system-ui, sans-serif;color: #FFFFFF;}html[dir="rtl"] /* AI-generated section */
+/* ===== Section Container ===== */
+.proces-management-section{direction: rtl;}
+
+.proces-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== Section Header ===== */
+.proces-section-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.proces-eyebrow {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-color, #D4A017);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.proces-eyebrow::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--primary-color, #D4A017);
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+.proces-section-title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #FFFFFF;
+  margin: 0 0 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.proces-section-subtitle {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ===== Band Rows ===== */
+.proces-band {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 40px;
+  padding: 30px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.proces-band:last-of-type {
+  border-bottom: none;
+  margin-bottom: 70px;
+}
+
+.proces-band--alt {
+  flex-direction: row-reverse;
+}
+
+/* Band Image */
+.proces-band-image {
+  flex: 0 0 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 160, 23, 0.15);
+  aspect-ratio: 4 / 3;
+}
+
+.proces-band-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.proces-band:hover .proces-band-img {
+  transform: scale(1.03);
+}
+
+/* Band Content */
+.proces-band-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.proces-band-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(212, 160, 23, 0.12);
+  color: var(--primary-color, #D4A017);
+  margin-bottom: 18px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.proces-band:hover .proces-band-icon {
+  background: rgba(212, 160, 23, 0.22);
+  transform: translateY(-2px);
+}
+
+.proces-band-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 12px;
+}
+
+.proces-band-desc {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+  max-width: 560px;
+}
+
+/* ===== Standard Cards Grid ===== */
+.proces-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 70px;
+}
+
+.proces-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 160, 23, 0.18);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.proces-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(212, 160, 23, 0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.proces-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(212, 160, 23, 0.12);
+  color: var(--primary-color, #D4A017);
+  margin-bottom: 20px;
+}
+
+.proces-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 12px;
+}
+
+.proces-card-desc {
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0;
+}
+
+/* ===== CTA ===== */
+.proces-cta {
+  text-align: center;
+  padding: 50px 30px;
+  background: rgba(212, 160, 23, 0.06);
+  border: 1px solid rgba(212, 160, 23, 0.2);
+  border-radius: 20px;
+}
+
+.proces-cta-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 24px;
+}
+
+.proces-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  background: var(--primary-color, #D4A017);
+  border: none;
+  border-radius: 50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.proces-cta-button:hover {
+  background: var(--accent-color, #F5C842);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(212, 160, 23, 0.35);
+}
+
+.proces-cta-button:focus-visible {
+  outline: 3px solid var(--primary-color, #D4A017);
+  outline-offset: 3px;
+}
+
+.proces-cta-button svg {
+  transition: transform 0.3s ease;
+}
+
+.proces-cta-button:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .proces-band {
+    gap: 40px;
+  }
+  
+  .proces-band-image {
+    flex: 0 0 260px;
+  }
+  
+  .proces-section-title {
+    font-size: 2.2rem;
+  }
+  
+  .proces-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .proces-management-section {
+    padding: 70px 16px;
+  }
+  
+  .proces-section-header {
+    margin-bottom: 50px;
+  }
+  
+  .proces-section-title {
+    font-size: 1.8rem;
+  }
+  
+  .proces-section-subtitle {
+    font-size: 1.05rem;
+  }
+  
+  .proces-band,
+  .proces-band--alt {
+    flex-direction: column;
+    gap: 28px;
+    padding: 20px 0;
+    margin-bottom: 30px;
+  }
+  
+  .proces-band-image {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 16 / 10;
+  }
+  
+  .proces-band-title {
+    font-size: 1.3rem;
+  }
+  
+  .proces-band-desc {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+  
+  .proces-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 50px;
+  }
+  
+  .proces-card {
+    padding: 24px 20px;
+  }
+  
+  .proces-cta {
+    padding: 36px 20px;
+  }
+  
+  .proces-cta-text {
+    font-size: 1.25rem;
+  }
+  
+  .proces-cta-button {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .proces-section-title {
+    font-size: 1.5rem;
+  }
+  
+  .proces-band-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+  }
+  
+  .proces-band-image {
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+  
+  .proces-cta-button {
+    width: 100%;
+    justify-content: center;
+  }
 }
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
