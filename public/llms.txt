@@ -61,7 +61,7 @@ Information about WCAG compliance and accessibility features.
   - `name` (text, required)
   - `email` (email, required)
   - `phone` (tel, required)
-  - `service_type` (select, required)
+  - `service_type` (select)
   - `message` (textarea, required)
   - `privacy_consent` (checkbox, required)
 
