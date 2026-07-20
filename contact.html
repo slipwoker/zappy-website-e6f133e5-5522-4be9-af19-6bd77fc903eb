@@ -2562,17 +2562,13 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
   </div>
 </section>
 
-<section class="contact-contact-form-section" data-layout-spec="צור קשר-contact-form" id="zappy-section-1781164200075-106" style="position: relative; overflow: hidden; background-color: #1A1A1A; --zappy-bg-color: #1A1A1A" data-zappy-bg-type="color" data-zappy-bg-color="#1A1A1A" data-zappy-bg-image="" data-zappy-bg-overlay-color="#000000" data-zappy-bg-overlay-opacity="30" data-zappy-bg-video-type="" data-zappy-bg-video-url=""><style data-zappy-section-color="zappy-section-1781164200075-106">#zappy-section-1781164200075-106, #zappy-section-1781164200075-106 h1, #zappy-section-1781164200075-106 h2, #zappy-section-1781164200075-106 h3, #zappy-section-1781164200075-106 h4, #zappy-section-1781164200075-106 h5, #zappy-section-1781164200075-106 h6, #zappy-section-1781164200075-106 p, #zappy-section-1781164200075-106 span, #zappy-section-1781164200075-106 a, #zappy-section-1781164200075-106 li, #zappy-section-1781164200075-106 label, #zappy-section-1781164200075-106 blockquote, #zappy-section-1781164200075-106 figcaption, #zappy-section-1781164200075-106 dt, #zappy-section-1781164200075-106 dd, #zappy-section-1781164200075-106 td, #zappy-section-1781164200075-106 th { color: #FFFFFF; }</style>
+<section class="contact-contact-form-section" data-layout-spec="צור קשר-contact-form" id="zappy-section-1781164200075-106" style="position: relative; overflow: hidden; background-color: rgb(26, 26, 26); --zappy-bg-color: #1A1A1A; direction: rtl;" data-zappy-bg-type="color" data-zappy-bg-color="#1A1A1A" data-zappy-bg-image="" data-zappy-bg-overlay-color="#000000" data-zappy-bg-overlay-opacity="30" data-zappy-bg-video-type="" data-zappy-bg-video-url=""><style data-zappy-section-color="zappy-section-1781164200075-106">#zappy-section-1781164200075-106, #zappy-section-1781164200075-106 h1, #zappy-section-1781164200075-106 h2, #zappy-section-1781164200075-106 h3, #zappy-section-1781164200075-106 h4, #zappy-section-1781164200075-106 h5, #zappy-section-1781164200075-106 h6, #zappy-section-1781164200075-106 p, #zappy-section-1781164200075-106 span, #zappy-section-1781164200075-106 a, #zappy-section-1781164200075-106 li, #zappy-section-1781164200075-106 label, #zappy-section-1781164200075-106 blockquote, #zappy-section-1781164200075-106 figcaption, #zappy-section-1781164200075-106 dt, #zappy-section-1781164200075-106 dd, #zappy-section-1781164200075-106 td, #zappy-section-1781164200075-106 th { color: #FFFFFF; }</style>
   <div class="contact-contact-form-section__container">
     <!-- Header -->
     <div class="contact-contact-form-section__header">
-      <div class="contact-contact-form-section__label-wrapper" data-i18n="contact_div_54">
-        <span class="contact-contact-form-section__label" style="color: rgb(26, 26, 26) !important;">צור קשר</span>
-      </div>
-      <h2 class="contact-contact-form-section__title" data-i18n="contact_h2_2">ספרו לנו על הצרכים שלכם</h2>
-      <p class="contact-contact-form-section__subtitle" data-i18n="contact_p_12">
-        השאירו פרטים ונחזור אליכם בהקדם עם הצעת מחיר מותאמת אישית. אנא ציינו את סוג הנכס, השירות הנדרש והאם מדובר בעבודה חד-פעמית או בהתקשרות מתמשכת.
-      </p>
+      <div class="contact-contact-form-section__label-wrapper" data-i18n="contact_div_54"><span class="contact-contact-form-section__label" style="color: rgb(26, 26, 26) !important;">צור קשר</span></div>
+      <h2 class="contact-contact-form-section__title" data-i18n="contact_h2_2" style="">ספרו לנו על הצורך שלכם</h2>
+      <p class="contact-contact-form-section__subtitle" data-i18n="contact_p_12">השאירו פרטים ונחזור אליכם בהקדם עם הצעת מחיר מותאמת אישית. אנא ציינו את סוג הנכס, השירות הנדרש והאם מדובר בעבודה חד-פעמית או בהתקשרות מתמשכת.</p>
     </div>
 
     <!-- Form -->
@@ -2599,7 +2595,7 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
         <!-- Service Type -->
         <div class="contact-contact-form-section__field" data-grid-item-index="3">
           <label class="contact-contact-form-section__field-label" for="contact-service-type" data-i18n="contact_label_46">סוג השירות</label>
-          <select id="contact-service-type" name="service_type" class="contact-contact-form-section__input" required="">
+          <select id="contact-service-type" name="service_type" class="contact-contact-form-section__input zappy-editable-dropdown" required="">
             <option value="" data-i18n="contact_opt_55">בחרו סוג שירות</option>
             <option value="cleaning" data-i18n="contact_opt_56">ניקיון</option>
             <option value="facility-management" data-i18n="contact_opt_57">ניהול מתקנים</option>
@@ -2608,7 +2604,7 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
         </div>
 
         <!-- Service Type (hidden field for context, but we use message for details) -->
-        <div class="contact-contact-form-section__field contact-contact-form-section__field--full" data-grid-item-index="3">
+        <div class="contact-contact-form-section__field contact-contact-form-section__field--full" data-grid-item-index="4">
           <label class="contact-contact-form-section__field-label" for="contact-message" data-i18n="contact_label_47">פרטי הפנייה</label>
           <textarea id="contact-message" name="message" class="contact-contact-form-section__textarea" rows="5" placeholder="אנא תארו את סוג הנכס, השירות הנדרש והאם מדובר בעבודה חד-פעמית או מתמשכת..." required="" data-i18n-placeholder="contact_placeholder_68"></textarea>
         </div>
@@ -2616,18 +2612,15 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
 
       <!-- Privacy Consent -->
       <div class="contact-contact-form-section__privacy privacy-consent">
-        <label class="privacy-consent-label" data-i18n="new_label_142">
+        <label class="privacy-consent-label" data-i18n="new_label_216">
           <input type="checkbox" name="privacy_consent" class="privacy-consent-checkbox" required="">
-          <span><span>קראתי ואני מסכים/ה ל</span><a href="/terms" target="_blank" data-i18n="contact_link_27">תנאי השימוש</a> <span>ול</span><a href="/privacy" target="_blank" data-i18n="contact_link_28">מדיניות הפרטיות</a></span>
+          <span><span><span><br>          קראתי ואני מסכים/ה ל</span></span><a href="/terms" target="_blank" data-i18n="contact_link_27">תנאי השימוש</a> <span><span> ול</span></span><a href="/privacy" target="_blank" data-i18n="contact_link_28">מדיניות הפרטיות</a></span>
         </label>
       </div>
 
       <!-- Submit -->
       <div class="contact-contact-form-section__submit-wrapper">
-        <button type="submit" class="contact-contact-form-section__submit btn-primary" data-element-type="button" data-element-id="btn-1781456769350-0kd4oxlnu" data-native-element="true" data-i18n="contact_btn_42">
-          <span style="color: rgb(26, 26, 26) !important;">שליחת הפנייה</span>
-          <i class="fas fa-arrow-left" aria-hidden="true"></i>
-        </button>
+        <button type="submit" class="contact-contact-form-section__submit btn-primary" data-element-type="button" data-element-id="btn-1781456769350-0kd4oxlnu" data-native-element="true" data-i18n="contact_btn_42">שליחת הפנייה</button>
       </div>
     </form>
 
@@ -2668,6 +2661,9 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
   </a>
   
   <div data-integration="accessibility:toolbar"></div>
+
+
+
 
 
 
