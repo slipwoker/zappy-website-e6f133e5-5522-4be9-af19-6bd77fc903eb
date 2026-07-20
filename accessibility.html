@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
+<!DOCTYPE html><html lang="he" dir="rtl"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
@@ -223,6 +221,377 @@
 })();
 </script>
 <!-- End Zappy Analytics -->
+<!-- Zappy Marketing Events -->
+<script>
+(function() {
+  'use strict';
+  if (window.zappyFireMarketingEvent) return;
+
+  var ECOM_MODE = "";
+  var IS_CATALOG = false;
+  var IS_FULL = false;
+
+  var ECOM_ALIAS = {
+    begin_checkout: 'checkout_started',
+    purchase: 'checkout_complete',
+    add_to_cart: 'add_to_cart',
+    view_product: 'view_product'
+  };
+
+  function pagePath() {
+    try {
+      if (window.ZAPPY_CONFIG && window.ZAPPY_CONFIG.currentPagePath) {
+        return window.ZAPPY_CONFIG.currentPagePath;
+      }
+    } catch (e) {}
+    try { return window.location.pathname || '/'; } catch (e2) { return '/'; }
+  }
+
+  function normalizeItems(meta) {
+    meta = meta || {};
+    var raw = meta.items || meta.cartItems || meta.cart_items || meta.lineItems || [];
+    if (!Array.isArray(raw)) raw = [];
+    var out = [];
+    for (var i = 0; i < raw.length; i++) {
+      var item = raw[i];
+      if (!item || typeof item !== 'object') continue;
+      var id = String(item.item_id || item.productId || item.product_id || item.id || '').trim();
+      var name = String(item.item_name || item.productName || item.product_name || item.name || '').trim();
+      var price = parseFloat(item.price != null ? item.price : (item.unitPrice != null ? item.unitPrice : 0)) || 0;
+      var quantity = Math.max(1, parseInt(item.quantity != null ? item.quantity : (item.qty != null ? item.qty : 1), 10) || 1);
+      if (!id && !name) continue;
+      out.push({ item_id: id || name, item_name: name || id, price: price, quantity: quantity });
+    }
+    return out;
+  }
+
+  function buildGa4Params(eventId, meta) {
+    meta = meta || {};
+    var items = normalizeItems(meta);
+    var value = parseFloat(meta.value != null ? meta.value : (meta.total != null ? meta.total : 0)) || 0;
+    var currency = String(meta.currency || 'USD').toUpperCase();
+
+    if (eventId === 'checkout_complete') {
+      return {
+        transaction_id: String(meta.transaction_id || meta.orderId || meta.order_id || meta.orderNumber || '') || undefined,
+        value: value,
+        currency: currency,
+        items: items
+      };
+    }
+    if (eventId === 'checkout_started') {
+      return { value: value, currency: currency, items: items };
+    }
+    if (eventId === 'add_to_cart') {
+      var atcItems = items.length ? items : [{
+        item_id: String(meta.productId || meta.product_id || ''),
+        item_name: String(meta.productName || meta.product_name || ''),
+        price: parseFloat(meta.value != null ? meta.value : (meta.price != null ? meta.price : 0)) || 0,
+        quantity: parseInt(meta.quantity != null ? meta.quantity : 1, 10) || 1
+      }].filter(function(x) { return x.item_id || x.item_name; });
+      return {
+        value: value || (atcItems[0] ? atcItems[0].price * atcItems[0].quantity : 0),
+        currency: currency,
+        items: atcItems
+      };
+    }
+    if (eventId === 'view_product') {
+      var vpItems = items.length ? items : [{
+        item_id: String(meta.productId || meta.product_id || ''),
+        item_name: String(meta.productName || meta.product_name || ''),
+        price: parseFloat(meta.price != null ? meta.price : (meta.value != null ? meta.value : 0)) || 0,
+        quantity: 1
+      }].filter(function(x) { return x.item_id || x.item_name; });
+      return {
+        currency: currency,
+        value: value || (vpItems[0] ? vpItems[0].price : 0),
+        items: vpItems
+      };
+    }
+    if (eventId === 'whatsapp_click' || eventId === 'phone_click') {
+      return { method: eventId === 'whatsapp_click' ? 'whatsapp' : 'phone', page_path: meta.pagePath || pagePath() };
+    }
+    if (eventId === 'contact_form_submitted' || eventId === 'product_inquiry') {
+      return { page_path: meta.pagePath || pagePath() };
+    }
+    return meta;
+  }
+
+  function buildMetaParams(eventId, meta) {
+    meta = meta || {};
+    var items = normalizeItems(meta);
+    var value = parseFloat(meta.value != null ? meta.value : (meta.total != null ? meta.total : 0)) || 0;
+    var currency = String(meta.currency || 'USD').toUpperCase();
+    var contentIds = [];
+    var numItems = 0;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].item_id) contentIds.push(items[i].item_id);
+      numItems += items[i].quantity || 1;
+    }
+
+    if (eventId === 'checkout_complete') {
+      return {
+        value: value,
+        currency: currency,
+        content_ids: contentIds.length ? contentIds : undefined,
+        content_type: 'product',
+        num_items: numItems || undefined,
+        order_id: String(meta.order_id || meta.orderId || meta.transaction_id || meta.orderNumber || '') || undefined
+      };
+    }
+    if (eventId === 'checkout_started') {
+      return {
+        value: value,
+        currency: currency,
+        content_ids: contentIds.length ? contentIds : undefined,
+        content_type: 'product',
+        num_items: numItems || parseInt(meta.itemCount != null ? meta.itemCount : 0, 10) || undefined
+      };
+    }
+    if (eventId === 'add_to_cart') {
+      var id = String(meta.productId || meta.product_id || contentIds[0] || '');
+      return {
+        value: value || (items[0] ? items[0].price * items[0].quantity : 0),
+        currency: currency,
+        content_ids: id ? [id] : (contentIds.length ? contentIds : undefined),
+        content_type: 'product',
+        content_name: meta.productName || meta.product_name || (items[0] && items[0].item_name),
+        num_items: parseInt(meta.quantity != null ? meta.quantity : (numItems || 1), 10) || 1
+      };
+    }
+    if (eventId === 'view_product') {
+      var vid = String(meta.productId || meta.product_id || contentIds[0] || '');
+      return {
+        value: value || parseFloat(meta.price != null ? meta.price : 0) || 0,
+        currency: currency,
+        content_ids: vid ? [vid] : (contentIds.length ? contentIds : undefined),
+        content_type: 'product',
+        content_name: meta.productName || meta.product_name || (items[0] && items[0].item_name)
+      };
+    }
+    if (eventId === 'whatsapp_click' || eventId === 'phone_click') {
+      return {
+        content_name: eventId === 'whatsapp_click' ? 'WhatsApp' : 'Phone',
+        content_category: 'contact'
+      };
+    }
+    if (eventId === 'contact_form_submitted' || eventId === 'product_inquiry') {
+      return {
+        content_name: eventId === 'product_inquiry' ? 'Product inquiry' : 'Contact form',
+        content_category: meta.productName || meta.product_name || undefined
+      };
+    }
+    return meta;
+  }
+
+  var PLATFORM = {
+    whatsapp_click: { ga4: 'contact', meta: 'Contact', gtm: 'whatsapp_click', ecom: false },
+    phone_click: { ga4: 'contact', meta: 'Contact', gtm: 'phone_click', ecom: false },
+    contact_form_submitted: { ga4: 'generate_lead', meta: 'Lead', gtm: 'contact_form_submitted', ecom: false },
+    checkout_started: { ga4: 'begin_checkout', meta: 'InitiateCheckout', gtm: 'begin_checkout', ecom: true },
+    checkout_complete: { ga4: 'purchase', meta: 'Purchase', gtm: 'purchase', ecom: true },
+    product_inquiry: { ga4: 'generate_lead', meta: 'Lead', gtm: 'product_inquiry', ecom: false },
+    add_to_cart: { ga4: 'add_to_cart', meta: 'AddToCart', gtm: 'add_to_cart', ecom: true },
+    view_product: { ga4: 'view_item', meta: 'ViewContent', gtm: 'view_item', ecom: true }
+  };
+
+  function purchaseDedupKey(orderId) {
+    return 'zappy_purchase_fired_' + String(orderId || '');
+  }
+
+  function alreadyFiredPurchase(orderId) {
+    if (!orderId) return false;
+    try {
+      return sessionStorage.getItem(purchaseDedupKey(orderId)) === '1';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function markPurchaseFired(orderId) {
+    if (!orderId) return;
+    try { sessionStorage.setItem(purchaseDedupKey(orderId), '1'); } catch (e) {}
+  }
+
+  /**
+   * Fire a marketing event to first-party analytics + GA4/GTM/Meta when present.
+   * @param {string} eventName marketing ID or ecommerce alias
+   * @param {object} [metadata]
+   * @param {{ skipFirstParty?: boolean }} [opts]
+   */
+  window.zappyFireMarketingEvent = function(eventName, metadata, opts) {
+    try {
+      opts = opts || {};
+      metadata = metadata || {};
+      var eventId = ECOM_ALIAS[eventName] || eventName;
+      var plat = PLATFORM[eventId];
+      if (!plat) return;
+
+      if (!metadata.pagePath && !metadata.page_path) {
+        metadata.pagePath = pagePath();
+      }
+
+      if (eventId === 'checkout_complete') {
+        var oid = String(metadata.orderId || metadata.order_id || metadata.transaction_id || '');
+        if (oid && alreadyFiredPurchase(oid)) return;
+        if (oid) markPurchaseFired(oid);
+      }
+
+      // First-party (skip when already tracked via zappyTrackEcomAnalytics path
+      // that opts out, or when caller already recorded under a different name)
+      if (!opts.skipFirstParty) {
+        try {
+          if (window.zappyAnalytics && typeof window.zappyAnalytics.track === 'function') {
+            window.zappyAnalytics.track(eventId, metadata);
+          }
+        } catch (e1) {}
+      }
+
+      // GTM / dataLayer — platform-standard ecommerce event names
+      try {
+        window.dataLayer = window.dataLayer || [];
+        if (plat.ecom) {
+          var ga4ForGtm = buildGa4Params(eventId, metadata);
+          var ecommerce = {};
+          if (ga4ForGtm.transaction_id) ecommerce.transaction_id = ga4ForGtm.transaction_id;
+          if (ga4ForGtm.value != null) ecommerce.value = ga4ForGtm.value;
+          if (ga4ForGtm.currency) ecommerce.currency = ga4ForGtm.currency;
+          if (ga4ForGtm.items) ecommerce.items = ga4ForGtm.items;
+          window.dataLayer.push({ event: plat.gtm, ecommerce: ecommerce });
+          // Secondary Zappy-specific trigger for merchants who want it
+          if (eventId === 'checkout_complete' || eventId === 'checkout_started') {
+            window.dataLayer.push({ event: eventId, ecommerce: ecommerce });
+          }
+        } else {
+          var dl = { event: plat.gtm };
+          for (var k in metadata) {
+            if (Object.prototype.hasOwnProperty.call(metadata, k)) dl[k] = metadata[k];
+          }
+          window.dataLayer.push(dl);
+        }
+      } catch (e2) {}
+
+      // GA4 gtag
+      try {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', plat.ga4, buildGa4Params(eventId, metadata));
+        }
+      } catch (e3) {}
+
+      // Meta Pixel (only when fbq is loaded — consent-gated lazy loader)
+      try {
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', plat.meta, buildMetaParams(eventId, metadata));
+        }
+      } catch (e4) {}
+    } catch (err) {}
+  };
+
+  // ---- Click listeners (capture) ----
+  var recent = Object.create(null);
+  function dedupe(key) {
+    var now = Date.now();
+    if (recent[key] && now - recent[key] < 800) return true;
+    recent[key] = now;
+    return false;
+  }
+
+  function closest(el, selector) {
+    if (!el) return null;
+    if (el.closest) return el.closest(selector);
+    return null;
+  }
+
+  function findAnchor(el) {
+    var node = el;
+    while (node && node !== document) {
+      if (node.tagName === 'A') return node;
+      node = node.parentElement;
+    }
+    return null;
+  }
+
+  function isWhatsAppHref(href) {
+    if (!href) return false;
+    var h = String(href).toLowerCase();
+    return h.indexOf('wa.me/') !== -1 ||
+      h.indexOf('api.whatsapp.com') !== -1 ||
+      h.indexOf('whatsapp.com/send') !== -1 ||
+      h.indexOf('whatsapp:') === 0;
+  }
+
+  document.addEventListener('click', function(e) {
+    try {
+      var target = e.target;
+      if (!target) return;
+
+      // WhatsApp
+      var waFloat = closest(target, '.whatsapp-float, a.whatsapp-float, [data-zappy-whatsapp]');
+      var anchor = findAnchor(target);
+      var href = (anchor && anchor.href) || '';
+      if (waFloat || (anchor && isWhatsAppHref(href))) {
+        if (!dedupe('wa:' + href)) {
+          var waSource = waFloat ? 'float' : 'link';
+          window.zappyFireMarketingEvent('whatsapp_click', {
+            source: waSource,
+            href: href || null,
+            pagePath: pagePath()
+          });
+        }
+        return;
+      }
+
+      // Phone
+      var phoneBtn = closest(target, '.phone-header-btn, .nav-phone-btn, .call-btn, [data-zappy-phone]');
+      var telHref = '';
+      if (anchor && anchor.href && String(anchor.href).toLowerCase().indexOf('tel:') === 0) {
+        telHref = anchor.href;
+      } else if (phoneBtn && phoneBtn.href && String(phoneBtn.href).toLowerCase().indexOf('tel:') === 0) {
+        telHref = phoneBtn.href;
+      }
+      if (phoneBtn || telHref) {
+        var phone = '';
+        if (telHref) {
+          phone = String(telHref).replace(/^tel:/i, '').trim();
+        }
+        if (!dedupe('tel:' + (phone || (phoneBtn && phoneBtn.id) || 'btn'))) {
+          window.zappyFireMarketingEvent('phone_click', {
+            source: phoneBtn ? 'button' : 'link',
+            phone: phone || null,
+            href: telHref || null,
+            pagePath: pagePath()
+          });
+        }
+        return;
+      }
+
+      // Catalog / product inquiry
+      if (IS_CATALOG || IS_FULL) {
+        var inq = closest(target, '.card-inquiry-btn, #zappy-pdp-inquiry-btn, a.inquiry-btn');
+        if (inq) {
+          if (!dedupe('inq:' + (inq.id || inq.className))) {
+            var product = window.currentProduct || null;
+            var productId = (inq.getAttribute && inq.getAttribute('data-product-id')) ||
+              (product && product.id) || null;
+            var productName = (inq.getAttribute && inq.getAttribute('data-product-name')) ||
+              (product && product.name) || null;
+            var channel = 'contact_page';
+            var inqHref = (inq.tagName === 'A' && inq.href) ? inq.href : '';
+            if (inqHref && String(inqHref).toLowerCase().indexOf('mailto:') === 0) channel = 'mailto';
+            window.zappyFireMarketingEvent('product_inquiry', {
+              source: inq.id === 'zappy-pdp-inquiry-btn' ? 'pdp' : 'card',
+              productId: productId,
+              productName: productName,
+              channel: channel,
+              pagePath: pagePath()
+            });
+          }
+        }
+      }
+    } catch (err) {}
+  }, true);
+})();
+</script>
     <meta property="og:title" content="הצהרת נגישות">
     <meta property="og:description" content="הצהרת הנגישות שלנו - מחויבותנו לנגישות דיגיטלית">
     <meta name="twitter:card" content="summary_large_image">
@@ -231,12 +600,6 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"LocalBusiness","@id":"https://proces.co.il#organization","name":"Proces פרוצס","url":"https://proces.co.il","description":"Proces is a comprehensive facility management and staffing company offering a wide range of professional cleaning and maintenance services for commercial buildings, offices, residential towers, hotels, and parking lots. The company stands out with advanced technical capabilities including drone-mounted water cannon cleaning, abseiling (rappelling) for high-rise window cleaning, reverse osmosis window treatment, nano coating, and eco-friendly pest control. They serve both ongoing contract clients and one-time customers, combining general labor supply with highly specialized professional cleaning divisions.","address":{"@type":"PostalAddress","streetAddress":"איירפורט סיטי, קרית שדה התעופה, ישראל"},"contactPoint":[{"@type":"ContactPoint","contactType":"customer service","email":"office@proces.co.il","telephone":"077-4243446","availableLanguage":["he","en"]}]},{"@type":"WebSite","@id":"https://proces.co.il#website","url":"https://proces.co.il","name":"Proces פרוצס","publisher":{"@id":"https://proces.co.il#organization"},"inLanguage":"he"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://proces.co.il"},{"@type":"ListItem","position":2,"name":"Accessibility","item":"https://proces.co.il/accessibility"}]}]}</script>
     <title data-i18n="accessibility_page_title">הצהרת נגישות</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    
-    
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
     .skip-link { position: absolute; top: 0; left: 0; transform: translateY(-200%); padding: 12px 18px; background: var(--bg-dark, #1a1a1a); color: var(--text-light, #fff); font-weight: 600; border-radius: 0 0 8px 0; z-index: 10000; }
     .skip-link:focus { transform: none; outline: 2px solid var(--ring, #fff); outline-offset: 2px; }
@@ -245,9 +608,9 @@
     
     <!-- Cookie Consent -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    
     <!-- Mickidum Accessibility Toolbar -->
-    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    
 
           <style id="zappy-cta-mobile-style">
             /* Hide CTA list item on desktop (tablets and up) */
@@ -1575,6 +1938,56 @@ html[dir="rtl"] body {
 }
 
 </style>
+    <style id="zappy-critical-above-fold-css">
+html{box-sizing:border-box;-webkit-text-size-adjust:100%}*,*::before,*::after{box-sizing:inherit}body{margin:0;min-width:320px;overflow-x:clip}img,svg,video{max-width:100%;height:auto}main{display:block}.container{width:min(100% - 32px,1200px);margin-inline:auto}.navbar,nav.navbar,header .navbar,header[role="banner"]{position:relative;z-index:1000;width:100%}.nav-container,.navbar .container{display:flex;align-items:center;justify-content:space-between;min-height:64px}.logo,.logo-link img{display:block;width:35px;height:35px;object-fit:contain}.nav-menu,#navMenu{list-style:none;margin:0;padding:0}.navbar a,.nav-menu a,#navMenu a,.navbar .nav-links a{color:inherit;text-decoration:none}.navbar .sub-menu,.nav-menu .sub-menu,#navMenu .sub-menu{display:none}.fa,.fas,.far,.fab,.fa-solid,.fa-regular,.fa-brands{display:inline-block;min-width:1em;text-align:center}html:not(#zappy-noop)[data-zappy-site-type="ecommerce"] .phone-header-btn,html:not(#zappy-noop) .navbar:has(.nav-ecommerce-icons)>.phone-header-btn{display:none!important;visibility:hidden!important;width:0!important;height:0!important;pointer-events:none!important}.zappy-preview-empty-store-cta{display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important}.zappy-catalog-menu{background:var(--surface-color,var(--surface,linear-gradient(135deg,#f8f9fa 0%,#fff 100%)));border-bottom:1px solid var(--border-color,#e5e7eb);padding:0;position:sticky;top:0;z-index:90}.zappy-catalog-menu[dir=rtl],.zappy-catalog-menu.rtl{direction:rtl}.zappy-catalog-menu[dir=ltr],.zappy-catalog-menu.ltr{direction:ltr}.catalog-menu-container{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:10px 24px;overflow:visible}.catalog-menu-categories,.catalog-menu-list{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:0;padding:0;list-style:none}.catalog-menu-item{display:inline-flex;align-items:center;padding:8px 16px;font-size:14px;font-weight:500;color:var(--text-color,var(--text,#374151));text-decoration:none;border-radius:20px;white-space:nowrap}.catalog-menu-all{background:var(--primary-color,var(--primary,#111));color:var(--text-light,#fff)!important}.catalog-menu-parent{position:relative;display:inline-flex;align-items:center}.catalog-menu-trigger{display:inline-flex;align-items:center;gap:6px}.catalog-menu-chevron{flex-shrink:0}.catalog-menu-parent>.sub-menu{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}.hero-section,.index-hero-section,section[class*="hero"]{position:relative;overflow:hidden;min-height:560px}.hero-bg-wrapper,.hero-bg-image,section[class*="hero"] [class*="hero-bg"]{position:absolute;inset:0;width:100%;height:100%}.hero-bg-wrapper img,.hero-bg-image img,section[class*="hero"] [data-hero-bg],section[class*="hero"] img[data-hero-background="true"]{width:100%!important;height:100%!important;object-fit:cover!important;display:block}.hero-content,section[class*="hero"] .container{position:relative;z-index:2}@media(max-width:768px){:root{--header-height:72px;--total-header-height:72px;--zappy-mobile-menu-top:72px}html[data-zappy-site-type="ecommerce"] body{padding-top:var(--total-header-height,72px)}html[data-zappy-site-type="ecommerce"] body>nav.navbar,html[data-zappy-site-type="ecommerce"] body>.navbar:not(.zappy-catalog-menu){position:fixed!important;top:0;left:0;right:0;z-index:100000;width:100%;margin-bottom:0}.zappy-catalog-menu{position:fixed;top:var(--header-height,72px);left:0;right:0;z-index:99999}.nav-container,.navbar .container{min-height:60px}.nav-menu,#navMenu{max-width:100vw;overflow-x:hidden}.hero-section,.index-hero-section,section[class*="hero"]{min-height:100svh}.hero-bg-wrapper,.hero-bg-image,.hero-scrim{min-height:100svh}}
+:root{--nav-bg:#FFFFFF}.navbar{background-color:#FFFFFF!important}
+
+/* ZAPPY_ANNOUNCEMENT_HEADER_OFFSET_CSS_V3 */
+:root {
+  --zappy-header-stack-height: calc(var(--zappy-announcement-height, 40px) + var(--header-height, 72px));
+}
+body:has(.zappy-announcement-bar) nav.navbar:not(.zappy-catalog-menu),
+body:has(.zappy-announcement-bar) header.navbar,
+body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-search-panel) {
+  top: var(--zappy-announcement-height, 40px) !important;
+}
+
+
+
+/* ZAPPY_CONTENT_ALIGNMENT_FIRST_PAINT_CSS_V1 */
+[data-zappy-content-align] {
+  display: flex !important;
+  flex-direction: column !important;
+}
+[data-zappy-content-align^="top-"] { justify-content: flex-start !important; }
+[data-zappy-content-align^="upper-"],
+[data-zappy-content-align^="center-"],
+[data-zappy-content-align^="lower-"] { justify-content: center !important; }
+[data-zappy-content-align^="bottom-"] { justify-content: flex-end !important; }
+[data-zappy-content-align$="-left"],
+[data-zappy-content-align$="-mid-left"] {
+  align-items: flex-start !important;
+  text-align: start !important;
+}
+[data-zappy-content-align$="-center"] {
+  align-items: center !important;
+  text-align: center !important;
+}
+[data-zappy-content-align$="-right"],
+[data-zappy-content-align$="-mid-right"] {
+  align-items: flex-end !important;
+  text-align: end !important;
+}
+[data-zappy-content-align] [data-zappy-align-target] {
+  margin-left: auto;
+  margin-right: auto;
+}
+[data-zappy-content-align$="-center"] [data-zappy-align-target],
+[data-zappy-content-align$="-center"] [data-zappy-align-target] > * {
+  text-align: center !important;
+}
+
+</style>
     <link rel="stylesheet" href="/styles.css">
     <script>window.ZAPPY_WEBSITE_ID = "e6f133e5-5522-4be9-af19-6bd77fc903eb"; window.ZAPPY_API_BASE = "https://api.zappy5.com";</script>
 
@@ -1616,7 +2029,7 @@ html[dir="rtl"] body {
     </style>
 </head>
 <body>
-<nav class="navbar"> <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-element-type="button" data-element-id="btn-1781096877550-r0lea1tv8" data-native-element="true" data-i18n-aria-label="home_aria_label_86"> <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;"> <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> </button> <button class="phone-header-btn" data-phone="0774243446" aria-label="Call" data-element-type="button" data-element-id="btn-1781096877550-890ahlv5s" data-native-element="true" data-i18n-aria-label="home_aria_label_87"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> </svg> </button> <div class="nav-container"> <div class="nav-right-group"><div class="nav-brand"> <a href="/" class="logo-link"><img class="logo" src="/assets/proces-facility-management-staffing-services-logo-1781456451189-zivb0h.webp?v=1781456457751-etr63x" alt="Proces פרוצס" data-image-type="logo"  data-i18n-alt="home_alt_81"></a> </div><ul class="nav-menu" id="navMenu"><li><a href="/" data-i18n="nav-home">בית</a></li><li><a href="/services" data-i18n="home_link_62">שירותינו</a></li><li><a href="/about-the-company" class="" data-i18n="home_nav_77">אודות החברה</a></li><li class="nav-cta-item-mobile"><a href="/contact" data-i18n="home_nav_78">צור קשר</a></li><li><a href="/knowledge-tips" class="nav-link" data-i18n="home_nav_79">כתבות</a></li></ul></div> <div class="lang-switcher" data-no-icon-edit="true" data-icon-color="#1A1A1A" style="position:relative;display:inline-flex;align-items:center;z-index:1000;margin:0 4px;"> <button class="lang-switcher-current" aria-haspopup="true" aria-expanded="false" data-no-icon-edit="true" style="display:flex;align-items:center;padding:8px;background:transparent;border:none;border-radius:6px;cursor:pointer;color:inherit;"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;" data-no-icon-edit="true"><path d="M12.039,.002s0,0,0,0c-.013,0-.026-.002-.039-.002-.005,0-.009,0-.014,0-.002,0-.003,0-.005,0C5.373,.011,0,5.39,0,12s5.383,12,12,12,12-5.383,12-12S18.638,.023,12.039,.002Zm9.747,6.998h-4.814c-1.067-2.669-2.712-4.781-3.731-5.925,3.734,.421,6.901,2.719,8.546,5.925Zm-4.786,5c0,1.407-.292,2.753-.731,4H7.731c-.439-1.247-.731-2.593-.731-4s.292-2.754,.73-4h8.539c.439,1.247,.731,2.593,.731,4Zm-1.122,5c-1.229,2.838-3.116,4.99-3.878,5.788-.762-.798-2.649-2.95-3.878-5.788h7.755ZM8.121,7c1.229-2.841,3.117-4.992,3.879-5.789,.762,.798,2.649,2.95,3.878,5.789h-7.757ZM10.757,1.075c-1.025,1.15-2.668,3.264-3.73,5.925H2.214C3.859,3.795,7.024,1.498,10.757,1.075ZM1.764,8H6.668c-.403,1.247-.668,2.589-.668,4s.265,2.752,.669,4H1.764c-.487-1.242-.764-2.588-.764-4s.277-2.758,.764-4Zm.45,9H7.029c1.067,2.669,2.712,4.781,3.731,5.925-3.734-.421-6.901-2.719-8.546-5.925Zm11.026,5.925c1.019-1.144,2.664-3.257,3.731-5.925h4.814c-1.645,3.206-4.812,5.504-8.546,5.925Zm8.996-6.925h-4.905c.404-1.248,.669-2.589,.669-4s-.265-2.752-.669-4h4.905c.487,1.242,.764,2.588,.764,4s-.277,2.758-.764,4Z"></path></svg> </button> <div class="lang-switcher-dropdown" role="menu" style="position:absolute;top:100%;right:0;margin-top:4px;min-width:140px;background:white;border:1px solid rgba(128,128,128,0.2);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);opacity:0;visibility:hidden;transform:translateY(-8px);transition:all 0.2s ease;z-index:1001;"> <button class="lang-option" data-lang="en" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:none;border:none;text-align:left;cursor:pointer;font-size:14px;color:#333;"><img src="https://api.iconify.design/circle-flags/us.svg" width="20" height="20" alt="" style="display:inline-block;vertical-align:middle;border-radius:50%;"> English</button> </div> </div> <script data-no-icon-edit="true">(function(){function f(){var b=document.querySelector('.lang-switcher-current');if(!b)return;var n=b.closest('nav')||b.closest('header')||b.closest('.navbar');if(!n)return;var a=n.querySelector('.nav-menu a,.nav-links a');if(!a)a=n.querySelector('a:not(.lang-option):not(.lang-switcher-current):not([class*="logo"])');if(a){var c=getComputedStyle(a).color;if(c&&c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'){b.style.color=c;return;}}var s=getComputedStyle(n).backgroundColor;if(s&&s!=='rgba(0, 0, 0, 0)'&&s!=='transparent'){var m=s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);if(m){var l=(0.299*parseInt(m[1])+0.587*parseInt(m[2])+0.114*parseInt(m[3]))/255;b.style.color=l>0.5?'#1a1a1a':'#F3FAFF';}}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f);}else{setTimeout(f,0);}})()</script><div class="nav-cta-container"> <a href="tel:077-4243446" class="nav-cta-btn" style="background: transparent; color: var(--nav-text); border: none; font-weight: 600; font-size: 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-right: 20px"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink: 0;"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.01l-2.2 2.21z"></path></svg>077-4243446</a> <a href="/contact" class="nav-cta-btn" data-element-type="button" data-element-id="btn-1781096877550-0rblmczpg" data-native-element="true" style="border-color: rgb(245, 200, 66) !important; color: rgb(51, 51, 51) !important; background-color: rgb(245, 200, 66) !important; background-image: none !important;" data-text-color="rgb(51, 51, 51)" data-i18n="home_nav_80">צור קשר</a> </div> </div> </nav>
+<nav class="navbar"> <button class="mobile-toggle" id="mobileToggle" aria-label="Menu" data-element-type="button" data-element-id="btn-1781096877550-r0lea1tv8" data-native-element="true" data-i18n-aria-label="home_aria_label_86"> <svg style="display:block !important" class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none !important"> <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> </button> <button class="phone-header-btn" data-phone="0774243446" aria-label="Call" data-element-type="button" data-element-id="btn-1781096877550-890ahlv5s" data-native-element="true" data-i18n-aria-label="home_aria_label_87"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> </svg> </button> <div class="nav-container"> <div class="nav-right-group"><div class="nav-brand"> <a href="/" class="logo-link"><img class="logo" src="/assets/proces-facility-management-staffing-services-logo-1781456451189-zivb0h.webp?v=1781456457751-etr63x" alt="Proces פרוצס" data-image-type="logo" data-i18n-alt="home_alt_81" decoding="async" width="35" height="35"></a> </div><ul class="nav-menu" id="navMenu"><li><a href="/" data-i18n="nav-home">בית</a></li><li><a href="/services" data-i18n="home_link_62">שירותינו</a></li><li><a href="/about-the-company" class="" data-i18n="home_nav_77">אודות החברה</a></li><li class="nav-cta-item-mobile"><a href="/contact" data-i18n="home_nav_78">צור קשר</a></li><li><a href="/knowledge-tips" class="nav-link" data-i18n="home_nav_79">כתבות</a></li></ul></div> <div class="lang-switcher" data-no-icon-edit="true" data-icon-color="#1A1A1A" style="position:relative;display:inline-flex;align-items:center;z-index:1000;margin:0 4px;"> <button class="lang-switcher-current" aria-haspopup="true" aria-expanded="false" data-no-icon-edit="true" style="display:flex;align-items:center;padding:8px;background:transparent;border:none;border-radius:6px;cursor:pointer;color:inherit;"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;" data-no-icon-edit="true"><path d="M12.039,.002s0,0,0,0c-.013,0-.026-.002-.039-.002-.005,0-.009,0-.014,0-.002,0-.003,0-.005,0C5.373,.011,0,5.39,0,12s5.383,12,12,12,12-5.383,12-12S18.638,.023,12.039,.002Zm9.747,6.998h-4.814c-1.067-2.669-2.712-4.781-3.731-5.925,3.734,.421,6.901,2.719,8.546,5.925Zm-4.786,5c0,1.407-.292,2.753-.731,4H7.731c-.439-1.247-.731-2.593-.731-4s.292-2.754,.73-4h8.539c.439,1.247,.731,2.593,.731,4Zm-1.122,5c-1.229,2.838-3.116,4.99-3.878,5.788-.762-.798-2.649-2.95-3.878-5.788h7.755ZM8.121,7c1.229-2.841,3.117-4.992,3.879-5.789,.762,.798,2.649,2.95,3.878,5.789h-7.757ZM10.757,1.075c-1.025,1.15-2.668,3.264-3.73,5.925H2.214C3.859,3.795,7.024,1.498,10.757,1.075ZM1.764,8H6.668c-.403,1.247-.668,2.589-.668,4s.265,2.752,.669,4H1.764c-.487-1.242-.764-2.588-.764-4s.277-2.758,.764-4Zm.45,9H7.029c1.067,2.669,2.712,4.781,3.731,5.925-3.734-.421-6.901-2.719-8.546-5.925Zm11.026,5.925c1.019-1.144,2.664-3.257,3.731-5.925h4.814c-1.645,3.206-4.812,5.504-8.546,5.925Zm8.996-6.925h-4.905c.404-1.248,.669-2.589,.669-4s-.265-2.752-.669-4h4.905c.487,1.242,.764,2.588,.764,4s-.277,2.758-.764,4Z"></path></svg> </button> <div class="lang-switcher-dropdown" role="menu" style="position:absolute;top:100%;right:0;margin-top:4px;min-width:140px;background:white;border:1px solid rgba(128,128,128,0.2);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);opacity:0;visibility:hidden;transform:translateY(-8px);transition:all 0.2s ease;z-index:1001;"> <button class="lang-option" data-lang="en" style="display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;background:none;border:none;text-align:left;cursor:pointer;font-size:14px;color:#333;"><img src="https://api.iconify.design/circle-flags/us.svg" width="20" height="20" alt="" style="display:inline-block;vertical-align:middle;border-radius:50%;" decoding="async"> English</button> </div> </div> <script data-no-icon-edit="true">(function(){function f(){var b=document.querySelector('.lang-switcher-current');if(!b)return;var n=b.closest('nav')||b.closest('header')||b.closest('.navbar');if(!n)return;var a=n.querySelector('.nav-menu a,.nav-links a');if(!a)a=n.querySelector('a:not(.lang-option):not(.lang-switcher-current):not([class*="logo"])');if(a){var c=getComputedStyle(a).color;if(c&&c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'){b.style.color=c;return;}}var s=getComputedStyle(n).backgroundColor;if(s&&s!=='rgba(0, 0, 0, 0)'&&s!=='transparent'){var m=s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);if(m){var l=(0.299*parseInt(m[1])+0.587*parseInt(m[2])+0.114*parseInt(m[3]))/255;b.style.color=l>0.5?'#1a1a1a':'#F3FAFF';}}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',f);}else{setTimeout(f,0);}})()</script><div class="nav-cta-container"> <a href="tel:077-4243446" class="nav-cta-btn" style="background: transparent; color: var(--nav-text); border: none; font-weight: 600; font-size: 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-right: 20px"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink: 0;"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.01l-2.2 2.21z"></path></svg>077-4243446</a> <a href="/contact" class="nav-cta-btn" data-element-type="button" data-element-id="btn-1781096877550-0rblmczpg" data-native-element="true" style="border-color: rgb(245, 200, 66) !important; color: rgb(51, 51, 51) !important; background-color: rgb(245, 200, 66) !important; background-image: none !important;" data-text-color="rgb(51, 51, 51)" data-i18n="home_nav_80">צור קשר</a> </div> </div> </nav>
     <main>
     <section class="legal-page-content accessibility-statement">
   <div class="container">
@@ -1711,10 +2124,19 @@ html[dir="rtl"] body {
   </div>
 </section>
     </main>
-    <footer class="site-footer" dir="rtl" style="background-color: rgb(255, 255, 255); direction: rtl;"> <div class="footer-container"> <div class="footer-grid"> <!-- Company Info --> <div class="footer-col footer-company-col">  <p class="company-blurb" data-i18n="home_p_44" >פרוצס מספקת פתרונות ניהול מתקנים וכוח אדם מקצועיים, אמינים ומותאמים אישית לעסקים ולנכסים מסחריים. המומחיות שלנו מבטיחה תפעול חלק ויעיל.<br><br><b>זמינות 24/7</b></p> </div> <!-- Quick Links --> <div class="footer-col footer-links-col"> <h4 data-i18n="home_h4_17">ניווט מהיר</h4> <ul ><li><a href="/" data-i18n="home_link_63">בית</a></li><li><a href="/services" data-i18n="home_link_64">שירותינו</a></li><li><a href="/contact" data-i18n="home_link_66">צור קשר</a></li></ul> </div> <!-- Contact Info --> <div class="footer-col footer-contact-col"> <h4 data-i18n="home_h4_18">צור קשר</h4> <ul class="footer-contact"> <li> <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1781162794838-qldgdzj93" data-icon-type="fontawesome"></i></span> <span class="contact-text" data-i18n="home_span_53"><a href="mailto:office@proces.co.il" data-i18n="home_link_67"><span><span>office@proces.co.il</span></span></a></span> </li> <li> <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1781162794838-g6u3hsmej" data-icon-type="fontawesome"></i></span> <span class="contact-text"><a href="tel:077-4243446">077-4243446</a></span> </li> <li><a href="https://www.google.com/maps/search/?api=1&amp;query=%D7%90%D7%99%D7%99%D7%A8%D7%A4%D7%95%D7%A8%D7%98%20%D7%A1%D7%99%D7%98%D7%99%2C%20%D7%A7%D7%A8%D7%99%D7%AA%20%D7%A9%D7%93%D7%94%20%D7%94%D7%AA%D7%A2%D7%95%D7%A4%D7%94%2C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" data-i18n="home_link_68" style="color: rgb(212, 160, 23); text-decoration: underline; cursor: pointer;" target="_blank" rel="noopener noreferrer">איירפורט סיטי, קרית שדה התעופה, ישראל<br></a></li> </ul> </div> <!-- Business Hours --> <div class="footer-col footer-hours-col zappy-hours-hidden" style="display: none"> <h4 data-i18n="home_h4_19">שעות פעילות</h4> <ul class="footer-hours"><li><a href="/" data-i18n="home_link_69"><span class="hours-day">ימים א’–שבת</span> <span class="hours-time">09:00–17:00</span></a></li></ul> </div> <!-- Social Media --> <div class="footer-col footer-social-col"> <h4 data-i18n="home_h4_20">עקבו אחרינו</h4> <div class="footer-social"> <a href="#" aria-label="פייסבוק" data-zappy-social-placeholder="true" style="display:none !important;" data-i18n-aria-label="home_aria_label_88"><i class="fab fa-facebook-f"></i></a> <a href="#" aria-label="אינסטגרם" data-zappy-social-placeholder="true" style="display:none !important;" data-i18n-aria-label="home_aria_label_89"><i class="fab fa-instagram"></i></a> <a href="https://wa.me/972774243446" aria-label="וואטסאפ" data-zappy-social-placeholder="true" data-i18n-aria-label="home_aria_label_90"><i class="fab fa-whatsapp" data-element-type="icon" data-element-id="icon-1781162794838-jmbhk5s99" data-icon-type="fontawesome"></i></a> </div> </div> </div> </div> <!-- Bottom Bar --> <div class="footer-bottom"> <div class="footer-container footer-bottom-inner"> <p class="copyright" data-i18n="home_p_45">© 2026 Proces פרוצס. כל הזכויות שמורות.</p> <div class="legal-links"> <a href="/privacy" data-i18n="home_link_70">מדיניות פרטיות</a> <a href="/terms" data-i18n="home_link_71">תנאי שימוש</a> <a href="/accessibility" data-i18n="home_link_72">נגישות</a> <a href="https://zappy5.com" target="_blank" class="zappy-attribution"  data-i18n="home_link_73"><br></a> </div> </div> </div> </footer>
+    <footer class="site-footer" dir="rtl" style="background-color: rgb(255, 255, 255); direction: rtl;"> <div class="footer-container"> <div class="footer-grid"> <!-- Company Info --> <div class="footer-col footer-company-col">  <p class="company-blurb" data-i18n="home_p_44">פרוצס מספקת פתרונות ניהול מתקנים וכוח אדם מקצועיים, אמינים ומותאמים אישית לעסקים ולנכסים מסחריים. המומחיות שלנו מבטיחה תפעול חלק ויעיל.<br><br><b>זמינות 24/7</b></p> </div> <!-- Quick Links --> <div class="footer-col footer-links-col"> <h4 data-i18n="home_h4_17">ניווט מהיר</h4> <ul><li><a href="/" data-i18n="home_link_63">בית</a></li><li><a href="/services" data-i18n="home_link_64">שירותינו</a></li><li><a href="/contact" data-i18n="home_link_66">צור קשר</a></li></ul> </div> <!-- Contact Info --> <div class="footer-col footer-contact-col"> <h4 data-i18n="home_h4_18">צור קשר</h4> <ul class="footer-contact"> <li> <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1781162794838-qldgdzj93" data-icon-type="fontawesome"></i></span> <span class="contact-text" data-i18n="home_span_53"><a href="mailto:office@proces.co.il" data-i18n="home_link_67"><span><span>office@proces.co.il</span></span></a></span> </li> <li> <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1781162794838-g6u3hsmej" data-icon-type="fontawesome"></i></span> <span class="contact-text"><a href="tel:077-4243446">077-4243446</a></span> </li> <li><a href="https://www.google.com/maps/search/?api=1&amp;query=%D7%90%D7%99%D7%99%D7%A8%D7%A4%D7%95%D7%A8%D7%98%20%D7%A1%D7%99%D7%98%D7%99%2C%20%D7%A7%D7%A8%D7%99%D7%AA%20%D7%A9%D7%93%D7%94%20%D7%94%D7%AA%D7%A2%D7%95%D7%A4%D7%94%2C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" data-i18n="home_link_68" style="color: rgb(212, 160, 23); text-decoration: underline; cursor: pointer;" target="_blank" rel="noopener noreferrer">איירפורט סיטי, קרית שדה התעופה, ישראל<br></a></li> </ul> </div> <!-- Business Hours --> <div class="footer-col footer-hours-col zappy-hours-hidden" style="display: none"> <h4 data-i18n="home_h4_19">שעות פעילות</h4> <ul class="footer-hours"><li><a href="/" data-i18n="home_link_69"><span class="hours-day">ימים א’–שבת</span> <span class="hours-time">09:00–17:00</span></a></li></ul> </div> <!-- Social Media --> <div class="footer-col footer-social-col"> <h4 data-i18n="home_h4_20">עקבו אחרינו</h4> <div class="footer-social"> <a href="#" aria-label="פייסבוק" data-zappy-social-placeholder="true" style="display:none !important;" data-i18n-aria-label="home_aria_label_88"><i class="fab fa-facebook-f"></i></a> <a href="#" aria-label="אינסטגרם" data-zappy-social-placeholder="true" style="display:none !important;" data-i18n-aria-label="home_aria_label_89"><i class="fab fa-instagram"></i></a> <a href="https://wa.me/972774243446" aria-label="וואטסאפ" data-zappy-social-placeholder="true" data-i18n-aria-label="home_aria_label_90"><i class="fab fa-whatsapp" data-element-type="icon" data-element-id="icon-1781162794838-jmbhk5s99" data-icon-type="fontawesome"></i></a> </div> </div> </div> </div> <!-- Bottom Bar --> <div class="footer-bottom"> <div class="footer-container footer-bottom-inner"> <p class="copyright" data-i18n="home_p_45">© 2026 Proces פרוצס. כל הזכויות שמורות.</p> <div class="legal-links"> <a href="/privacy" data-i18n="home_link_70">מדיניות פרטיות</a> <a href="/terms" data-i18n="home_link_71">תנאי שימוש</a> <a href="/accessibility" data-i18n="home_link_72">נגישות</a> <a href="https://zappy5.com" target="_blank" class="zappy-attribution" data-i18n="home_link_73"><br></a> </div> </div> </div> </footer>
     <div data-integration="accessibility:toolbar"></div>
 
   <a href="https://wa.me/972774243446" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-i18n-aria-label="accessibility_aria_label_79"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg></a>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1769,8 +2191,24 @@ html[dir="rtl"] body {
       "ecom_apartmentExt": "דירה, קומה, קוד בניין, הערות וכו'",
       "ecom_applyCoupon": "החל",
       "ecom_backToProducts": "חזרה למוצרים",
+      "ecom_bookNow": "הזמינו עכשיו",
+      "ecom_bookingChooseDate": "בחרו תאריך",
+      "ecom_bookingChooseTime": "בחרו שעה",
+      "ecom_bookingDate": "תאריך",
+      "ecom_bookingLoading": "טוען זמינות…",
+      "ecom_bookingNoDates": "אין תאריכים פנויים כרגע",
+      "ecom_bookingNoSlots": "אין זמנים פנויים כרגע",
+      "ecom_bookingRemaining": "נותרו {count}",
+      "ecom_bookingSelectOption": "בחירה",
+      "ecom_bookingSelectTime": "בחרו שעה",
+      "ecom_bookingSelectDateFirst": "אנא בחרו תאריך תחילה",
+      "ecom_bookingSelectTimeFirst": "אנא בחרו תאריך ושעה תחילה",
+      "ecom_bookingCompleteFormFirst": "אנא מלאו את שדות ההזמנה הנדרשים",
+      "ecom_bookingTime": "שעה",
       "ecom_browseFavorites": "גלו את כל המוצרים שלנו",
       "ecom_bundleDiscount": "הנחת חבילה",
+      "ecom_seasonalDiscount": "הנחה עונתית",
+      "ecom_customerDiscount": "הנחת לקוח",
       "ecom_bundleTotal": "סה\"כ לעגלה",
       "ecom_callNow": "התקשר עכשיו",
       "ecom_cancel": "ביטול",
@@ -1881,6 +2319,8 @@ html[dir="rtl"] body {
       "ecom_haveCouponCode": "יש לי קוד קופון",
       "ecom_home": "דף הבית",
       "ecom_inStock": "במלאי",
+      "ecom_onlyOneLeft": "נותר פריט אחד בלבד",
+      "ecom_onlyXLeft": "נותרו רק {count} במלאי",
       "ecom_inquiryAbout": "פנייה בנושא",
       "ecom_invalidCoupon": "קוד קופון לא תקין",
       "ecom_items": "פריטים",
@@ -1958,6 +2398,7 @@ html[dir="rtl"] body {
       "ecom_saveToFavorites": "שמור למועדפים",
       "ecom_saving": "שומר...",
       "ecom_searchProducts": "חיפוש מוצרים",
+      "ecom_searchResults": "תוצאות חיפוש",
       "ecom_selectVariant": "בחר אפשרות",
       "ecom_sendCode": "שלח קוד",
       "ecom_sendInquiry": "שלח פנייה",
@@ -2011,14 +2452,16 @@ html[dir="rtl"] body {
       "ecom_coursesEnrollmentCheckFailed": "לא ניתן לאמת בעלות על הקורס. אנא נסה שוב.",
       "ecom_coursesAlreadyEnrolledPrompt": "כבר נרשמת?",
       "ecom_coursesLoginLink": "לכניסה",
+      "ecom_yourCourse": "הקורס שלך",
+      "ecom_courseAccessMethod": "גישה דיגיטלית מקוונת",
       "ecom_processing": "מעבד...",
       "ecom_checkoutFailed": "שגיאה בתהליך התשלום. נסו שוב.",
-      "home_h1_1": "ניהול מבנים, כוח אדם ושירותי ניקיון מתקדמים – הכל תחת קורת גג אחת",
+      "home_h1_1": "<span style=\"font-weight: normal;\">קבוצת </span>פרוצס&nbsp;\nהשותף <u>התפעולי של</u>ך<span style=\"font-weight: normal;\">!</span>\nשירותי ניקיון ואספקת \n\nכוח אדם&nbsp;ניהול ואחזקת מבנים\nוהכול תחת קורת גג אחת",
       "home_h2_2": "פרוצס משלבת שירותי התקשרות שוטפים עם התערבויות מומחים חד-פעמיות",
       "home_h2_3": "פתרונות טכניים מעבר לניקיון שוטף",
       "home_h2_4": "מערך שירותים מקיף תחת קורת גג אחת",
       "home_h2_5": "מוכנים להעלות את רמת הניהול והאחזקה בנכס שלכם?",
-      "home_h3_6": "פרוצס מספקת שירותים מקצועיים מקיפים ופתרונות מתקדמים \nבפריסה ארצית: שירותי ניקיון ואספקת כוח אדם, שירותי ניהול, משק ואחזקה",
+      "home_h3_6": "אספקת שירותים מקיפים ופתרונות מתקדמים \nבפריסה ארצית",
       "home_h3_7": "אספקת כוח אדם",
       "home_h3_8": "שירותי ניקיון שוטף",
       "home_h3_9": "ניקיון מקצועי",
@@ -2069,13 +2512,13 @@ html[dir="rtl"] body {
       "new_p_174": "פרוצס מספקת כוח אדם מיומן לתפעול שוטף של עסקים וארגונים, החל מעובדי תחזוקה ועד צוותי לוגיסטיקה. אנו דואגים לגיוס, הכשרה והשמה של העובדים המתאימים ביותר, תוך הקפדה על אמינות ומקצועיות.",
       "new_p_175": "לפרויקטים מורכבים אנו מספקים צוותי תמיכה ייעודיים המוצבים באתר הלקוח. הצוותים עוברים הכשרה ייעודית ופועלים תחת ניהול צמוד של פרוצס, תוך התאמה מלאה לדרישות הפרויקט ולוחות הזמנים.",
       "new_p_176": "פרוצס מפעילה צוותי עבודות גובה מוסמכים לביצוע ניקוי חלונות בגלישה, תחזוקת חזיתות, צביעה ואיטום בגובה, תוך שימוש בטכנולוגיות מתקדמות הכוללות רחפנים ייעודיים ותותח מים מוטס לניקוי חזיתות מאתגרות.",
-      "new_p_205": "SPS",
-      "new_p_206": "ביטוח חבות מעבידים",
+      "new_p_205": "אס פי אס שירותים מקצועיים",
+      "new_p_206": "פאזל פרויקטים",
       "new_p_210": "הזן את טקסט הפסקה שלך...",
       "new_p_211": "טקסט כאן",
       "new_p_212": "משרד הכלכלה והתעשייה",
-      "new_p_213": "רישיון קבלן שירות",
-      "new_p_214": "ביטוח צד ג'",
+      "new_p_213": "רישיון הפעלה- קבלן שירות (ענף ניקיון)",
+      "new_p_214": "ביטוחים- אחריות מקצועית, צד ג' וחוות מעבידים",
       "home_h3_10": "ניקוי חלונות בגובה",
       "home_h3_11": "ניהול ואחזקת מבנים",
       "home_h3_12": "ניקיון חניונים ותמיכה תעשייתית",
@@ -2170,7 +2613,7 @@ html[dir="rtl"] body {
       "contact_p_14": "© 2026 Proces פרוצס. כל הזכויות שמורות.",
       "home_link_58": "דלג לתוכן הראשי",
       "home_link_59": "בקשה להצעת מחיר",
-      "home_link_60": "השירותים שלנו",
+      "home_link_60": "כלל שירותי הקבוצה",
       "home_link_61": "בקשו הצעת מחיר",
       "home_link_62": "שירותינו",
       "home_link_63": "בית",
@@ -2187,6 +2630,7 @@ html[dir="rtl"] body {
       "home_span_53": "<a href=\"mailto:office@proces.co.il\"><span><span>office@proces.co.il</span></span></a>",
       "new_span_163": "פתרונות איוש",
       "new_span_203": "זמינות 24/7",
+      "new_span_215": "לחץ להוספת כתובת URL מוטמעת",
       "privacy_h1_1": "מדיניות פרטיות",
       "privacy_h2_2": "1. איסוף מידע",
       "privacy_h2_3": "2. שימוש במידע",
@@ -2222,21 +2666,21 @@ html[dir="rtl"] body {
       "about_us_h2_2": "היתרונות שלנו",
       "about_us_h3_3": "אודות החברה",
       "about_us_h3_4": "איכות מתחילה בשירות",
-      "about_us_h3_5": "רשת ניקיון",
+      "about_us_h3_5": "פרוצס ניקיון",
       "about_us_h3_6": "מקצועיות",
       "about_us_h3_7": "זמינות",
       "about_us_h3_8": "פתרונות טכנולוגיים",
       "about_us_h3_9": "התאמה ללקוח",
-      "about_us_p_16": "פרוצס — מובילים בניקיון, אבטחה וניהול מתקנים",
-      "about_us_p_17": "פרוצס מקבוצת מאגרי אנוש נוסדה בשנת 2024 ופועלת ברישיון משרד הפנים ומשרד המשפטים. לחברה רישיון קבלן כוח-אדם של משרד המסחר והתעשייה, וכן כל הרישיונות הנדרשים על פי חוק להפעלת חברת שמירה. פרוצס הינה ספק מאושר של משרד הביטחון ובעלת תו תקן ISO-9001. החברה מעסיקה אלפי עובדים.",
-      "about_us_p_18": "השירות מתחיל בתכנון נכון, מענה נקודתי לצרכי כל לקוח, הגדרת נהלי עבודה וכלה בביצוע אמין ואיכותי בשטח, על פי תקן. פיקוח ובקרת איכות מבוצעות באופן הדוק וסדיר בכל שעות היום והלילה. כחלק מבקרת האיכות הקפדנית אנו שולחים את כל עובדי האבטחה שלנו להדרכות מקצועיות תקופתיות. אנו עומדים בסטנדרטים גבוהים של איכות, מקצוענות, אמינות ומהירות תגובה, המגובים על-ידי תקני האיכות ISO 9001.",
-      "about_us_p_19": "\"רשת ניקיון\" היא חטיבה בחברת רשת ביטחון מקבוצת מאגרי אנוש. \"רשת ניקיון\" מספקת את כל השירותים והפתרונות המקצועיים בתחום הניקיון והאחזקה לגופים פרטיים, מוסדות ציבור ומתקנים ממשלתיים. שיטות העבודה, נהלי הבקרה והפיקוח ואיכות הניהול של רשת ניקיון מבטיחים מענה מידי, יעיל ואיכותי לכל פנייה.",
-      "about_us_p_20": "מנהל שירות ייעודי לכל לקוח האמון על טיב העבודה. פיקוח של מנהלי אזור — כשירות העובדים, בקרות איכות, תוכניות עבודה ונהלים. הכשרות, קורסים וריענונים תקופתיים.",
-      "about_us_p_21": "זמינות מנהלים בכל שעות היממה. צי רכבים המונה מעל 150 כלי רכב וניידות סיור ופיקוח. 2 מוקדים הפעילים 24 שעות ביממה.",
+      "about_us_p_16": "פרוצס — מובילים בניקיון, כ\"א וניהול מתקנים",
+      "about_us_p_17": "קבוצת פרוצס נוסדה בשנת 2003 ופועלת ברישיון משרד הכלכלה, זרוע העבודה העבודה&nbsp;ומשרד המשפטים. לחברה רישיונות והיתרים לפעול על פי חוק והוראות הדין וכן כל הרישיונות הנדרשים על פי חוק להפעלה ואספקת שירותים.\nפרוצס הינה ספק מאושר של משרד הביטחון ובעלת תווי איכות ותקינה לרבות תו תקן ISO-9001. החברה מעסיקה אלפי עובדים.",
+      "about_us_p_18": "השירות מתחיל בתכנון נכון, מענה נקודתי לצרכי כל לקוח, הגדרת נהלי עבודה וכלה בביצוע אמין ואיכותי בשטח, על פי תקן. פיקוח ובקרת איכות מבוצעות באופן הדוק וסדיר בכל שעות היום והלילה. כחלק מבקרת האיכות הקפדנית כלל עובדי החב' עוברים הדרכות מקצועיות תקופתיות. אנו עומדים בסטנדרטים גבוהים של איכות, מקצוענות, אמינות ומהירות תגובה, המגובים על-ידי תקני האיכות.",
+      "about_us_p_19": "היא חטיבה עצמאית בקבוצה המספקת את כל השירותים והפתרונות המקצועיים בתחום הניקיון והאחזקה לגופים פרטיים, מוסדות ציבור ומתקנים ממשלתיים. שיטות העבודה, נהלי הבקרה והפיקוח ואיכות הניהול של פרוצס מבטיחים מענה מידי, יעיל ואיכותי לכל פנייה.",
+      "about_us_p_20": "מנהל שירות ייעודי לכל לקוח האמון על טיב העבודה. פיקוח של מנהלי אזור וכשירות העובדים, בקרות איכות, תוכניות עבודה ונהלים. הכשרות, קורסים וריענונים תקופתיים.",
+      "about_us_p_21": "זמינות מנהלים בכל שעות היממה. צי רכבים המונה עשרות כלי רכב סיור ופיקוח. מוקד פעיל 24 שעות ביממה.",
       "about_us_p_22": "חשיבה מחוץ לקופסא, התחדשות וקידמה. פיתוח אמצעים ייחודיים המותאמים לצרכי הלקוח.",
       "about_us_p_23": "מענה מדויק והתאמה אישית לכל לקוח. אנו לומדים את הצרכים הייחודיים ומתאימים את הפתרון המושלם.",
-      "about_us_p_24": "40 שנות ניסיון מצטבר. איתנות פיננסית המבטיחה יציבות ושקט נפשי ללקוחותינו.",
-      "about_us_p_25": "מבנה ניהול הקבוצה מאפשר גמישות במחיר — תמורה מלאה לכספכם ללא פשרות על איכות.",
+      "about_us_p_24": "23 שנות ניסיון מצטבר. איתנות פיננסית המבטיחה יציבות ושקט נפשי ללקוחותינו.",
+      "about_us_p_25": "מבנה ניהול הקבוצה מאפשר גמישות במחיר ותמורה מלאה לכספכם ללא פשרות על איכות.",
       "about_us_p_26": "פרוצס מספקת פתרונות ניהול מתקנים וכוח אדם מקצועיים, אמינים ומותאמים אישית לעסקים ולנכסים מסחריים. המומחיות שלנו מבטיחה תפעול חלק ויעיל.",
       "about_us_p_27": "© 2026 Proces פרוצס. כל הזכויות שמורות.",
       "contact_li_49": "ניקיון שוטף יומיומי למשרדים ומבנים מסחריים",
@@ -2598,17 +3042,17 @@ html[dir="rtl"] body {
       "about_us_aria_label_56": "אינסטגרם",
       "about_us_aria_label_57": "וואטסאפ",
       "about_us_aria_label_58": "וואטסאפ",
-      "cleaning_services_h2_1": "פתרונות ניהול מתקנים, כוח אדם וניקיון מקצה לקצה",
+      "cleaning_services_h2_1": "ניקיון וכוח אדם - ניהול מתקנים מקצה לקצה",
       "cleaning_services_h2_2": "תהליך העבודה של פרוצס",
       "cleaning_services_h2_3": "יכולות <span class=\"services-specialists-section__heading-accent\">גובה</span> וטיפול מתקדם במבנים",
       "cleaning_services_h2_4": "ביטחון ושקט נפשי בכל פרויקט",
       "cleaning_services_h3_5": "אספקת כוח אדם",
-      "cleaning_services_h3_6": "שירותי ניקיון שוטף יומיומי",
-      "cleaning_services_h3_7": "ניקיון ראשוני לאחר בנייה או שיפוץ",
+      "cleaning_services_h3_6": "שירותי ניקיון שוטף",
+      "cleaning_services_h3_7": "ניקיון ראשוני לפני אכלוס\nלאחר בנייה /שיפוץ",
       "cleaning_services_h3_8": "ניקוי חלונות ועבודות גובה",
       "cleaning_services_h3_9": "ניקוי אוסמוזה הפוכה וציפוי ננו",
-      "cleaning_services_p_28": "<span class=\"services-catalog-section__eyebrow\" style=\"color: rgb(26, 26, 26) !important;\">השירותים שלנו</span>",
-      "cleaning_services_p_29": "מערך שירותים תפעולי מלא תחת קורת גג אחת – מכוח אדם, טכנולוגיות ניקוי מתקדמות וניהול מתקנים מקיף",
+      "cleaning_services_p_28": "ניקיון וכוח אדם",
+      "cleaning_services_p_29": "מערך שירות תפעולי מלא תחת קורת גג אחת – מכוח אדם, טכנולוגיות ניקוי מתקדמות וניהול מתקנים מקיף",
       "cleaning_services_p_30": "צוותים כלליים ומקצועיים המותאמים לצרכי הלקוח – מעובדי ניקיון ועד מנהלי אחזקה מוסמכים",
       "cleaning_services_p_31": "תחזוקת ניקיון מקיפה למשרדים, מבנים מסחריים ומגדלי מגורים בהתאמה אישית",
       "cleaning_services_p_32": "ניקוי יסודי לפני אכלוס – הסרת אבק בנייה, שאריות חומרים וליטוש משטחים להכנה מלאה",
@@ -2666,7 +3110,7 @@ html[dir="rtl"] body {
       "cleaning_services_h3_10": "קרצוף, ליטוש וציפוי רצפות",
       "cleaning_services_h3_11": "ניקוי שטיחים וריפודים",
       "cleaning_services_h3_12": "הסרת כתמים עיקשים וגרפיטי",
-      "cleaning_services_h3_13": "החלפת וילונות, פרגודים ובישום",
+      "cleaning_services_h3_13": "החלפת וילונות ופרגודים\nמערכות בישום נטרול /הפצת ריחות",
       "cleaning_services_h3_14": "הערכת שטח והתאמת כוח אדם",
       "cleaning_services_h3_15": "הקצאת משאבים וציוד מתקדם",
       "cleaning_services_h3_16": "ביצוע ופיקוח צמוד",
@@ -2990,8 +3434,24 @@ html[dir="rtl"] body {
       "ecom_apartmentExt": "Apt, Floor, Building Code, Notes, Etc.",
       "ecom_applyCoupon": "Apply",
       "ecom_backToProducts": "Back to Products",
+      "ecom_bookNow": "Book now",
+      "ecom_bookingChooseDate": "Choose a date",
+      "ecom_bookingChooseTime": "Choose a time",
+      "ecom_bookingDate": "Date",
+      "ecom_bookingLoading": "Loading availability…",
+      "ecom_bookingNoDates": "No available dates right now",
+      "ecom_bookingNoSlots": "No available times right now",
+      "ecom_bookingRemaining": "{count} left",
+      "ecom_bookingSelectOption": "Select",
+      "ecom_bookingSelectTime": "Select a time",
+      "ecom_bookingSelectDateFirst": "Please choose a date first",
+      "ecom_bookingSelectTimeFirst": "Please choose a date and time first",
+      "ecom_bookingCompleteFormFirst": "Please fill in the required booking fields",
+      "ecom_bookingTime": "Time",
       "ecom_browseFavorites": "Discover all our products",
       "ecom_bundleDiscount": "Bundle Discount",
+      "ecom_seasonalDiscount": "Seasonal Discount",
+      "ecom_customerDiscount": "Customer Discount",
       "ecom_bundleTotal": "Bundle total",
       "ecom_callNow": "Call Now",
       "ecom_cancel": "Cancel",
@@ -3102,6 +3562,8 @@ html[dir="rtl"] body {
       "ecom_haveCouponCode": "I have a coupon code",
       "ecom_home": "Home",
       "ecom_inStock": "In Stock",
+      "ecom_onlyOneLeft": "Only 1 left in stock",
+      "ecom_onlyXLeft": "Only {count} left in stock",
       "ecom_inquiryAbout": "Inquiry about",
       "ecom_invalidCoupon": "Invalid coupon code",
       "ecom_items": "Items",
@@ -3179,6 +3641,7 @@ html[dir="rtl"] body {
       "ecom_saveToFavorites": "Save to Favorites",
       "ecom_saving": "Saving...",
       "ecom_searchProducts": "Search products",
+      "ecom_searchResults": "Search results",
       "ecom_selectVariant": "Select option",
       "ecom_sendCode": "Send Code",
       "ecom_sendInquiry": "Send Inquiry",
@@ -3232,14 +3695,16 @@ html[dir="rtl"] body {
       "ecom_coursesEnrollmentCheckFailed": "Could not verify course ownership. Please try again.",
       "ecom_coursesAlreadyEnrolledPrompt": "Already enrolled?",
       "ecom_coursesLoginLink": "Log in",
+      "ecom_yourCourse": "your course",
+      "ecom_courseAccessMethod": "Online course access",
       "ecom_processing": "Processing...",
       "ecom_checkoutFailed": "Checkout failed. Please try again.",
-      "home_h1_1": "Building Management, Staffing, and Advanced Cleaning Services – All Under One Roof",
+      "home_h1_1": "<span style=\"font-weight: normal;\">The </span>Proces&nbsp;\nYour <u>Operational Partner</u><span style=\"font-weight: normal;\">!</span>\nCleaning services & staffing \n\nsolutions&nbsp;building management & maintenance\nAll under one roof",
       "home_h2_2": "Proces combines ongoing contract services with one-time expert interventions",
       "home_h2_3": "Technical solutions beyond routine cleaning",
       "home_h2_4": "Comprehensive service array under one roof",
       "home_h2_5": "Ready to elevate the management and maintenance level of your property?",
-      "home_h3_6": "Proces provides comprehensive professional services and advanced solutions \nnationwide: cleaning and staffing services, management, housekeeping, and maintenance",
+      "home_h3_6": "Comprehensive service delivery and advanced solutions \nnationwide",
       "home_h3_7": "Staffing services",
       "home_h3_8": "Routine cleaning services",
       "home_h3_9": "Professional cleaning",
@@ -3290,13 +3755,13 @@ html[dir="rtl"] body {
       "new_p_174": "Proces provides skilled manpower for the ongoing operations of businesses and organizations, from maintenance workers to logistics teams. We handle the recruitment, training, and placement of the most suitable employees, with a commitment to reliability and professionalism.",
       "new_p_175": "For complex projects, we provide dedicated support teams deployed on-site at the client's location. The teams undergo specialized training and operate under the close management of Proces, with full adaptation to project requirements and timelines.",
       "new_p_176": "Proces operates certified high-altitude work teams for rappel window cleaning, facade maintenance, painting, and sealing at height, using advanced technologies including dedicated drones and an airborne water cannon for cleaning challenging facades.",
-      "new_p_205": "SPS",
-      "new_p_206": "Employers Liability Insurance",
+      "new_p_205": "SPS Professional Services",
+      "new_p_206": "Puzzle Projects",
       "new_p_210": "Enter your paragraph text...",
       "new_p_211": "Text here",
       "new_p_212": "Ministry of Economy and Industry",
-      "new_p_213": "Service Contractor License",
-      "new_p_214": "Third Party Insurance",
+      "new_p_213": "Operating License - Service Contractor (Cleaning Industry)",
+      "new_p_214": "Insurance – Professional Liability, Third Party, and Employers' Liability",
       "home_h3_10": "High-rise window cleaning",
       "home_h3_11": "Building management and maintenance",
       "home_h3_12": "Parking lot cleaning and industrial support",
@@ -3309,7 +3774,7 @@ html[dir="rtl"] body {
       "home_h4_19": "Operating hours",
       "home_h4_20": "Follow us",
       "new_h2_171": "Workforce Solutions & Facility Management",
-      "new_h2_204": "Licenses and Insurances",
+      "new_h2_204": "Licenses and Insurance",
       "new_h3_158": "Card Title 1",
       "new_h3_160": "Card Title 2",
       "terms_h1_1": "Terms of Use",
@@ -3391,7 +3856,7 @@ html[dir="rtl"] body {
       "contact_p_14": "© 2026 Proces פרוצס. All rights reserved.",
       "home_link_58": "Skip to main content",
       "home_link_59": "Request a quote",
-      "home_link_60": "Our services",
+      "home_link_60": "All Group Services",
       "home_link_61": "Request a quote",
       "home_link_62": "Our Services",
       "home_link_63": "Home",
@@ -3408,6 +3873,7 @@ html[dir="rtl"] body {
       "home_span_53": "<a href=\"mailto:office@proces.co.il\"><span>office@proces.co.il</span></a>",
       "new_span_163": "Staffing Solutions",
       "new_span_203": "24/7 Availability",
+      "new_span_215": "Click to add embed URL",
       "privacy_h1_1": "Privacy Policy",
       "privacy_h2_2": "1. Information Collection",
       "privacy_h2_3": "2. Use of Information",
@@ -3443,21 +3909,21 @@ html[dir="rtl"] body {
       "about_us_h2_2": "Our Advantages",
       "about_us_h3_3": "About the Company",
       "about_us_h3_4": "Quality Starts with Service",
-      "about_us_h3_5": "Cleaning Network",
+      "about_us_h3_5": "Proces Cleaning",
       "about_us_h3_6": "Professionalism",
       "about_us_h3_7": "Availability",
       "about_us_h3_8": "Technological Solutions",
       "about_us_h3_9": "Customer Customization",
-      "about_us_p_16": "Proces — Leaders in cleaning, security and facility management",
-      "about_us_p_17": "Proces, part of the Maagaley Enosh Group, was founded in 2024 and operates under licenses from the Ministry of Interior and the Ministry of Justice. The company holds a manpower contractor license from the Ministry of Commerce and Industry, as well as all legally required licenses to operate a security company. Proces is an approved supplier of the Ministry of Defense and holds the ISO-9001 quality standard certification. The company employs thousands of workers.",
-      "about_us_p_18": "Service begins with proper planning, precise response to each client's needs, defining work procedures and culminating in reliable and quality execution in the field, according to standards. Supervision and quality control are performed closely and regularly at all hours of day and night. As part of our strict quality control, we send all our security personnel to periodic professional training. We maintain high standards of quality, professionalism, reliability and response speed, backed by ISO 9001 quality standards.",
-      "about_us_p_19": "\"Cleaning Network\" is a division of Security Network company from the Human Resources Group. \"Cleaning Network\" provides all professional services and solutions in the field of cleaning and maintenance for private entities, public institutions and government facilities. The work methods, control and supervision procedures and management quality of Cleaning Network ensure immediate, efficient and quality response to every inquiry.",
-      "about_us_p_20": "Dedicated service manager for each client responsible for work quality. Supervision by area managers — employee services, quality controls, work programs and procedures. Training, courses and periodic refreshers.",
-      "about_us_p_21": "Manager availability at all hours of the day. Vehicle fleet numbering over 150 vehicles and patrol and supervision units. 2 control centers operating 24 hours a day.",
+      "about_us_p_16": "Proces — Leaders in Cleaning, Staffing & Facility Management",
+      "about_us_p_17": "The Proces Group was founded in 2003 and operates under a license from the Ministry of Economy, the Employment Service&nbsp;and the Ministry of Justice. The company holds licenses and permits to operate in accordance with the law and legal regulations, as well as all licenses required by law for the operation and provision of services.\nProces is an approved supplier of the Ministry of Defense and holds quality and standards certifications, including the ISO-9001 standard mark. The company employs thousands of workers.",
+      "about_us_p_18": "The service begins with proper planning, a precise response to each client's needs, defining work procedures, and ends with reliable and quality execution in the field, according to standard. Supervision and quality control are carried out closely and regularly at all hours of the day and night. As part of the rigorous quality control, all company employees undergo periodic professional training. We maintain high standards of quality, professionalism, reliability, and response time, backed by quality standards.",
+      "about_us_p_19": "Is an independent division within the group that provides all professional services and solutions in the field of cleaning and maintenance for private entities, public institutions, and government facilities. Proces's work methods, control and supervision procedures, and quality of management ensure an immediate, efficient, and high-quality response to every inquiry.",
+      "about_us_p_20": "A dedicated service manager for each client, responsible for work quality. Supervision of area managers and employee competency, quality controls, work plans, and procedures. Training, courses, and periodic refreshers.",
+      "about_us_p_21": "Management availability around the clock. A fleet of dozens of patrol and supervision vehicles. An active operations center 24 hours a day.",
       "about_us_p_22": "Thinking outside the box, innovation and progress. Development of unique means adapted to customer needs.",
       "about_us_p_23": "Precise response and personal customization for each client. We learn the unique needs and adapt the perfect solution.",
-      "about_us_p_24": "40 years of combined experience. Financial stability that ensures stability and peace of mind for our clients.",
-      "about_us_p_25": "The group's management structure allows pricing flexibility — full value for your money without compromising on quality.",
+      "about_us_p_24": "23 years of cumulative experience. Financial stability ensuring reliability and peace of mind for our clients.",
+      "about_us_p_25": "The group's management structure allows for pricing flexibility and full value for your money without compromising on quality.",
       "about_us_p_26": "Proces provides professional, reliable, and customized facility management and staffing solutions for businesses and commercial properties. Our expertise ensures smooth and efficient operations.",
       "about_us_p_27": "© 2026 Proces פרוצס. All rights reserved.",
       "contact_li_49": "Daily routine cleaning for offices and commercial buildings",
@@ -3819,17 +4285,17 @@ html[dir="rtl"] body {
       "about_us_aria_label_56": "Instagram",
       "about_us_aria_label_57": "WhatsApp",
       "about_us_aria_label_58": "WhatsApp",
-      "cleaning_services_h2_1": "End-to-End Facility Management, Staffing & Cleaning Solutions",
+      "cleaning_services_h2_1": "Cleaning & Staffing - End-to-End Facility Management",
       "cleaning_services_h2_2": "Proces Work Process",
       "cleaning_services_h2_3": "Height Capabilities and Advanced Building Care",
       "cleaning_services_h2_4": "Security and Peace of Mind in Every Project",
       "cleaning_services_h3_5": "Staffing Services",
-      "cleaning_services_h3_6": "Daily Routine Cleaning Services",
-      "cleaning_services_h3_7": "Initial Cleaning After Construction or Renovation",
+      "cleaning_services_h3_6": "Regular Cleaning Services",
+      "cleaning_services_h3_7": "Initial cleaning before occupancy\nAfter construction / renovation",
       "cleaning_services_h3_8": "Window Cleaning and Height Work",
       "cleaning_services_h3_9": "Reverse Osmosis Cleaning and Nano Coating",
-      "cleaning_services_p_28": "Our Services",
-      "cleaning_services_p_29": "A complete operational service array under one roof – from manpower, advanced cleaning technologies, and comprehensive facility management",
+      "cleaning_services_p_28": "Cleaning & Staffing",
+      "cleaning_services_p_29": "A complete operational service system under one roof – from manpower, advanced cleaning technologies, and comprehensive facility management",
       "cleaning_services_p_30": "General and professional teams tailored to client needs – from cleaning staff to certified maintenance managers",
       "cleaning_services_p_31": "Comprehensive cleaning maintenance for offices, commercial buildings and residential towers with personal customization",
       "cleaning_services_p_32": "Thorough cleaning before occupancy – removal of construction dust, material residues and surface polishing for complete preparation",
@@ -3887,7 +4353,7 @@ html[dir="rtl"] body {
       "cleaning_services_h3_10": "Floor Scrubbing, Polishing and Coating",
       "cleaning_services_h3_11": "Carpet and Upholstery Cleaning",
       "cleaning_services_h3_12": "Stubborn Stain and Graffiti Removal",
-      "cleaning_services_h3_13": "Curtain, Blind Replacement and Fragrance",
+      "cleaning_services_h3_13": "Curtain and partition replacement\nScent neutralization/diffusion systems",
       "cleaning_services_h3_14": "Area Assessment and Workforce Matching",
       "cleaning_services_h3_15": "Resource Allocation and Advanced Equipment",
       "cleaning_services_h3_16": "Execution and Close Supervision",
@@ -5162,77 +5628,38 @@ html[dir="rtl"] body {
   
   // ============================================
   // LANGUAGE SWITCHER ICON COLOR DETECTION
-  // Dynamically detect if navbar has light/dark background
-  // and set the globe icon color accordingly
+  // (shared source — see getFixLanguageSwitcherColorSource)
   // ============================================
   function fixLanguageSwitcherColor() {
+    /* ZAPPY_LANG_SWITCHER_COLOR_FIX_V3 */
     var switcher = document.querySelector('.lang-switcher-current');
     var svg = switcher ? switcher.querySelector('svg') : null;
     if (!switcher || !svg) return;
-    
-    // Find the navbar or header element
-    var navbar = document.querySelector('.navbar') || 
-                 document.querySelector('nav') || 
+
+    var navbar = document.querySelector('.navbar') ||
+                 document.querySelector('nav') ||
                  document.querySelector('header');
     if (!navbar) return;
-    
-    // Get the effective background color by walking up the DOM tree
-    function getEffectiveBackgroundColor(element) {
-      var el = element;
-      var maxDepth = 10; // Prevent infinite loops
-      
-      while (el && maxDepth > 0) {
-        var style = window.getComputedStyle(el);
-        var bg = style.backgroundColor;
-        
-        // Skip transparent backgrounds
-        if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
-          return bg;
-        }
-        
-        // Check background-image for gradients
-        var bgImage = style.backgroundImage;
-        if (bgImage && bgImage !== 'none') {
-          // Extract first color from gradient
-          var gradientMatch = bgImage.match(/rgba?\([^)]+\)|#[a-fA-F0-9]{3,8}/);
-          if (gradientMatch) {
-            return gradientMatch[0];
-          }
-        }
-        
-        el = el.parentElement;
-        maxDepth--;
-      }
-      
-      // Default to white if no background found (assume light)
-      return 'rgb(255, 255, 255)';
+
+    function applyColor(color) {
+      if (!color) return;
+      // Keep SVG on currentColor so frosted-scroll CSS / setScrolledColors can
+      // retint the globe by setting only the button's color.
+      try { svg.style.fill = 'currentColor'; } catch (e1) {}
+      try { svg.setAttribute('fill', 'currentColor'); } catch (e2) {}
+      switcher.style.color = color;
     }
-    
-    // Parse color string to RGB values
+
     function parseColor(colorStr) {
       if (!colorStr) return null;
-      
-      // Handle rgb/rgba
       var rgbMatch = colorStr.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
       if (rgbMatch) {
-        return {
-          r: parseInt(rgbMatch[1], 10),
-          g: parseInt(rgbMatch[2], 10),
-          b: parseInt(rgbMatch[3], 10)
-        };
+        return { r: parseInt(rgbMatch[1], 10), g: parseInt(rgbMatch[2], 10), b: parseInt(rgbMatch[3], 10) };
       }
-      
-      // Handle hex
       var hexMatch = colorStr.match(/#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/);
       if (hexMatch) {
-        return {
-          r: parseInt(hexMatch[1], 16),
-          g: parseInt(hexMatch[2], 16),
-          b: parseInt(hexMatch[3], 16)
-        };
+        return { r: parseInt(hexMatch[1], 16), g: parseInt(hexMatch[2], 16), b: parseInt(hexMatch[3], 16) };
       }
-      
-      // Handle 3-digit hex
       var hex3Match = colorStr.match(/#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])$/);
       if (hex3Match) {
         return {
@@ -5241,46 +5668,143 @@ html[dir="rtl"] body {
           b: parseInt(hex3Match[3] + hex3Match[3], 16)
         };
       }
-      
       return null;
     }
-    
-    // Calculate relative luminance (WCAG formula)
+
     function getLuminance(rgb) {
-      if (!rgb) return 0.5; // Default to middle
-      
-      var r = rgb.r / 255;
-      var g = rgb.g / 255;
-      var b = rgb.b / 255;
-      
-      // Apply gamma correction
+      if (!rgb) return 0.5;
+      var r = rgb.r / 255, g = rgb.g / 255, b = rgb.b / 255;
       r = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
       g = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
       b = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
-      
       return 0.2126 * r + 0.7152 * g + 0.0722 * b;
     }
-    
-    // Get the effective background color
-    var bgColor = getEffectiveBackgroundColor(navbar);
-    var rgb = parseColor(bgColor);
-    var luminance = getLuminance(rgb);
-    
-    // Threshold: 0.5 is middle, lower = darker background
-    // Use 0.4 as threshold for better contrast
-    var isLightBackground = luminance > 0.4;
-    
-    // Set icon color based on background
-    // Light background = dark icon (#1a1a1a)
-    // Dark background = light icon (#F3FAFF)
-    var iconColor = isLightBackground ? '#1a1a1a' : '#F3FAFF';
-    
-    svg.style.fill = iconColor;
-    switcher.style.color = iconColor;
-    
-    console.log('[i18n] Language switcher icon color:', iconColor, 
-                '(bg luminance:', luminance.toFixed(2), 
-                ', isLight:', isLightBackground, ')');
+
+    function isOpaqueBg(bg) {
+      if (!bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)') return false;
+      var am = bg.match(/rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*([\d.]+)/);
+      if (am && parseFloat(am[1]) < 0.6) return false;
+      return true;
+    }
+
+    function pickFromLuminance(rgb) {
+      return getLuminance(rgb) > 0.4 ? '#1a1a1a' : '#F3FAFF';
+    }
+
+    var isScrolled = navbar.classList.contains('scrolled');
+    var frostedText = '';
+    try { frostedText = (navbar.style.getPropertyValue('--frosted-text') || window.getComputedStyle(navbar).getPropertyValue('--frosted-text') || '').trim(); } catch (e3) {}
+
+    // 0) Frosted / scrolled transparent navbar — light glass needs a DARK globe.
+    //    Must win over --nav-text (which stays light for the at-top hero overlay).
+    if (isScrolled || frostedText) {
+      if (frostedText) {
+        applyColor(frostedText);
+        return;
+      }
+      var rootForFrost = window.getComputedStyle(document.documentElement);
+      var frostDark = (rootForFrost.getPropertyValue('--text-dark') || '').trim() || '#1a1a1a';
+      applyColor(frostDark);
+      return;
+    }
+
+    // 1) Match a real top-level nav link — contrast-correct at-top over hero.
+    var navLink = navbar.querySelector('.nav-menu > li > a, .nav-links > li > a, .nav-menu a, .nav-links a');
+    if (!navLink) {
+      navLink = navbar.querySelector('a:not(.lang-option):not(.lang-switcher-current):not([class*="logo"]):not(.logo-link)');
+    }
+    if (navLink) {
+      var linkColor = window.getComputedStyle(navLink).color;
+      if (linkColor && linkColor !== 'rgb(0, 0, 0)' && linkColor !== 'rgba(0, 0, 0, 0)') {
+        applyColor(linkColor);
+        return;
+      }
+    }
+
+    // 2) Prefer --nav-text (baked for transparent navbars over heroes) — at-top only.
+    var rootCs = window.getComputedStyle(document.documentElement);
+    var navText = (rootCs.getPropertyValue('--nav-text') || '').trim();
+    if (navText && navText.toLowerCase() !== 'currentcolor') {
+      applyColor(navText);
+      return;
+    }
+
+    var nbCs = window.getComputedStyle(navbar);
+    var bg = nbCs.backgroundColor;
+
+    // 3) Opaque navbar background → luminance pick.
+    if (isOpaqueBg(bg)) {
+      applyColor(pickFromLuminance(parseColor(bg)));
+      return;
+    }
+
+    // 4) Transparent navbar with a gradient scrim (e.g. rgba(0,0,0,.35) → clear):
+    //    use the darkest non-near-transparent stop — never the page body beneath.
+    var bi = nbCs.backgroundImage || '';
+    if (bi && bi !== 'none') {
+      var stops = bi.match(/rgba?\([^)]+\)|#[a-fA-F0-9]{3,8}/g) || [];
+      var darkest = null, darkestLum = 2;
+      for (var si = 0; si < stops.length; si++) {
+        var alphaM = stops[si].match(/rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*([\d.]+)/);
+        if (alphaM && parseFloat(alphaM[1]) < 0.15) continue;
+        var pr = parseColor(stops[si]);
+        if (!pr) continue;
+        var sl = getLuminance(pr);
+        if (sl < darkestLum) { darkestLum = sl; darkest = pr; }
+      }
+      if (darkest) {
+        applyColor(pickFromLuminance(darkest));
+        return;
+      }
+    }
+
+    // 5) Transparent over hero media → light icon (do NOT walk to body/html).
+    function hasHeroMediaBehind() {
+      var hero = document.querySelector(
+        'section[class*="hero"], .hero, [data-zappy-section="hero"], main > section:first-of-type, body > section:first-of-type'
+      );
+      if (!hero) return false;
+      if (hero.querySelector('img, video, [data-hero-bg], .zappy-section-video-bg, .zappy-section-video')) return true;
+      var hbi = window.getComputedStyle(hero).backgroundImage || '';
+      return hbi.indexOf('url(') >= 0;
+    }
+    if (hasHeroMediaBehind()) {
+      var textLight = (rootCs.getPropertyValue('--text-light') || '').trim() || '#F3FAFF';
+      applyColor(textLight);
+      return;
+    }
+
+    // 6) Last resort for transparent nav without hero cue — prefer --text-light
+    //    over walking to body (cream page bg was the false "light navbar" signal).
+    var fallbackLight = (rootCs.getPropertyValue('--text-light') || '').trim() || '#F3FAFF';
+    applyColor(fallbackLight);
+  }
+
+  // Expose + re-run on frosted scroll so at-top (light) and scrolled (dark) both work.
+  window.fixLanguageSwitcherColor = fixLanguageSwitcherColor;
+  if (!window.__zappyLangSwitcherColorScrollBound) {
+    window.__zappyLangSwitcherColorScrollBound = true;
+    var _langColorScrollTimer = null;
+    function scheduleLangSwitcherColorFix() {
+      if (_langColorScrollTimer) return;
+      _langColorScrollTimer = setTimeout(function() {
+        _langColorScrollTimer = null;
+        try { fixLanguageSwitcherColor(); } catch (e4) {}
+      }, 16);
+    }
+    window.addEventListener('scroll', scheduleLangSwitcherColorFix, { passive: true });
+    window.addEventListener('resize', scheduleLangSwitcherColorFix, { passive: true });
+    if (typeof MutationObserver === 'function') {
+      try {
+        var _langNav = document.querySelector('.navbar') || document.querySelector('nav');
+        if (_langNav) {
+          new MutationObserver(scheduleLangSwitcherColorFix).observe(_langNav, {
+            attributes: true,
+            attributeFilter: ['class', 'style']
+          });
+        }
+      } catch (e5) {}
+    }
   }
   
   // Initialize on DOM ready
@@ -5329,6 +5853,10 @@ html[dir="rtl"] body {
 </script>
 
     <script src="/script.js"></script>
+
+    <script id="zappy-font-awesome-loader">
+(function(){if(window.__zappyFontAwesomeLoader)return;window.__zappyFontAwesomeLoader=true;var href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';function load(){if(document.querySelector('link[href*="font-awesome"][href*="all.min.css"]'))return;var l=document.createElement('link');l.rel='stylesheet';l.href=href;l.crossOrigin='anonymous';l.referrerPolicy='no-referrer';document.head.appendChild(l);}function schedule(){if('requestIdleCallback'in window){requestIdleCallback(load,{timeout:5000});}else{setTimeout(load,3500);}}['pointerdown','keydown','touchstart','mouseover'].forEach(function(evt){window.addEventListener(evt,load,{once:true,passive:true});});schedule();})();
+</script>
 
     <script id="zappy-mobile-submenu-script">
     (function() {
@@ -5380,5 +5908,4 @@ html[dir="rtl"] body {
       }, 500);
     })();
     </script>
-</body>
-</html>
+</body></html>
