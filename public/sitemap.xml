@@ -56,24 +56,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/about-the-company" />
   </url>
   <url>
-    <loc>https://proces.co.il/contact</loc>
-    <lastmod>2026-07-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/contact" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/contact" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/contact" />
-  </url>
-  <url>
-    <loc>https://proces.co.il/en/contact</loc>
-    <lastmod>2026-07-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/contact" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/contact" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/contact" />
-  </url>
-  <url>
     <loc>https://proces.co.il/articles</loc>
     <lastmod>2026-07-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -108,6 +90,24 @@
     <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/drone-cleaning" />
     <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/drone-cleaning" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/drone-cleaning" />
+  </url>
+  <url>
+    <loc>https://proces.co.il/contact</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/contact" />
+  </url>
+  <url>
+    <loc>https://proces.co.il/en/contact</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/contact" />
   </url>
   <url>
     <loc>https://proces.co.il/privacy</loc>
