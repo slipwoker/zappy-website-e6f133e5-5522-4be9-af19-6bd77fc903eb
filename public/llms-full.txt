@@ -2001,10 +2001,10 @@ office@proces.co.il
 
 ## כתבות מידע וטיפים
 
-URL: https://proces.co.il/knowledge-tips
+URL: https://proces.co.il/articles
 Description: Proces פרוצס - כתבות מידע וטיפים
 
-כתבות מידע וטיפים
+כתבות
 
 
 

@@ -74,22 +74,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/contact" />
   </url>
   <url>
-    <loc>https://proces.co.il/knowledge-tips</loc>
+    <loc>https://proces.co.il/articles</loc>
     <lastmod>2026-07-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/knowledge-tips" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/knowledge-tips" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/knowledge-tips" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/articles" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/articles" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/articles" />
   </url>
   <url>
-    <loc>https://proces.co.il/en/knowledge-tips</loc>
+    <loc>https://proces.co.il/en/articles</loc>
     <lastmod>2026-07-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/knowledge-tips" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/knowledge-tips" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/knowledge-tips" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://proces.co.il/articles" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://proces.co.il/en/articles" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://proces.co.il/articles" />
   </url>
   <url>
     <loc>https://proces.co.il/privacy</loc>
