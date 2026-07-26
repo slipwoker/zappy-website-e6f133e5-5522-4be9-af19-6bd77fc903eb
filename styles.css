@@ -9019,6 +9019,17 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   cursor: pointer;
   margin: 0;
 }
+
+.contact-contact-form-section__privacy .privacy-consent-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  font-size: 0.95rem !important;
+  position: relative !important;
+  padding-right: 36px !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
