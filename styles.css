@@ -9019,6 +9019,48 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   cursor: pointer;
   margin: 0;
 }
+
+.contact-contact-form-section__field[data-grid-item-index="3"] input[type="checkbox"] {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  accent-color: var(--accent-color, var(--accent, #F5C842)) !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  -webkit-appearance: checkbox !important;
+  appearance: checkbox !important;
+  pointer-events: auto !important;
+}
+
+.contact-contact-form-section__privacy .privacy-consent-label input[type="checkbox"] {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  accent-color: var(--accent-color, var(--accent, #F5C842)) !important;
+  margin: 0 !important;
+  margin-left: 8px !important;
+  flex-shrink: 0 !important;
+  -webkit-appearance: checkbox !important;
+  appearance: checkbox !important;
+  pointer-events: auto !important;
+}
+
+.contact-contact-form-section__privacy .privacy-consent-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  font-size: 0.95rem !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
