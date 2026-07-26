@@ -62,7 +62,6 @@ Information about WCAG compliance and accessibility features.
   - `service_type` (checkbox)
   - `service_type` (checkbox)
   - `message` (textarea, required)
-  - `privacy_consent` (checkbox, required)
 
 ---
 
