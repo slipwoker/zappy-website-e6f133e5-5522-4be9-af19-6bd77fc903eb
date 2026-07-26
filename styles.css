@@ -8996,6 +8996,29 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .site-footer .footer-social a[aria-label="Waze"] {
   color: var(--text-color, var(--text, var(--text-dark, #1A1A1A))) !important;
 }
+
+.contact-contact-form-section__checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.contact-contact-form-section__checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF)));
+}
+
+.contact-contact-form-section__checkbox-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent, var(--accent-color, var(--accent, #F5C842)));
+  cursor: pointer;
+  margin: 0;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,

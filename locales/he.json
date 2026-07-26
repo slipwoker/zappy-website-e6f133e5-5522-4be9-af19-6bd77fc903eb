@@ -244,6 +244,7 @@
   "new_label_216": "<input type=\"checkbox\" name=\"privacy_consent\" class=\"privacy-consent-checkbox\" required />\n          <span><span><span>\n          קראתי ואני מסכים/ה ל</span></span><a href=\"/terms\" target=\"_blank\">תנאי השימוש</a> <span><span> ול</span></span><a href=\"/privacy\" target=\"_blank\">מדיניות הפרטיות</a></span>",
   "new_label_217": "<input type=\"checkbox\" name=\"privacy_consent\" class=\"privacy-consent-checkbox\" required />\n          <span><span><span>\n          קראתי ואני מסכים/ה ל</span></span><a href=\"/terms\" target=\"_blank\">תנאי השימוש</a> <span><span> ול</span></span><a href=\"/privacy\" target=\"_blank\">מדיניות הפרטיות</a></span>",
   "new_label_218": "<input type=\"checkbox\" name=\"privacy_consent\" class=\"privacy-consent-checkbox\" required />\n          <span><span><span>\n          קראתי ואני מסכים/ה ל</span></span><a href=\"/terms\" target=\"_blank\">תנאי השימוש</a> <span><span> ול</span></span><a href=\"/privacy\" target=\"_blank\">מדיניות הפרטיות</a></span>",
+  "new_label_219": "<input type=\"checkbox\" name=\"privacy_consent\" class=\"privacy-consent-checkbox\" required />\n          <span><span><span>\n          קראתי ואני מסכים/ה ל</span></span><a href=\"/terms\" target=\"_blank\">תנאי השימוש</a> <span><span> ול</span></span><a href=\"/privacy\" target=\"_blank\">מדיניות הפרטיות</a></span>",
   "privacy_h4_10": "ניווט מהיר",
   "privacy_h4_11": "צור קשר",
   "privacy_h4_12": "שעות פעילות",
@@ -964,8 +965,6 @@
   "management_staffing_seo_og_description": "פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.",
   "cleaning_services_seo_twitter_description": "מנקים הכול, מגיעים לכל מקום: ניקוי חלונות בגובה בעזרת רחפן תותח מים, ציפוי ננו, הדברה ירוקה ועוד. השירותים המתקדמים של פרוצס מחכים לכם כאן.",
   "management_staffing_seo_twitter_description": "פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.",
-  "new_text_219_0": "<input type=\"checkbox\" name=\"privacy_consent\" class=\"privacy-consent-checkbox\" required />\n          <span><span><span>\n          קראתי ואני מסכים/ה ל</span></span><a href=\"/terms\" target=\"_blank\">",
-  "new_text_219_1": "</a> <span><span> ול</span></span><a href=\"/privacy\" target=\"_blank\">",
   "new_text_228_0": "<span><span>מחפשים מידע נוסף? בקרו ב</span></span><a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">",
   "new_text_228_1": "</a> <span><span> שלנו וגלו עוד כתבות, מדריכים וטיפים שיעזרו לכם לשמור על הנכס שלכם במצב מושלם.</span></span>"
 }
