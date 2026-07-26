@@ -8821,6 +8821,18 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     font-size: 1rem;
   }
 }
+
+.nav-brand .logo-link {
+  font-weight: 800 !important;
+  font-size: 1.35rem !important;
+  letter-spacing: -0.5px !important;
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+  text-decoration: none !important;
+}
+
+.nav-brand .logo-link:hover {
+  color: var(--accent-color, var(--accent, #F5C842)) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
