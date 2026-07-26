@@ -74,6 +74,7 @@
   "new_p_223": "<span><span>Looking for more information? Visit our</span></span><a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">Knowledge Center</a> <span><span> and discover more articles, guides, and tips to help you keep your property in perfect condition.</span></span>",
   "new_p_225": "Link text",
   "new_p_227": "<span><span>Looking for more information? Visit our </span></span><a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">Knowledge Center</a> <span><span> and discover more articles, guides, and tips to help you keep your property in perfect condition.</span></span>",
+  "new_p_228": "<span><span>Looking for more information? Visit our</span></span> <a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">Knowledge Center</a> <span><span>and discover more articles, guides, and tips to help you keep your property in perfect condition.</span></span>",
   "new_p_232": "This page is ready for your content.",
   "new_p_234": "An innovative, safe, and fast solution for cleaning windows and building facades at height – no scaffolding or rappelling required",
   "new_p_235": "The industrial cleaning world is undergoing a true revolution with the entry of drones into the field. At <b>Proces</b>, we are proud to be among the first companies in Israel offering building cleaning services using advanced drones, combining water cannon technology, reverse osmosis systems, and advanced nano coatings – all from the air. Our service is suitable for a wide range of buildings: office towers, hotels, industrial facilities, multi-story parking structures, and luxury residential buildings.",
@@ -1023,6 +1024,6 @@
   "management_staffing_seo_og_description": "Proces combines general staffing supply with professional cleaning divisions for high-altitude work. Smart facility management solutions for office buildings, hotels and luxury towers. Talk to us.",
   "cleaning_services_seo_twitter_description": "We clean everything, reach everywhere: high-rise window cleaning with water cannon drone, nano coating, green pest control and more. Proces advanced services are waiting for you here.",
   "management_staffing_seo_twitter_description": "Proces combines general staffing supply with professional cleaning divisions for high-altitude work. Smart facility management solutions for office buildings, hotels and luxury towers. Talk to us.",
-  "new_text_228_0": "<span><span>Looking for more information? Visit our</span></span> <a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">",
-  "new_text_228_1": "</a> <span><span>and discover more articles, guides, and tips to help you keep your property in perfect condition.</span></span>"
+  "new_text_289_0": "<span><span><span>Looking for more information? Visit our</span></span></span> <a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">",
+  "new_text_289_1": "</a> <span><span> <span>and discover more articles, guides, and tips to help you keep your property in perfect condition.</span></span></span>"
 }
