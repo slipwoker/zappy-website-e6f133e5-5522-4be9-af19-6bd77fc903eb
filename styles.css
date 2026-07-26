@@ -8866,6 +8866,70 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .site-footer .footer-bottom .legal-links a:link {
   color: #fff !important;
 }
+
+.site-footer .footer-social a {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-social a:hover {
+  color: var(--accent) !important;
+}
+
+.site-footer .contact-list a {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .contact-list li {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .contact-list span {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-legal a {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .copyright p {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-bottom a {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-bottom p {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-bottom span:not(.separator) {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-legal .separator {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-bottom .copyright {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-bottom .legal-links a {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-social a .fab {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-bottom .legal-links a:link {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
+
+.site-footer .footer-social a[aria-label="Waze"] {
+  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
