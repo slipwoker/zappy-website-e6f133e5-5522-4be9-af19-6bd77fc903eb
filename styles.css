@@ -8833,6 +8833,39 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .nav-brand .logo-link:hover {
   color: var(--accent-color, var(--accent, #F5C842)) !important;
 }
+
+.site-footer .footer-social a[aria-label="Waze"] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: #fff !important;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+
+.site-footer .footer-social a[aria-label="Waze"]:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.site-footer .footer-bottom span:not(.separator) {
+  color: #fff !important;
+}
+
+.site-footer .footer-bottom .legal-links a {
+  color: #fff !important;
+}
+
+.site-footer .footer-social a .fab {
+  color: #fff !important;
+}
+
+.site-footer .footer-bottom .legal-links a:link {
+  color: #fff !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
