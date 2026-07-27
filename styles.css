@@ -8852,23 +8852,23 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .footer-bottom span:not(.separator) {
-  color: #fff !important;
+  color: var(--text-color) !important;
 }
 
 .site-footer .footer-bottom .legal-links a {
-  color: #fff !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-social a .fab {
-  color: #fff !important;
+  color: var(--text-color) !important;
 }
 
 .site-footer .footer-bottom .legal-links a:link {
-  color: #fff !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-social a {
-  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  color: var(--text-color) !important;
 }
 
 .site-footer .footer-social a:hover {
@@ -8880,7 +8880,7 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .contact-list li {
-  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  color: #000000 !important;
 }
 
 .site-footer .contact-list span {
@@ -8904,7 +8904,7 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .footer-bottom span:not(.separator) {
-  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  color: var(--text-color) !important;
 }
 
 .site-footer .footer-legal .separator {
@@ -8916,15 +8916,15 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .footer-bottom .legal-links a {
-  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-social a .fab {
-  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  color: var(--text-color) !important;
 }
 
 .site-footer .footer-bottom .legal-links a:link {
-  color: var(--background-color, var(--background, var(--bg-light, #FFFFFF))) !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-social a[aria-label="Waze"] {
@@ -8932,7 +8932,7 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .footer-social a {
-  color: var(--text-color, var(--text, var(--text-dark, #1A1A1A))) !important;
+  color: var(--text-color) !important;
   background-color: rgba(0,0,0,0.05) !important;
 }
 
@@ -8946,7 +8946,7 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .contact-list li {
-  color: var(--text-color, var(--text, var(--text-dark, #1A1A1A))) !important;
+  color: #000000 !important;
 }
 
 .site-footer .contact-list span {
@@ -8970,7 +8970,7 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .footer-bottom span:not(.separator) {
-  color: var(--text-color, var(--text, var(--text-dark, #1A1A1A))) !important;
+  color: var(--text-color) !important;
 }
 
 .site-footer .footer-legal .separator {
@@ -8982,15 +8982,15 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 }
 
 .site-footer .footer-bottom .legal-links a {
-  color: var(--text-color, var(--text, var(--text-dark, #1A1A1A))) !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-social a .fab {
-  color: var(--text-color, var(--text, var(--text-dark, #1A1A1A))) !important;
+  color: var(--text-color) !important;
 }
 
 .site-footer .footer-bottom .legal-links a:link {
-  color: var(--text-color, var(--text, var(--text-dark, #1A1A1A))) !important;
+  color: #000000 !important;
 }
 
 .site-footer .footer-social a[aria-label="Waze"] {
