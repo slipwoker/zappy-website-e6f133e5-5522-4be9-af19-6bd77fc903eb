@@ -230,6 +230,9 @@
   var ECOM_MODE = "";
   var IS_CATALOG = false;
   var IS_FULL = false;
+  var DIRECT_GA = false;
+  var DIRECT_META = false;
+  var GA_SEND_TO = "";
 
   var ECOM_ALIAS = {
     begin_checkout: 'checkout_started',
@@ -399,10 +402,14 @@
     return 'zappy_purchase_fired_' + String(orderId || '');
   }
 
+  function purchaseMetaDedupKey(orderId) {
+    return 'zappy_purchase_meta_fired_' + String(orderId || '');
+  }
+
   function alreadyFiredPurchase(orderId) {
     if (!orderId) return false;
     try {
-      return sessionStorage.getItem(purchaseDedupKey(orderId)) === '1';
+      return window.sessionStorage.getItem(purchaseDedupKey(orderId)) === '1';
     } catch (e) {
       return false;
     }
@@ -410,7 +417,78 @@
 
   function markPurchaseFired(orderId) {
     if (!orderId) return;
-    try { sessionStorage.setItem(purchaseDedupKey(orderId), '1'); } catch (e) {}
+    try { window.sessionStorage.setItem(purchaseDedupKey(orderId), '1'); } catch (e) {}
+  }
+
+  function alreadyFiredPurchaseMeta(orderId) {
+    if (!orderId) return false;
+    try {
+      return window.sessionStorage.getItem(purchaseMetaDedupKey(orderId)) === '1';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function markPurchaseMetaFired(orderId) {
+    if (!orderId) return;
+    try { window.sessionStorage.setItem(purchaseMetaDedupKey(orderId), '1'); } catch (e) {}
+  }
+
+  function getPendingMetaEvents() {
+    try {
+      if (!Array.isArray(window.__zappyPendingMetaEvents)) {
+        window.__zappyPendingMetaEvents = [];
+      }
+      return window.__zappyPendingMetaEvents;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function enqueueMetaEvent(eventName, params, orderId) {
+    var q = getPendingMetaEvents();
+    if (orderId) {
+      for (var i = 0; i < q.length; i++) {
+        if (q[i] && q[i].orderId === orderId && q[i].eventName === eventName) return;
+      }
+    }
+    q.push({ eventName: eventName, params: params || {}, orderId: orderId || null });
+  }
+
+  /**
+   * Live sites replace the eager Meta snippet with a consent-gated lazy
+   * loader. Payment providers bounce the shopper back to /order-success
+   * before CookieConsent hydrates, so confirm-order used to fire Purchase
+   * while window.fbq was still undefined — then sessionStorage blocked a
+   * retry. Queue until fbq exists, then flush.
+   */
+  function flushPendingMetaEvents() {
+    if (typeof window.fbq !== 'function') return;
+    var q = getPendingMetaEvents().slice();
+    try { window.__zappyPendingMetaEvents = []; } catch (e) {}
+    for (var i = 0; i < q.length; i++) {
+      var item = q[i];
+      if (!item || !item.eventName) continue;
+      if (item.orderId && alreadyFiredPurchaseMeta(item.orderId)) continue;
+      try {
+        window.fbq('track', item.eventName, item.params || {});
+        if (item.orderId) markPurchaseMetaFired(item.orderId);
+      } catch (e2) {}
+    }
+  }
+  window.zappyFlushPendingMetaEvents = flushPendingMetaEvents;
+
+  if (DIRECT_META) {
+    var metaFlushAttempts = 0;
+    var metaFlushTimer = setInterval(function() {
+      metaFlushAttempts++;
+      flushPendingMetaEvents();
+      var pendingLen = 0;
+      try { pendingLen = (window.__zappyPendingMetaEvents || []).length; } catch (e) {}
+      if ((pendingLen === 0 && typeof window.fbq === 'function') || metaFlushAttempts > 60) {
+        clearInterval(metaFlushTimer);
+      }
+    }, 500);
   }
 
   /**
@@ -431,15 +509,19 @@
         metadata.pagePath = pagePath();
       }
 
+      var oid = '';
+      var purchaseAlreadySent = false;
+      var purchaseMetaAlreadySent = false;
       if (eventId === 'checkout_complete') {
-        var oid = String(metadata.orderId || metadata.order_id || metadata.transaction_id || '');
-        if (oid && alreadyFiredPurchase(oid)) return;
-        if (oid) markPurchaseFired(oid);
+        oid = String(metadata.orderId || metadata.order_id || metadata.transaction_id || '');
+        purchaseAlreadySent = !!(oid && alreadyFiredPurchase(oid));
+        purchaseMetaAlreadySent = !!(oid && alreadyFiredPurchaseMeta(oid));
+        if (purchaseAlreadySent && purchaseMetaAlreadySent) return;
       }
 
       // First-party (skip when already tracked via zappyTrackEcomAnalytics path
       // that opts out, or when caller already recorded under a different name)
-      if (!opts.skipFirstParty) {
+      if (!opts.skipFirstParty && !purchaseAlreadySent) {
         try {
           if (window.zappyAnalytics && typeof window.zappyAnalytics.track === 'function') {
             window.zappyAnalytics.track(eventId, metadata);
@@ -447,43 +529,79 @@
         } catch (e1) {}
       }
 
-      // GTM / dataLayer — platform-standard ecommerce event names
-      try {
-        window.dataLayer = window.dataLayer || [];
-        if (plat.ecom) {
-          var ga4ForGtm = buildGa4Params(eventId, metadata);
-          var ecommerce = {};
-          if (ga4ForGtm.transaction_id) ecommerce.transaction_id = ga4ForGtm.transaction_id;
-          if (ga4ForGtm.value != null) ecommerce.value = ga4ForGtm.value;
-          if (ga4ForGtm.currency) ecommerce.currency = ga4ForGtm.currency;
-          if (ga4ForGtm.items) ecommerce.items = ga4ForGtm.items;
-          window.dataLayer.push({ event: plat.gtm, ecommerce: ecommerce });
-          // Secondary Zappy-specific trigger for merchants who want it
-          if (eventId === 'checkout_complete' || eventId === 'checkout_started') {
-            window.dataLayer.push({ event: eventId, ecommerce: ecommerce });
+      // GTM / dataLayer — platform-standard ecommerce event names.
+      // Always push. A bare gtag.js snippet ignores plain event objects;
+      // a GTM container is what turns them into GA4/Ads hits.
+      if (!purchaseAlreadySent) {
+        try {
+          window.dataLayer = window.dataLayer || [];
+          if (plat.ecom) {
+            var ga4ForGtm = buildGa4Params(eventId, metadata);
+            var ecommerce = {};
+            if (ga4ForGtm.transaction_id) ecommerce.transaction_id = ga4ForGtm.transaction_id;
+            if (ga4ForGtm.value != null) ecommerce.value = ga4ForGtm.value;
+            if (ga4ForGtm.currency) ecommerce.currency = ga4ForGtm.currency;
+            if (ga4ForGtm.items) ecommerce.items = ga4ForGtm.items;
+            // Clear first so GTM does not merge this hit with the previous ecommerce object.
+            window.dataLayer.push({ ecommerce: null });
+            window.dataLayer.push({ event: plat.gtm, ecommerce: ecommerce });
+            // Secondary Zappy-specific trigger for merchants who want it
+            if (eventId === 'checkout_complete' || eventId === 'checkout_started') {
+              window.dataLayer.push({ ecommerce: null });
+              window.dataLayer.push({ event: eventId, ecommerce: ecommerce });
+            }
+          } else {
+            var dl = { event: plat.gtm };
+            for (var k in metadata) {
+              if (Object.prototype.hasOwnProperty.call(metadata, k)) dl[k] = metadata[k];
+            }
+            window.dataLayer.push(dl);
           }
-        } else {
-          var dl = { event: plat.gtm };
-          for (var k in metadata) {
-            if (Object.prototype.hasOwnProperty.call(metadata, k)) dl[k] = metadata[k];
+        } catch (e2) {}
+
+        // Direct Google Analytics snippet only. GTM also defines window.gtag;
+        // calling it then sends the same event again to every Google tag the
+        // container loaded. send_to keeps a direct GA install off those tags
+        // when the merchant also has GTM.
+        if (DIRECT_GA) {
+          try {
+            if (typeof window.gtag === 'function') {
+              var gaParams = buildGa4Params(eventId, metadata);
+              if (GA_SEND_TO && gaParams && typeof gaParams === 'object') {
+                var gaCopy = {};
+                for (var gk in gaParams) {
+                  if (Object.prototype.hasOwnProperty.call(gaParams, gk)) gaCopy[gk] = gaParams[gk];
+                }
+                gaCopy.send_to = GA_SEND_TO;
+                gaParams = gaCopy;
+              }
+              window.gtag('event', plat.ga4, gaParams);
+            }
+          } catch (e3) {}
+        }
+
+        if (oid) markPurchaseFired(oid);
+      }
+
+      // Meta Pixel — only the Zappy pixel integration. A pixel pasted inside
+      // GTM already initializes fbq; calling it from here would double-count.
+      // Live sites lazy-load fbq after marketing consent. If the stub is not
+      // defined yet, queue and flush when the pixel arrives.
+      if (DIRECT_META) {
+        try {
+          if (purchaseMetaAlreadySent) {
+            // already delivered to Meta
+          } else {
+            var metaParams = buildMetaParams(eventId, metadata);
+            if (typeof window.fbq === 'function') {
+              window.fbq('track', plat.meta, metaParams);
+              if (oid) markPurchaseMetaFired(oid);
+            } else {
+              enqueueMetaEvent(plat.meta, metaParams, eventId === 'checkout_complete' ? oid : null);
+            }
           }
-          window.dataLayer.push(dl);
-        }
-      } catch (e2) {}
-
-      // GA4 gtag
-      try {
-        if (typeof window.gtag === 'function') {
-          window.gtag('event', plat.ga4, buildGa4Params(eventId, metadata));
-        }
-      } catch (e3) {}
-
-      // Meta Pixel (only when fbq is loaded — consent-gated lazy loader)
-      try {
-        if (typeof window.fbq === 'function') {
-          window.fbq('track', plat.meta, buildMetaParams(eventId, metadata));
-        }
-      } catch (e4) {}
+        } catch (e4) {}
+      }
     } catch (err) {}
   };
 
@@ -746,10 +864,11 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
 שירותי ניקיון ואספקת כוח אדם
 ניהול ואחזקת מבנים
 תחת קורת גג אחת.<br></h1> <h3 class="index-hero-subtitle" data-i18n="home_h3_6" style="text-align: center;">אספקת שירותים מקיפים ופתרונות מתקדמים 
-בפריסה ארצית<br></h3> <div class="index-hero-ctas" style="display: flex; justify-content: center; align-items: center"> <a href="/contact" class="index-hero-btn-primary btn btn-primary" style="outline: none; color: var(--text-color, #1a1a1a) !important; border-color: rgb(245, 200, 66) !important; background-color: rgb(245, 200, 66) !important; background-image: none !important;" data-element-type="button" data-element-id="btn-1780930254913-z7ylql0o2" data-native-element="true" data-text-color="dark" data-i18n="home_link_59">בקשה להצעת מחיר</a> <a href="/services" class="index-hero-btn-secondary btn btn-outline btn-secondary" data-element-type="button" data-element-id="btn-1780930254913-wbhgrkevp" data-native-element="true" style="outline: none; border-color: rgb(212, 160, 23) !important; color: var(--light-text, #ffffff) !important; background-color: transparent !important; background-image: none !important;" data-text-color="light" data-i18n="home_link_60">כלל שירותי הקבוצה</a> </div> </div> </div> <!-- Bottom Chevron Divider -->  </section>  <section data-band-index="2" class="index-capabilities-section" data-layout-spec="בית-capabilities" id="zappy-section-2"> <div class="index-capabilities-section__container"> <!-- Content Column (Right side in RTL) --> <div class="index-capabilities-section__content"> <p data-i18n="home_p_29"><span class="index-capabilities-section__eyebrow" style="color: #ffde59"> <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #ffde59;"> <path d="M10 2L12.5 7.5L18.5 8.5L14 13L15 19L10 16L5 19L6 13L1.5 8.5L7.5 7.5L10 2Z" fill="#ffde59"></path> </svg> יכולות מתקדמות </span> </p><h2 class="index-capabilities-section__title" data-i18n="home_h2_3">פתרונות טכניים מעבר לניקיון שוטף</h2> <p class="index-capabilities-section__description" data-i18n="home_p_30"> חטיבות מקצועיות ייעודיות לגישה קשה, טיפול חזיתות, ציפוי ננו, הסרת כתמים וגרפיטי, הדברה אקולוגית, חיטוי באוזון, ניקיון מעבדות וחדרים נקיים. אנו משלבים כוח אדם עם מומחיות טכנית מתקדמת כדי לספק מענה כולל לכל דרישות התחזוקה והניקיון של הארגון שלך. </p> <div class="index-capabilities-section__callouts zappy-preserve-css-grid" id="zappy-auto-grid-1781096588396-wkoxjb" data-zappy-auto-grid="true" data-original-item-width="177" data-original-gap="20px" style="display: grid; --zappy-grid-cols: repeat(3, minmax(0, 1fr)); grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch !important;" data-zappy-explicit-columns="true"> <!-- Callout 1 --> <div class="index-capabilities-section__callout" data-grid-item-index="0"> <div class="index-capabilities-section__callout-icon"> <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M12 2L13.5 8.5L20 10L14.5 14L16 20.5L12 17L8 20.5L9.5 14L4 10L10.5 8.5L12 2Z" fill="currentColor"></path> <circle cx="12" cy="12" r="3" fill="var(--accent)"></circle> </svg> </div> <h3 class="index-capabilities-section__callout-title" data-i18n="home_h3_13">שיטות גישה לגובה</h3> <p class="index-capabilities-section__callout-text" data-i18n="home_p_31">גלישה (סנפלינג), במות הרמה, ליפטרים, פיגומים ורחפן עם תותח מים – אנו מגיעים לכל נקודה.</p> </div> <!-- Callout 2 --> <div class="index-capabilities-section__callout" data-grid-item-index="1"> <div class="index-capabilities-section__callout-icon"> <svg data-element-type="icon" data-icon-type="svg" width="29" height="29" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-id="zappy-temp-icon-1781096646226-55gpy6y5x" style="width: 29px !important; height: 29px !important; color: rgb(245, 200, 66);" data-size-adjusted="true"> <path d="M12 2L13.5 8.5L20 10L14.5 14L16 20.5L12 17L8 20.5L9.5 14L4 10L10.5 8.5L12 2Z" fill="currentColor"></path> <circle cx="12" cy="12" r="3" fill="var(--accent)"></circle> </svg> </div> <h3 class="index-capabilities-section__callout-title" data-i18n="home_h3_14">טיפול חזיתות מתקדם</h3> <p class="index-capabilities-section__callout-text" data-i18n="home_p_32">ניקוי חלונות באוסמוזה הפוכה, ציפוי ננו דוחה לכלוך, והסרת גרפיטי בהתזת חול או זכוכית.</p> </div> <!-- Callout 3 --> <div class="index-capabilities-section__callout" data-grid-item-index="2"> <div class="index-capabilities-section__callout-icon"> <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M12 2L13.5 8.5L20 10L14.5 14L16 20.5L12 17L8 20.5L9.5 14L4 10L10.5 8.5L12 2Z" fill="currentColor"></path> <circle cx="12" cy="12" r="3" fill="var(--accent)"></circle> </svg> </div> <h3 class="index-capabilities-section__callout-title" data-i18n="home_h3_15">היגיינה ייעודית</h3> <p class="index-capabilities-section__callout-text" data-i18n="home_p_33">חיטוי מעבדות, חדרים נקיים ומפעלים בגז אוזון, לצד ניקיון יסודי לאחר בנייה או שיפוץ.</p> </div> </div> </div> <!-- Image Collage Column (Left side in RTL) --> <div class="index-capabilities-section__collage"> <div class="index-capabilities-section__collage-grid zappy-preserve-css-grid" id="zappy-auto-grid-1781096588415-un5qnq" data-zappy-auto-grid="true" data-original-item-width="570" data-original-gap="12px" style="--zappy-grid-cols: repeat(2, minmax(0, 1fr)); display: grid; align-items: stretch !important; grid-template-columns: repeat(2, minmax(0, 1fr));" data-zappy-explicit-columns="true"> <!-- Main large image --> <div class="index-capabilities-section__collage-item index-capabilities-section__collage-item--main zappy-grid-item-no-stretch" data-zappy-has-aspect-ratio="true" data-zappy-original-height="319" style="background-color: rgb(212, 160, 23) !important; grid-area: auto !important; height: 319px !important;" data-grid-item-index="0"> <div data-zappy-zoom-wrapper="true" data-element-id="img-1781096588328-f5mx2xa9v-add-1781166357463-hn9rye-add-1781166359664-5dr7pn" data-element-type="image" data-zappy-zoom-wrapper-width="570px" data-zappy-zoom-wrapper-height="319px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 570px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 319px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true"><img decoding="async" data-placeholder="image-placeholder" data-context="Drone-mounted water cannon cleaning a high-rise building facade, dramatic angle, documentary style, blue sky background, water spray visible" width="600" height="400" src="/assets/image-image-placeholder-1781166434846-8eu2u3.webp?v=1781166437138" alt="Image placeholder" data-element-type="image" data-element-id="new-grid-img-1781166359664-0-x0k0f4ph0" style="cursor: pointer; object-position: 50% 50% !important; display: block; object-fit: cover !important; margin-top: 0px !important; margin-bottom: 0px !important; left: 0% !important; top: 0% !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; position: absolute !important;" data-zappy-zoom="1" data-zappy-original-width="570" data-zappy-original-height="319" data-zappy-object-position="50% 50%" id="new-grid-img-1781166359664-0-x0k0f4ph0" data-ai-slot="grid-item-image" data-i18n-alt="home_alt_83" loading="lazy" fetchpriority="low"></div> </div><div class="index-capabilities-section__collage-item index-capabilities-section__collage-item--main zappy-grid-item-no-stretch" data-grid-item-index="1" data-zappy-has-aspect-ratio="true" data-zappy-original-height="320.625" style="height: 320.625px !important; overflow: hidden !important;"> <div data-zappy-zoom-wrapper="true" data-element-id="img-1781096588328-f5mx2xa9v" data-element-type="image" data-zappy-zoom-wrapper-width="570px" data-zappy-zoom-wrapper-height="319px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 570px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 319px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true"><img decoding="async" data-placeholder="index-capabilities-image-1" data-context="Drone-mounted water cannon cleaning a high-rise building facade, dramatic angle, documentary style, blue sky background, water spray visible" width="600" height="400" src="/assets/site-index-capabilities-image-1-1781096696313-yu5vng.webp?v=1781096699059" alt="רחפן עם תותח מים מנקה חזית בניין" data-element-type="image" data-element-id="img-1781096588328-f5mx2xa9v" style="object-position: 50% 33% !important; margin: 0px !important; left: 0% !important; top: 0% !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; display: block !important; object-fit: cover !important; position: absolute !important;" data-zappy-zoom="1" data-zappy-original-width="570" data-zappy-original-height="319" data-zappy-object-position="50% 33%" data-i18n-alt="home_alt_84" loading="lazy" fetchpriority="low"></div> </div> <!-- Secondary image: abseiling --> <!-- Secondary image: reverse osmosis --> <!-- Secondary image: floor polishing --> </div> <!-- Geometric overlay frame --> <div class="index-capabilities-section__collage-overlay" aria-hidden="true"></div> </div> </div> <!-- Bottom divider: layered torn-chevron edge --> <div class="index-capabilities-section__divider-wrapper" aria-hidden="true"> <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"> <!-- Yellow sliver peeking through --> <path d="M0,80 L0,42 L50,48 L100,40 L150,46 L200,38 L250,44 L300,36 L350,42 L400,34 L450,40 L500,32 L550,38 L600,30 L650,36 L700,28 L750,34 L800,26 L850,32 L900,24 L950,30 L1000,22 L1050,28 L1100,20 L1150,26 L1200,18 L1200,80 Z" fill="var(--bg-light)"></path> <!-- White/light fill for next section --> <path d="M0,80 L0,52 L50,58 L100,50 L150,56 L200,48 L250,54 L300,46 L350,52 L400,44 L450,50 L500,42 L550,48 L600,40 L650,46 L700,38 L750,44 L800,36 L850,42 L900,34 L950,40 L1000,32 L1050,38 L1100,30 L1150,36 L1200,28 L1200,80 Z" fill="var(--bg-light)"></path> </svg> </div> </section> <section class="services-intro-section" data-layout-spec="שירותים-intro" id="services-intro-section"> <div class="services-intro-section__container"> <div class="services-intro-section__eyebrow" data-i18n="home_div_74"> <span class="services-intro-section__eyebrow-text">המערך התפעולי שלנו</span> </div> <div class="services-intro-section__header"> <h2 class="services-intro-section__title" data-i18n="home_h2_4">מערך שירותים מקיף תחת קורת גג אחת</h2> <p class="services-intro-section__subtitle" data-i18n="home_p_34"> פרוצס מספקת מעטפת שירותים מלאה לניהול ואחזקת מבנים, תוך התאמה מדויקת לצרכי הלקוח. אנו משלבים כוח אדם מקצועי עם יכולות טכנולוגיות מתקדמות, ומעניקים שירות רציף ואמין ללקוחות קבועים לצד מענה ייעודי ומהיר לעבודות חד-פעמיות. </p> </div> <div class="services-intro-section__content-grid zappy-preserve-css-grid" data-zappy-grid-align="start" data-original-item-width="518" data-original-gap="60px" style="display: grid; --zappy-grid-cols: repeat(2, minmax(0, 1fr)); grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch !important;" data-zappy-explicit-columns="true"> <div class="services-intro-section__summary" data-grid-item-index="0"> <h3 class="services-intro-section__summary-title" data-i18n="home_h3_16">מחויבות למקצועיות ללא פשרות</h3> <p class="services-intro-section__summary-text" data-i18n="home_p_35"> אנו מפעילים מחלקות ייעודיות לעבודות שגרה ועבודות מיוחדות, כך שכל פרויקט מקבל את תשומת הלב והמומחיות הנדרשות. צוותי השטח שלנו עוברים הכשרות קפדניות ומצוידים במיטב הטכנולוגיה, החל ממערכות אוסמוזה הפוכה ועד רחפנים ייעודיים לניקוי חזיתות. </p> <p class="services-intro-section__summary-text" data-i18n="home_p_36"> בין אם מדובר בחוזה אחזקה שנתי לבניין משרדים ובין אם בניקיון יסודי חד-פעמי לאחר שיפוץ, אנו מתאימים את המתודולוגיה והצוות כדי להבטיח תוצאות מושלמות. </p> </div> <div class="services-intro-section__metrics" data-grid-item-index="1"> <div class="services-intro-section__metric-card"> <div class="services-intro-section__metric-icon"> <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> </div> <div class="services-intro-section__metric-content"> <p class="zappy-editable" data-i18n="home_p_37"><span class="services-intro-section__metric-number" style="color: rgb(26, 26, 26) !important;">500+</span> <span class="services-intro-section__metric-label">עובדים פעילים בשטח</span> </p><p class="services-intro-section__metric-desc" data-i18n="home_p_38">צוותי ניקיון שוטף, אחזקה ועבודות גובה הפרוסים ברחבי הארץ</p> </div> </div> <div class="services-intro-section__metric-card"> <div class="services-intro-section__metric-icon"> <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> </div> <div class="services-intro-section__metric-content"> <p class="zappy-editable" data-i18n="home_p_39"><span class="services-intro-section__metric-number" style="color: rgb(26, 26, 26) !important;">24/7</span> <span class="services-intro-section__metric-label">מענה מיידי למקרי חירום</span> </p><p class="services-intro-section__metric-desc" data-i18n="home_p_40">מחלקת מבצעים מיוחדים להתערבות מהירה, נזילות, גרפיטי ואירועים חריגים</p> </div> </div> <div class="services-intro-section__metric-card"> <div class="services-intro-section__metric-icon"> <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> </div> <div class="services-intro-section__metric-content"> <p class="zappy-editable" data-i18n="home_p_41"><span class="services-intro-section__metric-number" style="color: rgb(26, 26, 26) !important;">100%</span> <span class="services-intro-section__metric-label">התאמה חוזית גמישה</span> </p><p class="services-intro-section__metric-desc" data-i18n="home_p_42">חוזים שנתיים, פרויקטים חד-פעמיים או הסדרי קריאה – מודל העבודה מותאם עבורך</p> </div> </div> </div> </div> </div> <div class="services-intro-section__divider-wrapper" data-no-icon-edit="true" aria-hidden="true"> <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"> <path d="M0,80 L0,0 L1200,80 Z" fill="#1A1A1A"></path> </svg> </div> </section> <section data-band-index="4" class="index-cta-section" data-layout-spec="בית-cta" dir="rtl" id="index-cta-section" style="direction: rtl;"> <div class="index-cta-section__container"> <div class="index-cta-section__content"> <h2 class="index-cta-section__title" data-i18n="home_h2_5">מוכנים להעלות את רמת הניהול והאחזקה בנכס שלכם?</h2> <p class="index-cta-section__description" data-i18n="home_p_43">צוות המומחים של פרוצס מוכן לבנות עבורכם תוכנית שירות מותאמת אישית – מניקיון שוטף ועד עבודות גובה מתקדמות עם רחפן. השאירו פרטים ונחזור עם הצעה מקצועית תוך 24 שעות.</p> <div class="index-cta-section__actions"> <a href="/contact" class="index-cta-section__btn index-cta-section__btn--primary" data-element-type="button" data-element-id="btn-1781112473392-shshhwy1v" data-native-element="true" data-i18n="home_link_61">בקשו הצעת מחיר</a> <a href="/services" class="index-cta-section__btn index-cta-section__btn--secondary" data-element-type="button" data-element-id="btn-1781112473392-pd1i5b1rm" data-native-element="true" data-i18n="home_link_62">שירותינו</a> </div> </div> <div class="index-cta-section__accent-backplate" aria-hidden="true"></div> </div> <div class="zappy-inserted-element" id="zappy-element-1782651275265-gz91enxh1" data-element-id="zappy-element-1782651275265-gz91enxh1" data-element-type="paragraph" data-zappy-newly-inserted="true" style="width: 100%;"></div></section></main> <footer class="site-footer" dir="rtl" style="background-color: rgb(255, 255, 255); direction: rtl;"> <div class="footer-container"> <div class="footer-grid"> <!-- Company Info --> <div class="footer-col footer-company-col"><a href="/" class="logo-link footer-logo-link" aria-label="Proces פרוצס"><img class="logo" src="/assets/proces-facility-management-staffing-services-logo.webp" alt="Proces פרוצס" width="150" height="40" decoding="async"></a>  <p class="company-blurb" data-i18n="home_p_44" style="color: rgb(26, 26, 26) !important;">פרוצס מספקת פתרונות ניהול מתקנים וכוח אדם מקצועיים, אמינים ומותאמים אישית לעסקים ולנכסים מסחריים. המומחיות שלנו מבטיחה תפעול חלק ויעיל.<br><br><b>זמינות 24/7</b></p> </div> <!-- Quick Links --> <div class="footer-col footer-links-col"> <h4 data-i18n="home_h4_17" style="color: rgb(26, 26, 26) !important;">ניווט מהיר</h4> <ul><li style="color: rgb(26, 26, 26) !important;"><a href="/" data-i18n="home_link_63">עמוד הבית</a></li><li style="color: rgb(26, 26, 26) !important;"><a href="/services" data-i18n="home_link_64">שירותינו</a></li><li style="color: rgb(26, 26, 26) !important;"><a href="/contact" data-i18n="home_link_66">צור קשר</a></li></ul> </div> <!-- Contact Info --> <div class="footer-col footer-contact-col"> <h4 data-i18n="home_h4_18" style="color: rgb(26, 26, 26) !important;">צור קשר</h4> <ul class="footer-contact"><li style="color: rgb(26, 26, 26) !important;"> <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1781162794838-qldgdzj93" data-icon-type="fontawesome" style="cursor: pointer;"></i></span> <span class="contact-text" data-i18n="home_span_53"><a href="mailto:office@proces.co.il" data-i18n="home_link_67">office@proces.co.il</a></span> </li><li style="color: rgb(26, 26, 26) !important;"> <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1781162794838-g6u3hsmej" data-icon-type="fontawesome" style="cursor: pointer;"></i></span> <span class="contact-text"><a href="tel:077-4243446">077-4243446</a></span> </li><li style="color: rgb(26, 26, 26) !important;"> <span class="contact-icon"><i class="fas fa-map-marker-alt" data-element-type="icon" data-icon-type="fontawesome"></i></span> <a href="https://www.google.com/maps/search/?api=1&amp;query=%D7%90%D7%99%D7%99%D7%A8%D7%A4%D7%95%D7%A8%D7%98%20%D7%A1%D7%99%D7%98%D7%99%2C%20%D7%A7%D7%A8%D7%99%D7%AA%20%D7%A9%D7%93%D7%94%20%D7%94%D7%AA%D7%A2%D7%95%D7%A4%D7%94%2C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" data-i18n="home_link_68" target="_blank" rel="noopener noreferrer">איירפורט סיטי, קרית שדה התעופה, ישראל</a></li></ul> </div> <!-- Business Hours --> <div class="footer-col footer-hours-col">  <ul class="footer-hours"></ul> </div> <!-- Social Media --> <div class="footer-col footer-social-col"> <h4 data-i18n="home_h4_20" style="color: rgb(26, 26, 26) !important;">עקבו אחרינו</h4> <div class="footer-social"><a href="https://facebook.com/proces.co.il" aria-label="פייסבוק" data-zappy-social-placeholder="true" data-i18n-aria-label="home_aria_label_88"><i class="fab fa-facebook-f"></i></a>
+בפריסה ארצית<br></h3> <div class="index-hero-ctas" style="display: flex; justify-content: center; align-items: center"> <a href="/contact" class="index-hero-btn-primary btn btn-primary" style="outline: none; color: var(--text-color, #1a1a1a) !important; border-color: rgb(245, 200, 66) !important; background-color: rgb(245, 200, 66) !important; background-image: none !important;" data-element-type="button" data-element-id="btn-1780930254913-z7ylql0o2" data-native-element="true" data-text-color="dark" data-i18n="home_link_59">בקשה להצעת מחיר</a> <a href="/services" class="index-hero-btn-secondary btn btn-outline btn-secondary" data-element-type="button" data-element-id="btn-1780930254913-wbhgrkevp" data-native-element="true" style="outline: none; border-color: rgb(212, 160, 23) !important; color: var(--light-text, #ffffff) !important; background-color: transparent !important; background-image: none !important;" data-text-color="light" data-i18n="home_link_60">כלל שירותי הקבוצה</a> </div> </div> </div> <!-- Bottom Chevron Divider -->  </section>  <section data-band-index="2" class="index-capabilities-section" data-layout-spec="בית-capabilities" id="zappy-section-2"> <div class="index-capabilities-section__container"> <!-- Content Column (Right side in RTL) --> <div class="index-capabilities-section__content"> <p data-i18n="home_p_29"><span class="index-capabilities-section__eyebrow" style="color: #ffde59"> <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #ffde59;"> <path d="M10 2L12.5 7.5L18.5 8.5L14 13L15 19L10 16L5 19L6 13L1.5 8.5L7.5 7.5L10 2Z" fill="#ffde59"></path> </svg> יכולות מתקדמות </span> </p><h2 class="index-capabilities-section__title" data-i18n="home_h2_3">פתרונות טכניים מעבר לניקיון שוטף</h2> <p class="index-capabilities-section__description" data-i18n="home_p_30"> חטיבות מקצועיות ייעודיות לגישה קשה, טיפול חזיתות, ציפוי ננו, הסרת כתמים וגרפיטי, הדברה אקולוגית, חיטוי באוזון, ניקיון מעבדות וחדרים נקיים. אנו משלבים כוח אדם עם מומחיות טכנית מתקדמת כדי לספק מענה כולל לכל דרישות התחזוקה והניקיון של הארגון שלך. </p> <div class="index-capabilities-section__callouts zappy-preserve-css-grid" id="zappy-auto-grid-1781096588396-wkoxjb" data-zappy-auto-grid="true" data-original-item-width="177" data-original-gap="20px" style="display: grid; --zappy-grid-cols: repeat(3, minmax(0, 1fr)); grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch !important;" data-zappy-explicit-columns="true"> <!-- Callout 1 --> <div class="index-capabilities-section__callout" data-grid-item-index="0"> <div class="index-capabilities-section__callout-icon"> <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M12 2L13.5 8.5L20 10L14.5 14L16 20.5L12 17L8 20.5L9.5 14L4 10L10.5 8.5L12 2Z" fill="currentColor"></path> <circle cx="12" cy="12" r="3" fill="var(--accent)"></circle> </svg> </div> <h3 class="index-capabilities-section__callout-title" data-i18n="home_h3_13">שיטות גישה לגובה</h3> <p class="index-capabilities-section__callout-text" data-i18n="home_p_31">גלישה (סנפלינג), במות הרמה, ליפטרים, פיגומים ורחפן עם תותח מים – אנו מגיעים לכל נקודה.</p> </div> <!-- Callout 2 --> <div class="index-capabilities-section__callout" data-grid-item-index="1"> <div class="index-capabilities-section__callout-icon"> <svg data-element-type="icon" data-icon-type="svg" width="29" height="29" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-element-id="zappy-temp-icon-1781096646226-55gpy6y5x" style="width: 29px !important; height: 29px !important; color: rgb(245, 200, 66);" data-size-adjusted="true"> <path d="M12 2L13.5 8.5L20 10L14.5 14L16 20.5L12 17L8 20.5L9.5 14L4 10L10.5 8.5L12 2Z" fill="currentColor"></path> <circle cx="12" cy="12" r="3" fill="var(--accent)"></circle> </svg> </div> <h3 class="index-capabilities-section__callout-title" data-i18n="home_h3_14">טיפול חזיתות מתקדם</h3> <p class="index-capabilities-section__callout-text" data-i18n="home_p_32">ניקוי חלונות באוסמוזה הפוכה, ציפוי ננו דוחה לכלוך, והסרת גרפיטי בהתזת חול או זכוכית.</p> </div> <!-- Callout 3 --> <div class="index-capabilities-section__callout" data-grid-item-index="2"> <div class="index-capabilities-section__callout-icon"> <svg data-element-type="icon" data-icon-type="svg" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M12 2L13.5 8.5L20 10L14.5 14L16 20.5L12 17L8 20.5L9.5 14L4 10L10.5 8.5L12 2Z" fill="currentColor"></path> <circle cx="12" cy="12" r="3" fill="var(--accent)"></circle> </svg> </div> <h3 class="index-capabilities-section__callout-title" data-i18n="home_h3_15">היגיינה ייעודית</h3> <p class="index-capabilities-section__callout-text" data-i18n="home_p_33">חיטוי מעבדות, חדרים נקיים ומפעלים בגז אוזון, לצד ניקיון יסודי לאחר בנייה או שיפוץ.</p> </div> </div> </div> <!-- Image Collage Column (Left side in RTL) --> <div class="index-capabilities-section__collage"> <div class="index-capabilities-section__collage-grid zappy-preserve-css-grid" id="zappy-auto-grid-1781096588415-un5qnq" data-zappy-auto-grid="true" data-original-item-width="570" data-original-gap="12px" style="--zappy-grid-cols: repeat(2, minmax(0, 1fr)); display: grid; align-items: stretch !important; grid-template-columns: repeat(2, minmax(0, 1fr));" data-zappy-explicit-columns="true"> <!-- Main large image --> <div class="index-capabilities-section__collage-item index-capabilities-section__collage-item--main zappy-grid-item-no-stretch" data-zappy-has-aspect-ratio="true" data-zappy-original-height="319" style="background-color: rgb(212, 160, 23) !important; grid-area: auto !important; height: 319px !important;" data-grid-item-index="0"> <div data-zappy-zoom-wrapper="true" data-element-id="img-1781096588328-f5mx2xa9v-add-1781166357463-hn9rye-add-1781166359664-5dr7pn" data-element-type="image" data-zappy-zoom-wrapper-width="570px" data-zappy-zoom-wrapper-height="319px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 570px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 319px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true"><img decoding="async" data-placeholder="image-placeholder" data-context="Drone-mounted water cannon cleaning a high-rise building facade, dramatic angle, documentary style, blue sky background, water spray visible" width="600" height="400" src="/assets/image-image-placeholder-1781166434846-8eu2u3.webp?v=1781166437138" alt="Image placeholder" data-element-type="image" data-element-id="new-grid-img-1781166359664-0-x0k0f4ph0" style="cursor: pointer; object-position: 50% 50% !important; display: block; object-fit: cover !important; margin-top: 0px !important; margin-bottom: 0px !important; left: 0% !important; top: 0% !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; position: absolute !important;" data-zappy-zoom="1" data-zappy-original-width="570" data-zappy-original-height="319" data-zappy-object-position="50% 50%" id="new-grid-img-1781166359664-0-x0k0f4ph0" data-ai-slot="grid-item-image" data-i18n-alt="home_alt_83" loading="lazy" fetchpriority="low"></div> </div><div class="index-capabilities-section__collage-item index-capabilities-section__collage-item--main zappy-grid-item-no-stretch" data-grid-item-index="1" data-zappy-has-aspect-ratio="true" data-zappy-original-height="320.625" style="height: 320.625px !important; overflow: hidden !important;"> <div data-zappy-zoom-wrapper="true" data-element-id="img-1781096588328-f5mx2xa9v" data-element-type="image" data-zappy-zoom-wrapper-width="570px" data-zappy-zoom-wrapper-height="319px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 570px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 319px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true"><img decoding="async" data-placeholder="index-capabilities-image-1" data-context="Drone-mounted water cannon cleaning a high-rise building facade, dramatic angle, documentary style, blue sky background, water spray visible" width="600" height="400" src="/assets/site-index-capabilities-image-1-1781096696313-yu5vng.webp?v=1781096699059" alt="רחפן עם תותח מים מנקה חזית בניין" data-element-type="image" data-element-id="img-1781096588328-f5mx2xa9v" style="object-position: 50% 33% !important; margin: 0px !important; left: 0% !important; top: 0% !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; display: block !important; object-fit: cover !important; position: absolute !important;" data-zappy-zoom="1" data-zappy-original-width="570" data-zappy-original-height="319" data-zappy-object-position="50% 33%" data-i18n-alt="home_alt_84" loading="lazy" fetchpriority="low"></div> </div> <!-- Secondary image: abseiling --> <!-- Secondary image: reverse osmosis --> <!-- Secondary image: floor polishing --> </div> <!-- Geometric overlay frame --> <div class="index-capabilities-section__collage-overlay" aria-hidden="true"></div> </div> </div> <!-- Bottom divider: layered torn-chevron edge --> <div class="index-capabilities-section__divider-wrapper" aria-hidden="true"> <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"> <!-- Yellow sliver peeking through --> <path d="M0,80 L0,42 L50,48 L100,40 L150,46 L200,38 L250,44 L300,36 L350,42 L400,34 L450,40 L500,32 L550,38 L600,30 L650,36 L700,28 L750,34 L800,26 L850,32 L900,24 L950,30 L1000,22 L1050,28 L1100,20 L1150,26 L1200,18 L1200,80 Z" fill="var(--bg-light)"></path> <!-- White/light fill for next section --> <path d="M0,80 L0,52 L50,58 L100,50 L150,56 L200,48 L250,54 L300,46 L350,52 L400,44 L450,50 L500,42 L550,48 L600,40 L650,46 L700,38 L750,44 L800,36 L850,42 L900,34 L950,40 L1000,32 L1050,38 L1100,30 L1150,36 L1200,28 L1200,80 Z" fill="var(--bg-light)"></path> </svg> </div> </section> <section class="services-intro-section" data-layout-spec="שירותים-intro" id="services-intro-section"> <div class="services-intro-section__container"> <div class="services-intro-section__eyebrow" data-i18n="home_div_74"> <span class="services-intro-section__eyebrow-text">המערך התפעולי שלנו</span> </div> <div class="services-intro-section__header"> <h2 class="services-intro-section__title" data-i18n="home_h2_4">מערך שירותים מקיף תחת קורת גג אחת</h2> <p class="services-intro-section__subtitle" data-i18n="home_p_34"> פרוצס מספקת מעטפת שירותים מלאה לניהול ואחזקת מבנים, תוך התאמה מדויקת לצרכי הלקוח. אנו משלבים כוח אדם מקצועי עם יכולות טכנולוגיות מתקדמות, ומעניקים שירות רציף ואמין ללקוחות קבועים לצד מענה ייעודי ומהיר לעבודות חד-פעמיות. </p> </div> <div class="services-intro-section__content-grid zappy-preserve-css-grid" data-zappy-grid-align="start" data-original-item-width="518" data-original-gap="60px" style="display: grid; --zappy-grid-cols: repeat(2, minmax(0, 1fr)); grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch !important;" data-zappy-explicit-columns="true"> <div class="services-intro-section__summary" data-grid-item-index="0"> <h3 class="services-intro-section__summary-title" data-i18n="home_h3_16">מחויבות למקצועיות ללא פשרות</h3> <p class="services-intro-section__summary-text" data-i18n="home_p_35"> אנו מפעילים מחלקות ייעודיות לעבודות שגרה ועבודות מיוחדות, כך שכל פרויקט מקבל את תשומת הלב והמומחיות הנדרשות. צוותי השטח שלנו עוברים הכשרות קפדניות ומצוידים במיטב הטכנולוגיה, החל ממערכות אוסמוזה הפוכה ועד רחפנים ייעודיים לניקוי חזיתות. </p> <p class="services-intro-section__summary-text" data-i18n="home_p_36"> בין אם מדובר בחוזה אחזקה שנתי לבניין משרדים ובין אם בניקיון יסודי חד-פעמי לאחר שיפוץ, אנו מתאימים את המתודולוגיה והצוות כדי להבטיח תוצאות מושלמות. </p> </div> <div class="services-intro-section__metrics" data-grid-item-index="1"> <div class="services-intro-section__metric-card"> <div class="services-intro-section__metric-icon"> <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> </div> <div class="services-intro-section__metric-content"> <p class="zappy-editable" data-i18n="home_p_37"><span class="services-intro-section__metric-number" style="color: rgb(26, 26, 26) !important;">500+</span> <span class="services-intro-section__metric-label">עובדים פעילים בשטח</span> </p><p class="services-intro-section__metric-desc" data-i18n="home_p_38">צוותי ניקיון שוטף, אחזקה ועבודות גובה הפרוסים ברחבי הארץ</p> </div> </div> <div class="services-intro-section__metric-card"> <div class="services-intro-section__metric-icon"> <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> </div> <div class="services-intro-section__metric-content"> <p class="zappy-editable" data-i18n="home_p_39"><span class="services-intro-section__metric-number" style="color: rgb(26, 26, 26) !important;">24/7</span> <span class="services-intro-section__metric-label">מענה מיידי למקרי חירום</span> </p><p class="services-intro-section__metric-desc" data-i18n="home_p_40">מחלקת מבצעים מיוחדים להתערבות מהירה, נזילות, גרפיטי ואירועים חריגים</p> </div> </div> <div class="services-intro-section__metric-card"> <div class="services-intro-section__metric-icon"> <svg data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> </div> <div class="services-intro-section__metric-content"> <p class="zappy-editable" data-i18n="home_p_41"><span class="services-intro-section__metric-number" style="color: rgb(26, 26, 26) !important;">100%</span> <span class="services-intro-section__metric-label">התאמה חוזית גמישה</span> </p><p class="services-intro-section__metric-desc" data-i18n="home_p_42">חוזים שנתיים, פרויקטים חד-פעמיים או הסדרי קריאה – מודל העבודה מותאם עבורך</p> </div> </div> </div> </div> </div> <div class="services-intro-section__divider-wrapper" data-no-icon-edit="true" aria-hidden="true"> <svg viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"> <path d="M0,80 L0,0 L1200,80 Z" fill="#1A1A1A"></path> </svg> </div> </section> <section data-band-index="4" class="index-cta-section" data-layout-spec="בית-cta" dir="rtl" id="index-cta-section" style="direction: rtl;"> <div class="index-cta-section__container"> <div class="index-cta-section__content"> <h2 class="index-cta-section__title" data-i18n="home_h2_5">מוכנים להעלות את רמת הניהול והאחזקה בנכס שלכם?</h2> <p class="index-cta-section__description" data-i18n="home_p_43">צוות המומחים של פרוצס מוכן לבנות עבורכם תוכנית שירות מותאמת אישית – מניקיון שוטף ועד עבודות גובה מתקדמות עם רחפן. השאירו פרטים ונחזור עם הצעה מקצועית תוך 24 שעות.</p> <div class="index-cta-section__actions"> <a href="/contact" class="index-cta-section__btn index-cta-section__btn--primary" data-element-type="button" data-element-id="btn-1781112473392-shshhwy1v" data-native-element="true" data-i18n="home_link_61">בקשו הצעת מחיר</a> <a href="/services" class="index-cta-section__btn index-cta-section__btn--secondary" data-element-type="button" data-element-id="btn-1781112473392-pd1i5b1rm" data-native-element="true" data-i18n="home_link_62-dup-1785155897557-0">שירותינו</a> </div> </div> <div class="index-cta-section__accent-backplate" aria-hidden="true"></div> </div> <div class="zappy-inserted-element" id="zappy-element-1782651275265-gz91enxh1" data-element-id="zappy-element-1782651275265-gz91enxh1" data-element-type="paragraph" data-zappy-newly-inserted="true" style="width: 100%;"></div></section></main> <footer class="site-footer" dir="rtl" style="background-color: rgb(255, 255, 255); direction: rtl;"> <div class="footer-container"> <div class="footer-grid"> <!-- Company Info --> <div class="footer-col footer-company-col"><a href="/" class="logo-link footer-logo-link" aria-label="Proces פרוצס"><img class="logo" src="/assets/proces-facility-management-staffing-services-logo.webp" alt="Proces פרוצס" width="150" height="40" decoding="async"></a>  <p class="company-blurb" data-i18n="home_p_44" style="color: rgb(26, 26, 26) !important;">פרוצס מספקת פתרונות ניהול מתקנים וכוח אדם מקצועיים, אמינים ומותאמים אישית לעסקים ולנכסים מסחריים. המומחיות שלנו מבטיחה תפעול חלק ויעיל.<br><br><b>זמינות 24/7</b></p> </div> <!-- Quick Links --> <div class="footer-col footer-links-col"> <h4 data-i18n="home_h4_17" style="color: rgb(26, 26, 26) !important;">ניווט מהיר</h4> <ul><li style="color: rgb(26, 26, 26) !important;"><a href="/" data-i18n="home_link_63">עמוד הבית</a></li><li style="color: rgb(26, 26, 26) !important;"><a href="/services" data-i18n="home_link_64">שירותינו</a></li><li style="color: rgb(26, 26, 26) !important;"><a href="/contact" data-i18n="home_link_66">צור קשר</a></li></ul> </div> <!-- Contact Info --> <div class="footer-col footer-contact-col"> <h4 data-i18n="home_h4_18" style="color: rgb(26, 26, 26) !important;">צור קשר</h4> <ul class="footer-contact"><li style="color: rgb(26, 26, 26) !important;"> <span class="contact-icon"><i class="fas fa-envelope" data-element-type="icon" data-element-id="icon-1781162794838-qldgdzj93" data-icon-type="fontawesome" style="cursor: pointer;"></i></span> <span class="contact-text" data-i18n="home_span_53"><a href="mailto:office@proces.co.il" data-i18n="home_link_67">office@proces.co.il</a></span> </li><li style="color: rgb(26, 26, 26) !important;"> <span class="contact-icon"><i class="fas fa-phone" data-element-type="icon" data-element-id="icon-1781162794838-g6u3hsmej" data-icon-type="fontawesome" style="cursor: pointer;"></i></span> <span class="contact-text"><a href="tel:077-4243446">077-4243446</a></span> </li><li style="color: rgb(26, 26, 26) !important;"> <span class="contact-icon"><i class="fas fa-map-marker-alt" data-element-type="icon" data-icon-type="fontawesome"></i></span> <a href="https://www.google.com/maps/search/?api=1&amp;query=%D7%90%D7%99%D7%99%D7%A8%D7%A4%D7%95%D7%A8%D7%98%20%D7%A1%D7%99%D7%98%D7%99%2C%20%D7%A7%D7%A8%D7%99%D7%AA%20%D7%A9%D7%93%D7%94%20%D7%94%D7%AA%D7%A2%D7%95%D7%A4%D7%94%2C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C" data-i18n="home_link_68" target="_blank" rel="noopener noreferrer">איירפורט סיטי, קרית שדה התעופה, ישראל</a></li></ul> </div> <!-- Business Hours --> <div class="footer-col footer-hours-col">  <ul class="footer-hours"></ul> </div> <!-- Social Media --> <div class="footer-col footer-social-col"> <h4 data-i18n="home_h4_20" style="color: rgb(26, 26, 26) !important;">עקבו אחרינו</h4> <div class="footer-social"><a href="https://facebook.com/proces.co.il" aria-label="פייסבוק" data-zappy-social-placeholder="true" data-i18n-aria-label="home_aria_label_88"><i class="fab fa-facebook-f"></i></a>
 <a href="#" aria-label="אינסטגרם" data-zappy-social-placeholder="true" data-i18n-aria-label="home_aria_label_89"><i class="fab fa-instagram" data-element-type="icon" data-element-id="icon-1785150702452-za89ogq6h" data-icon-type="fontawesome"></i></a>
 <a href="https://wa.me/972774243446" aria-label="וואטסאפ" data-zappy-social-placeholder="true" data-i18n-aria-label="home_aria_label_90"><i class="fab fa-whatsapp" data-element-id="icon-1781162794838-jmbhk5s99" data-element-type="icon" data-icon-type="fontawesome"></i></a>
 <a href="https://waze.com/ul/hsv8vfrq7t" aria-label="Waze" target="_blank" rel="noopener noreferrer" data-zappy-original-link="true" data-zappy-orig-href="https://waze.com/ul?q=איירפורט סיטי, קרית שדה התעופה, ישראל" data-zappy-orig-target="_blank" data-zappy-orig-rel="noopener noreferrer" data-zappy-click-action="link"><i class="fab fa-waze" data-element-type="icon" data-element-id="icon-1785067002453-59yg4efpr" data-icon-type="fontawesome" style="font-size: 18px !important; color: rgb(212, 160, 23); cursor: pointer;" data-zappy-click-action="link"></i></a></div> </div> </div> </div> <!-- Bottom Bar --> <div class="footer-bottom"> <div class="footer-container footer-bottom-inner"> <p class="copyright" data-i18n="home_p_45">© 2026 Proces פרוצס. כל הזכויות שמורות.</p> <div class="legal-links"> <a href="/privacy" data-i18n="home_link_70">מדיניות פרטיות</a> <a href="/terms" data-i18n="home_link_71">תנאי שימוש</a> <a href="/accessibility" data-i18n="home_link_72">נגישות</a> <a href="https://zappy5.com" target="_blank" class="zappy-attribution" data-i18n="home_link_73"><br></a> </div> </div> </div> </footer> <a href="https://wa.me/972774243446" class="whatsapp-float" aria-label="WhatsApp" data-i18n-aria-label="home_aria_label_91"> <i class="fab fa-whatsapp"></i> </a> <div data-integration="accessibility:toolbar"></div>  
+
 
 
 
@@ -1198,6 +1317,12 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "ecom_courseAccessMethod": "גישה דיגיטלית מקוונת",
       "ecom_processing": "מעבד...",
       "ecom_checkoutFailed": "שגיאה בתהליך התשלום. נסו שוב.",
+      "ecom_formFileUploading": "מעלה…",
+      "ecom_formFileTooLarge": "הקובץ גדול מדי (עד {size} MB)",
+      "ecom_formFileUnsupported": "סוג הקובץ אינו נתמך",
+      "ecom_formFileFailed": "ההעלאה נכשלה. נסו שוב.",
+      "ecom_formFileRemove": "הסרת הקובץ",
+      "nav-home": "עמוד הבית",
       "home_h1_1": "קבוצת פרוצס\nהשותף התפעולי שלך!\nשירותי ניקיון ואספקת כוח אדם\nניהול ואחזקת מבנים\nתחת קורת גג אחת.",
       "home_h2_2": "פרוצס משלבת שירותי התקשרות שוטפים עם התערבויות מומחים חד-פעמיות",
       "home_h2_3": "פתרונות טכניים מעבר לניקיון שוטף",
@@ -1312,7 +1437,7 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "new_h1_233": "ניקוי מבנים באמצעות רחפנים",
       "new_h1_265": "ניקוי בעזרת רחפנים: פתרון מתקדם למבנים גבוהים ומורכבים",
       "new_h2_171": "פתרונות כוח אדם וניהול מתקנים",
-      "new_h2_204": "חברות בקבוצה",
+      "new_h2_204": "רישיונות וביטוחים",
       "new_h2_236": "איך זה עובד?",
       "new_h2_240": "היתרונות הבולטים של ניקוי באמצעות רחפן",
       "new_h2_245": "השוואה לשיטות מסורתיות",
@@ -2190,11 +2315,14 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "knowledge_tips_aria_label_61": "אינסטגרם",
       "knowledge_tips_aria_label_62": "וואטסאפ",
       "knowledge_tips_aria_label_63": "וואטסאפ",
+      "new_p_205-dup-1785155897557-1": "רישיון הפעלה- קבלן כוח אדם",
+      "new_p_206-dup-1785155897557-2": "פאזל פרויקטים",
       "accessibility_meta_description": "הצהרת הנגישות שלנו - מחויבותנו לנגישות דיגיטלית",
       "cleaning_services_seo_keywords": "רחפן, גובה, ניקוי חלונות בגובה, ציפוי ננו, הדברה ירוקה",
       "cleaning_services_seo_og_title": "שירותי גובה עם רחפן וסנפלינג — Proces פרוצס",
       "legal_accessibility_page_title": "הצהרת נגישות - Proces פרוצס",
       "management_staffing_page_title": "ניהול מתקנים וכוח אדם מקצועי — Proces פרוצס",
+      "new_h2_204-dup-1785155897557-0": "חברות בקבוצה",
       "contact_seo_twitter_description": "צריכים הצעת מחיר לניקוי חלונות ברחפן או חוזה תחזוקה שוטף? צרו קשר עם פרוצס ונחזור אליכם במהירות עם הפתרון המושלם לניקיון מקצועי בגובה.",
       "knowledge_tips_meta_description": "Proces פרוצס - כתבות מידע וטיפים",
       "about_us_seo_twitter_description": "פרוצס מביאה לשוק הניקיון והתחזוקה מהפכה של ממש: משירותי ניקיון משרדים ועד ניקוי חלונות בגובה באמצעות רחפן, סנפלינג ואוסמוזה הפוכה. שדרגו את הנכס שלכם עוד היום.",
@@ -2204,6 +2332,7 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "cleaning_services_aria_label_134": "אינסטגרם",
       "cleaning_services_aria_label_135": "וואטסאפ",
       "cleaning_services_aria_label_136": "וואטסאפ",
+      "home_link_62-dup-1785155897557-0": "שירותינו",
       "knowledge_tips_seo_twitter_title": "כתבות מידע וטיפים",
       "management_staffing_seo_keywords": "ניהול מתקנים, כוח אדם, שירותי ניקיון למשרדים בישראל, חברת ניקיון מקצועית, גובה",
       "management_staffing_seo_og_title": "ניהול מתקנים וכוח אדם מקצועי — Proces פרוצס",
@@ -2222,6 +2351,12 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "knowledge_tips_seo_twitter_description": "Proces פרוצס - כתבות מידע וטיפים",
       "management_staffing_seo_og_description": "פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.",
       "cleaning_services_seo_twitter_description": "מנקים הכול, מגיעים לכל מקום: ניקוי חלונות בגובה בעזרת רחפן תותח מים, ציפוי ננו, הדברה ירוקה ועוד. השירותים המתקדמים של פרוצס מחכים לכם כאן.",
+      "knowledge_tips_link_30-dup-1785155897557-0": "קרא עוד ←",
+      "knowledge_tips_link_30-dup-1785155897557-1": "קרא עוד ←",
+      "knowledge_tips_link_30-dup-1785155897557-2": "קרא עוד ←",
+      "knowledge_tips_link_30-dup-1785155897557-4": "קרא עוד ←",
+      "knowledge_tips_link_30-dup-1785155897557-5": "קרא עוד ←",
+      "knowledge_tips_span_18-dup-1785155897557-3": "טכנולוגיה",
       "management_staffing_seo_twitter_description": "פרוצס משלבת אספקת כח אדם כללי עם חטיבות ניקיון מקצועיות לעבודה בגובה. פתרונות ניהול מתקנים חכמים לבנייני משרדים, מלונות ומגדלי יוקרה. דברו איתנו.",
       "new_text_289_0": "<span><span><span>מחפשים מידע נוסף? בקרו ב</span></span></span><a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">",
       "new_text_289_1": "</a> <span><span> <span>שלנו וגלו עוד כתבות, מדריכים וטיפים שיעזרו לכם לשמור על הנכס שלכם במצב מושלם.</span></span></span>"
@@ -2514,6 +2649,12 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "ecom_courseAccessMethod": "Online course access",
       "ecom_processing": "Processing...",
       "ecom_checkoutFailed": "Checkout failed. Please try again.",
+      "ecom_formFileUploading": "Uploading…",
+      "ecom_formFileTooLarge": "File is too large (max {size} MB)",
+      "ecom_formFileUnsupported": "This file type is not supported",
+      "ecom_formFileFailed": "Upload failed. Please try again.",
+      "ecom_formFileRemove": "Remove file",
+      "nav-home": "Home",
       "home_h1_1": "Proces Group\nYour Operational Partner!\nCleaning Services & Staffing Solutions\nBuilding Management & Maintenance\nAll Under One Roof.",
       "home_h2_2": "Proces combines ongoing contract services with one-time expert interventions",
       "home_h2_3": "Technical solutions beyond routine cleaning",
@@ -2628,7 +2769,7 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "new_h1_233": "Building Cleaning Using Drones",
       "new_h1_265": "Drone Cleaning: An Advanced Solution for Tall and Complex Structures",
       "new_h2_171": "Workforce Solutions & Facility Management",
-      "new_h2_204": "Group Companies",
+      "new_h2_204": "Licenses and Insurance",
       "new_h2_236": "How Does It Work?",
       "new_h2_240": "The Key Advantages of Drone Cleaning",
       "new_h2_245": "Comparison to Traditional Methods",
@@ -3506,11 +3647,14 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "knowledge_tips_aria_label_61": "Instagram",
       "knowledge_tips_aria_label_62": "WhatsApp",
       "knowledge_tips_aria_label_63": "WhatsApp",
+      "new_p_205-dup-1785155897557-1": "Operating License - Manpower Contractor",
+      "new_p_206-dup-1785155897557-2": "Project Puzzle",
       "accessibility_meta_description": "Our accessibility statement - our commitment to digital accessibility",
       "cleaning_services_seo_keywords": "drone, height, high-rise window cleaning, nano coating, green pest control",
       "cleaning_services_seo_og_title": "Height Services with Drone and Rappelling — Proces פרוצס",
       "legal_accessibility_page_title": "Accessibility Statement - Proces פרוצס",
       "management_staffing_page_title": "Professional Facility Management & Staffing — Proces פרוצס",
+      "new_h2_204-dup-1785155897557-0": "Group Companies",
       "contact_seo_twitter_description": "Need a quote for drone window cleaning or an ongoing maintenance contract? Contact Proces and we'll get back to you quickly with the perfect solution for professional high-altitude cleaning.",
       "knowledge_tips_meta_description": "Proces פרוצס - Information Articles and Tips",
       "about_us_seo_twitter_description": "Proces brings a real revolution to the cleaning and maintenance market: from office cleaning services to high-altitude window cleaning using drones, rappelling and reverse osmosis. Upgrade your property today.",
@@ -3520,6 +3664,7 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "cleaning_services_aria_label_134": "Instagram",
       "cleaning_services_aria_label_135": "WhatsApp",
       "cleaning_services_aria_label_136": "WhatsApp",
+      "home_link_62-dup-1785155897557-0": "Our Services",
       "knowledge_tips_seo_twitter_title": "Information Articles and Tips",
       "management_staffing_seo_keywords": "facility management, staffing, office cleaning services in Israel, professional cleaning company, height",
       "management_staffing_seo_og_title": "Professional Facility Management & Staffing — Proces פרוצס",
@@ -3538,6 +3683,12 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       "knowledge_tips_seo_twitter_description": "Proces פרוצס - Information Articles and Tips",
       "management_staffing_seo_og_description": "Proces combines general staffing supply with professional cleaning divisions for high-altitude work. Smart facility management solutions for office buildings, hotels and luxury towers. Talk to us.",
       "cleaning_services_seo_twitter_description": "We clean everything, reach everywhere: high-rise window cleaning with water cannon drone, nano coating, green pest control and more. Proces advanced services are waiting for you here.",
+      "knowledge_tips_link_30-dup-1785155897557-0": "Read more ←",
+      "knowledge_tips_link_30-dup-1785155897557-1": "Read more ←",
+      "knowledge_tips_link_30-dup-1785155897557-2": "Read more ←",
+      "knowledge_tips_link_30-dup-1785155897557-4": "Read more ←",
+      "knowledge_tips_link_30-dup-1785155897557-5": "Read more ←",
+      "knowledge_tips_span_18-dup-1785155897557-3": "Technology",
       "management_staffing_seo_twitter_description": "Proces combines general staffing supply with professional cleaning divisions for high-altitude work. Smart facility management solutions for office buildings, hotels and luxury towers. Talk to us.",
       "new_text_289_0": "<span><span><span>Looking for more information? Visit our</span></span></span> <a href=\"#\" style=\"color: rgb(26, 26, 26) !important;\">",
       "new_text_289_1": "</a> <span><span> <span>and discover more articles, guides, and tips to help you keep your property in perfect condition.</span></span></span>"
@@ -3778,6 +3929,9 @@ body:has(.zappy-announcement-bar) .navbar:not(.zappy-catalog-menu):not(.mobile-s
       var key = el.getAttribute('data-i18n');
       var translation = zappyI18n.t(key);
       if (!translation || translation === key) return;
+      translation = String(translation)
+        .replace(/&nbsp;/gi, String.fromCharCode(160))
+        .replace(/&nbsp;/gi, String.fromCharCode(160));
 
       // Skip parent elements whose children have their own data-i18n keys
       // (e.g., <li data-i18n="key1"><a data-i18n="key2">text</a></li>)
