@@ -2039,10 +2039,8 @@ html[dir="rtl"] .site-footer .footer-col:nth-child(3) .footer-contact li{flex-di
 }
 
 .index-hero-section .index-hero-title {
-  font-size: 3rem;
   font-weight: 900;
   letter-spacing: -0.01em;
-  line-height: 1.1;
   color: var(--text-light);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   margin-bottom: 10px;
