@@ -59,14 +59,8 @@ Information about WCAG compliance and accessibility features.
 - Method: POST
 - Content-Type: application/json
 - Fields:
-  - `name` (text, required)
-  - `email` (email, required)
-  - `phone` (tel, required)
-  - `service_type` (checkbox)
-  - `service_type` (checkbox)
-  - `service_type` (checkbox)
-  - `service_type` (checkbox)
   - `message` (textarea, required)
+  - `company` (text)
   - `privacy_consent` (checkbox, required)
 
 ---

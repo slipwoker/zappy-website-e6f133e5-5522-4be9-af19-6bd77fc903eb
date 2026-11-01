@@ -623,6 +623,58 @@ window.onload = function() {
 })();
 /* ZAPPY_CUSTOM_JS_END:32d378b37420 */
 
+/* ZAPPY_CUSTOM_JS_START:9ce7f1503732 */
+(function () {
+  function __zappyCustomInit() {
+    try {
+(function () {
+  var form = document.querySelector('form.contact-contact-form-section__form, form.contact-form');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    // Honeypot: if a bot filled the hidden field, silently block (no visible error).
+    var hp = form.querySelector('input[name="company"]');
+    if (hp && hp.value && hp.value.trim() !== '') {
+      e.preventDefault();
+      return;
+    }
+
+    // Privacy consent must be checked.
+    var consent = form.querySelector('input[name="privacy_consent"]');
+    if (consent && !consent.checked) {
+      e.preventDefault();
+      if (consent.reportValidity) {
+        consent.setCustomValidity('נדרשת הסכמה למדיניות הפרטיות כדי לשלוח את הפנייה.');
+        consent.reportValidity();
+        consent.setCustomValidity('');
+      }
+      consent.focus();
+      return;
+    }
+
+    // Let the browser's native required/type validation run (POST, no GET).
+    // If valid, show an accessible success message without navigating away.
+    var success = form.querySelector('.contact-contact-form-section__success');
+    if (success) {
+      success.style.display = 'block';
+    }
+    // Do NOT preventDefault here: allows the native POST to proceed when a
+    // backend action is configured. On static previews with action="#" the
+    // page simply reloads with the success state visible.
+  });
+})();
+    } catch (e) {
+      if (typeof console !== 'undefined' && console.warn) { console.warn('[zappy-custom-js]', e); }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', __zappyCustomInit);
+  } else {
+    __zappyCustomInit();
+  }
+})();
+/* ZAPPY_CUSTOM_JS_END:9ce7f1503732 */
+
 
 /* ZAPPY_PUBLISHED_LIGHTBOX_RUNTIME */
 (function(){
