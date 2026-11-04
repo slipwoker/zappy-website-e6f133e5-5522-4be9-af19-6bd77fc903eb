@@ -9364,6 +9364,55 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   display: none !important;
 }
 }
+
+@media (max-width: 991px) {
+.navbar .nav-menu,
+  .navbar #navMenu {
+  display: none !important;
+}
+
+.navbar .nav-cta-container {
+  display: none !important;
+}
+
+.navbar .lang-switcher {
+  display: none !important;
+}
+
+.navbar .nav-right-group {
+  display: contents;
+}
+
+.navbar .mobile-toggle,
+  .navbar .phone-header-btn {
+  display: flex !important;
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+  transform: none !important;
+  z-index: 1001 !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.mobile-toggle, html[lang="he"] .mobile-toggle{right: 12px !important;left: auto !important;}
+
+.phone-header-btn, html[lang="he"] .phone-header-btn{left: 12px !important;right: auto !important;}
+
+.nav-container {
+  position: relative !important;
+  min-height: 70px !important;
+}
+}
+
+@media (min-width: 992px) {
+.navbar .mobile-toggle,
+  .navbar .phone-header-btn {
+  display: none !important;
+}
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
