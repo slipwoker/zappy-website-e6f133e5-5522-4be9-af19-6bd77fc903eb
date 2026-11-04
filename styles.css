@@ -9413,6 +9413,28 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   display: none !important;
 }
 }
+
+@media (max-width: 991px) {
+.navbar #navMenu.active,
+  .navbar #navMenu.open {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+}
+
+.navbar #navMenu.active {
+  background: var(--text-color, var(--text, var(--text-dark, var(--text-color, var(--text, var(--text-dark, #1A1A1A)))))) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25) !important;
+  z-index: 1002 !important;
+}
+
+.navbar #navMenu.active li a {
+  color: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
+}
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
