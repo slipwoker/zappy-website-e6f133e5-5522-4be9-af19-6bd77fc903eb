@@ -675,6 +675,78 @@ window.onload = function() {
 })();
 /* ZAPPY_CUSTOM_JS_END:9ce7f1503732 */
 
+/* ZAPPY_CUSTOM_JS_START:6ca4974d1ac4 */
+(function () {
+  function __zappyCustomInit() {
+    try {
+(function () {
+  function initMenu() {
+    var toggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-toggle');
+    var menu = document.getElementById('navMenu') || document.querySelector('.nav-menu');
+    if (!toggle || !menu) return;
+
+    // Avoid double-binding by marking the element
+    if (toggle.getAttribute('data-hb-fixed') === '1') return;
+    toggle.setAttribute('data-hb-fixed', '1');
+
+    var hamburger = toggle.querySelector('.hamburger-icon');
+    var closeIcon = toggle.querySelector('.close-icon');
+
+    function open() {
+      menu.classList.add('active');
+      menu.classList.add('open');
+      menu.style.display = 'flex';
+      menu.style.opacity = '1';
+      menu.style.visibility = 'visible';
+      if (hamburger) hamburger.style.display = 'none';
+      if (closeIcon) closeIcon.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      menu.classList.remove('active');
+      menu.classList.remove('open');
+      menu.style.display = 'none';
+      menu.style.opacity = '0';
+      menu.style.visibility = 'hidden';
+      if (hamburger) hamburger.style.display = 'block';
+      if (closeIcon) closeIcon.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (menu.classList.contains('active')) { close(); } else { open(); }
+    });
+
+    // Close when a nav link is clicked
+    menu.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        close();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenu);
+  } else {
+    initMenu();
+  }
+  // Also re-run after full load in case DOM changed
+  window.addEventListener('load', initMenu);
+})();
+    } catch (e) {
+      if (typeof console !== 'undefined' && console.warn) { console.warn('[zappy-custom-js]', e); }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', __zappyCustomInit);
+  } else {
+    __zappyCustomInit();
+  }
+})();
+/* ZAPPY_CUSTOM_JS_END:6ca4974d1ac4 */
+
 
 /* ZAPPY_PUBLISHED_LIGHTBOX_RUNTIME */
 (function(){
