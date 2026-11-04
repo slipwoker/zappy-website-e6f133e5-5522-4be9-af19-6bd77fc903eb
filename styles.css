@@ -9511,6 +9511,28 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
 .site-footer .footer-social a[aria-label="Waze"] {
   color: var(--primary-color, var(--primary, #D4A017)) !important;
 }
+
+@media (max-width: 768px) {
+.index-hero-section .index-hero-title {
+  font-size: 2rem !important;
+  line-height: 1.25 !important;
+}
+
+.index-hero-section .index-hero-subtitle {
+  font-size: 1.05rem !important;
+  line-height: 1.6 !important;
+}
+
+.index-hero-section .index-hero-overlay {
+  padding: 80px 16px 50px !important;
+}
+}
+
+@media (max-width: 768px) {
+.index-hero-section .index-hero-subtitle {
+  text-align: start !important;
+}
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
