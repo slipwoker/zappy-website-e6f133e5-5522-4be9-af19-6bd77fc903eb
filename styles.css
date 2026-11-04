@@ -9435,6 +9435,82 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   color: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
 }
 }
+
+.site-footer .footer-social a {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+  background-color: rgba(212,160,23,0.12) !important;
+}
+
+.site-footer .footer-social a svg {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+  fill: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-social a:hover {
+  color: #b48814 !important;
+  background-color: rgba(212,160,23,0.2) !important;
+}
+
+.site-footer .footer-social a:hover svg {
+  color: #b48814 !important;
+  fill: #b48814 !important;
+}
+
+.site-footer .contact-list a {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .contact-list li {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .contact-list span {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-legal a {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .copyright p {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-bottom a {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-bottom p {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-bottom span:not(.separator) {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-legal .separator {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-bottom .copyright {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-bottom .legal-links a {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-social a .fab {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-bottom .legal-links a:link {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
+
+.site-footer .footer-social a[aria-label="Waze"] {
+  color: var(--primary-color, var(--primary, #D4A017)) !important;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
