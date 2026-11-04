@@ -747,6 +747,99 @@ window.onload = function() {
 })();
 /* ZAPPY_CUSTOM_JS_END:6ca4974d1ac4 */
 
+/* ZAPPY_CUSTOM_JS_START:661418e3cae8 */
+(function () {
+  function __zappyCustomInit() {
+    try {
+(function() {
+  // Hamburger menu toggle fix - robust, runs on DOMContentLoaded + load
+  function initHamburger() {
+    var toggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-toggle');
+    var navMenu = document.getElementById('navMenu') || document.querySelector('.nav-menu');
+    var navbar = document.querySelector('.navbar') || document.querySelector('nav');
+
+    if (!toggle || !navMenu) return;
+
+    // Mark to avoid double-binding from any prior fix
+    if (toggle.getAttribute('data-zappy-hb-bound') === '1') return;
+    toggle.setAttribute('data-zappy-hb-bound', '1');
+
+    function openMenu() {
+      navMenu.classList.add('active');
+      if (navbar) navbar.classList.add('menu-open');
+      document.body.classList.add('menu-open');
+      document.body.style.overflow = 'hidden';
+      var close = toggle.querySelector('.close-icon');
+      var ham = toggle.querySelector('.hamburger-icon');
+      if (close) close.style.display = 'block';
+      if (ham) ham.style.display = 'none';
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMenu() {
+      navMenu.classList.remove('active');
+      if (navbar) navbar.classList.remove('menu-open');
+      document.body.classList.remove('menu-open');
+      document.body.style.overflow = '';
+      var close = toggle.querySelector('.close-icon');
+      var ham = toggle.querySelector('.hamburger-icon');
+      if (close) close.style.display = 'none';
+      if (ham) ham.style.display = 'block';
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (navMenu.classList.contains('active')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close when a nav link is clicked
+    navMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        closeMenu();
+      });
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!navMenu.classList.contains('active')) return;
+      if (navMenu.contains(e.target) || toggle.contains(e.target)) return;
+      closeMenu();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+        closeMenu();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHamburger);
+  } else {
+    initHamburger();
+  }
+  // Also run after full load to be safe
+  window.addEventListener('load', initHamburger);
+})();
+    } catch (e) {
+      if (typeof console !== 'undefined' && console.warn) { console.warn('[zappy-custom-js]', e); }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', __zappyCustomInit);
+  } else {
+    __zappyCustomInit();
+  }
+})();
+/* ZAPPY_CUSTOM_JS_END:661418e3cae8 */
+
 
 /* ZAPPY_PUBLISHED_LIGHTBOX_RUNTIME */
 (function(){
