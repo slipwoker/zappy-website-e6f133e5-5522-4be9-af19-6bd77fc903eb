@@ -313,6 +313,8 @@
   "new_label_229": "<input type=\"checkbox\" name=\"service_type\" value=\"staffing\" style=\"width:18px;height:18px;accent-color:#F5C842;cursor:pointer;margin:0;\" />\n    <span style>Management Services</span>",
   "new_label_295": "<input type=\"checkbox\" name=\"service_type\" value=\"maintenance\" style=\"width:22px;height:22px;min-width:22px;accent-color:#F5C842;cursor:pointer;margin:0;\" />\n    <span>Maintenance Services</span>",
   "new_label_307": "Do not fill in this field",
+  "new_label_309": "First Name",
+  "new_label_310": "Last Name",
   "new_title_290": "Proces | Building Management, Maintenance & Professional Cleaning",
   "new_title_291": "Our Services | Cleaning, Height Work, Maintenance & Staffing – Proces",
   "new_title_292": "About Proces | Cleaning, Staffing & Facility Management",
