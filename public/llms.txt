@@ -62,6 +62,7 @@ Information about WCAG compliance and accessibility features.
   - `first_name` (text, required)
   - `last_name` (text, required)
   - `phone` (tel, required)
+  - `email` (email, required)
   - `message` (textarea, required)
   - `company` (text)
 
