@@ -7197,7 +7197,7 @@ function withConsent(category, callback) {
              flattened submenus used to set pointer-events:auto and re-enable
              hit-testing under an invisible More panel (hover 100px+ below
              still opened עוד). */
-          '.navbar .zappy-nav-more-item>.sub-menu{display:block!important;left:auto!important;right:0!important;min-width:200px!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:translateY(6px);transition:opacity .18s ease,visibility .18s ease,transform .18s ease;}' +
+          '.navbar .zappy-nav-more-item>.sub-menu{position:absolute!important;top:100%!important;z-index:100001!important;display:block!important;left:auto!important;right:0!important;min-width:200px!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:translateY(6px);transition:opacity .18s ease,visibility .18s ease,transform .18s ease;}' +
           /* Keep right:0 in RTL too. The old left:0 flip made the panel grow
              rightward over the nav links; on RTL More sits on the left of the
              item cluster so the panel must open left under עוד. */
@@ -7719,10 +7719,11 @@ function withConsent(category, callback) {
   } catch (e) {}
 })();
 
-/* ZAPPY_NAV_MORE_POINTER_FIX_V4 */
+/* ZAPPY_NAV_MORE_POINTER_FIX_V5 */
 (function(){
   try {
-    if (window.__zappyNavMorePointerFixV4) return;
+    if (window.__zappyNavMorePointerFixV5) return;
+    window.__zappyNavMorePointerFixV5 = true;
     window.__zappyNavMorePointerFixV4 = true;
     window.__zappyNavMorePointerFixV3 = true;
     window.__zappyNavMorePointerFixV2 = true;
@@ -7746,6 +7747,7 @@ function withConsent(category, callback) {
            + overflow-y:auto (which promotes overflow-x:auto) → horizontal
            scrollbar on long Hebrew nested titles. */
         'html body .navbar .zappy-nav-more-item > .sub-menu{' +
+          'position:absolute!important;top:100%!important;z-index:100001!important;' +
           'width:min(420px,calc(100vw - 24px))!important;max-width:min(420px,calc(100vw - 24px))!important;' +
           'overflow-x:hidden!important;overflow-y:auto!important;box-sizing:border-box!important;' +
         '}' +
@@ -7897,6 +7899,9 @@ function withConsent(category, callback) {
         attributeFilter: ['style', 'data-zappy-more-flattened']
       });
     }
+    // The overflow runtime may already have measured the in-flow panel and
+    // pinned the menu width. A resize re-runs that pass with the panel absolute.
+    try { window.dispatchEvent(new Event('resize')); } catch (e2) {}
   } catch (e) {}
 })();
 
