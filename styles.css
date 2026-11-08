@@ -9533,6 +9533,15 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   text-align: start !important;
 }
 }
+
+.contact-contact-form-section__privacy .privacy-consent-checkbox {
+  accent-color: var(--primary-color, var(--primary, #D4A017));
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  flex-shrink: 0 !important;
+  cursor: pointer;
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
