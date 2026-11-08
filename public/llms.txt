@@ -59,11 +59,11 @@ Information about WCAG compliance and accessibility features.
 - Method: POST
 - Content-Type: application/json
 - Fields:
-  - `first_name` (text, required)
-  - `last_name` (text, required)
+  - `first_name` (text)
+  - `last_name` (text)
   - `phone` (tel, required)
-  - `email` (email, required)
-  - `message` (textarea, required)
+  - `email` (email)
+  - `message` (textarea)
   - `company` (text)
 
 ---
