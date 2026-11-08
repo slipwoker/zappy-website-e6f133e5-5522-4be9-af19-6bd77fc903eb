@@ -2084,7 +2084,7 @@ window.onload = function() {
       }
     }
 
-    // /* ZAPPY_NAV_MOBILE_FOLLOWS_HAMBURGER_V5 */
+    // /* ZAPPY_NAV_MOBILE_FOLLOWS_HAMBURGER_V6 */
     function isDesktopNav() {
       var shown = hamburgerShown();
       if (shown === true) return false;
@@ -2113,14 +2113,57 @@ window.onload = function() {
       } catch (e) {}
     }
 
+    // A phone with no <meta name="viewport"> lays out around 980px and then
+    // scales the page down. min-width:769px is true there, so a desktop-row
+    // rule paints every nav link into one crushed bar. Real desktop windows
+    // still get that row. Phones keep the hamburger.
+    function isPhoneLayout() {
+      try {
+        var nav = window.navigator;
+        var ua = (nav && nav.userAgent) || '';
+        if (/iPhone|iPod|Android.+Mobile|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return true;
+        if (/Mobile/.test(ua) && /CriOS|FxiOS|EdgiOS/.test(ua)) return true;
+        var vv = window.visualViewport;
+        if (vv && typeof vv.scale === 'number' && vv.scale > 0 && vv.scale < 0.85) return true;
+        var screenObj = window.screen;
+        var shortSide = screenObj ? Math.min(screenObj.width || 0, screenObj.height || 0) : 0;
+        if (nav && nav.maxTouchPoints > 0 && shortSide > 0 && shortSide <= 500) return true;
+      } catch (e) {}
+      return false;
+    }
+
+    function ensureViewportMeta() {
+      try {
+        var existing = document.querySelector ? document.querySelector('meta[name="viewport"]') : null;
+        if (existing && String(existing.tagName || '').toLowerCase() === 'meta') return;
+        if (!document.createElement) return;
+        var meta = document.createElement('meta');
+        if (meta.setAttribute) {
+          meta.setAttribute('name', 'viewport');
+          meta.setAttribute('content', 'width=device-width, initial-scale=1');
+        }
+        var head = document.head || document.documentElement;
+        if (!head) return;
+        if (head.insertBefore) head.insertBefore(meta, head.firstChild || null);
+        else if (head.appendChild) head.appendChild(meta);
+      } catch (e) {}
+    }
+
     // A site stylesheet can keep the hamburger up past 768px (proces.co.il
     // uses 991px). That paints a phone icon, the logo, and a hamburger with
-    // the links hidden. Above the phone breakpoint the desktop row stays,
-    // and the More menu takes whatever does not fit.
+    // the links hidden. A desktop window above the phone breakpoint gets the
+    // desktop row, and the More menu takes whatever does not fit.
     function ensureDesktopRowCss() {
       try {
-        if (!document.getElementById || !document.createElement) return;
-        if (document.getElementById('zappy-desktop-nav-row')) return;
+        if (!document.getElementById) return;
+        var existing = document.getElementById('zappy-desktop-nav-row');
+        if (isPhoneLayout()) {
+          if (existing && existing.parentNode && existing.parentNode.removeChild) {
+            existing.parentNode.removeChild(existing);
+          }
+          return;
+        }
+        if (existing || !document.createElement) return;
         var style = document.createElement('style');
         style.id = 'zappy-desktop-nav-row';
         // display:flex alone leaves a 991px drawer (fixed, column, full size)
@@ -2317,6 +2360,7 @@ window.onload = function() {
     // Arm even when an older V3 already bound the hamburger. That copy
     // returns before this release exists; a second append must still undo
     // the desktop lock.
+    ensureViewportMeta();
     ensureDesktopRowCss();
     ensureDrawerCss();
     bindMobileToggleCapture();
