@@ -9798,6 +9798,18 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   color: var(--text-color, var(--text, var(--text-dark, var(--text-color, var(--text, var(--text-dark, #1A1A1A)))))) !important;
 }
 }
+
+@media (max-width: 768px) {
+.navbar .lang-switcher,
+  .nav-cta-container .lang-switcher {
+  display: inline-flex !important;
+  visibility: visible !important;
+}
+
+.nav-cta-container .lang-switcher {
+  align-self: center !important;
+}
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
