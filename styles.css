@@ -9810,6 +9810,27 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
   align-self: center !important;
 }
 }
+
+@media (max-width: 768px) {
+.navbar .mobile-lang-toggle,
+  .navbar .mobile-lang-toggle span,
+  .navbar .mobile-lang-toggle svg,
+  .navbar .mobile-lang-option,
+  .navbar .mobile-lang-option span {
+  color: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
+  -webkit-text-fill-color: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
+}
+
+.navbar .mobile-lang-toggle svg,
+  .navbar .mobile-lang-option svg {
+  fill: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
+  stroke: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
+}
+
+.navbar .mobile-lang-chevron {
+  stroke: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
+}
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
