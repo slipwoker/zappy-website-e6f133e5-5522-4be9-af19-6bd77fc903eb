@@ -9783,6 +9783,21 @@ div[id*="mic-access-tool-box"] button[class*="reset"] * {
     font-size: 0.9rem;
   }
 }
+
+@media (max-width: 768px) {
+.nav-menu, .navbar #navMenu {
+  background: var(--background-color, var(--background, var(--bg-light, var(--background-color, var(--background, var(--bg-light, #FFFFFF)))))) !important;
+}
+
+.nav-menu a, #navMenu a {
+  color: var(--text-color, var(--text, var(--text-dark, var(--text-color, var(--text, var(--text-dark, #1A1A1A)))))) !important;
+}
+
+.nav-menu .mobile-lang-toggle, .nav-menu .mobile-lang-toggle span,
+  .nav-menu .mobile-lang-option {
+  color: var(--text-color, var(--text, var(--text-dark, var(--text-color, var(--text, var(--text-dark, #1A1A1A)))))) !important;
+}
+}
 /* mobile-submenu-overflow-fix */
 @media (max-width: 768px) {
   .navbar .sub-menu.mobile-expanded,
